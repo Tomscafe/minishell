@@ -36,16 +36,14 @@ t_type	*init_line(t_type *line)
 
 int	check_type(char *str, int i)
 {
+	if (!str[i])
+		return (-1);
 	if (str[i] == ' ')
-		return (SPACE);
+		return (SP);
 	else if (str[i] == '\'')
 		return (QUOTE);
 	else if (str[i] == '\"')
 		return (QUOTES);
-	else if (str[i] == ';')
-		return (SEMICOLON);
-	else if (str[i] == '\\')
-		return (BACK);
 	else if (str[i] == '$')
 		return (DOLLOR);
 	else if (str[i] == '<')
@@ -59,7 +57,8 @@ int	check_type(char *str, int i)
 	}
 	else if (str[i] == '|')
 		return (PIPE);
-	return (STRING);
+	else
+		return (STRING);
 }
 
 void	line_add_back(t_type *curr, t_type *new)
@@ -88,43 +87,45 @@ char	*mini_strdup(char *s, int i, int j)
 	return (result);
 }
 
-int	storage_string(char *str, t_type *line, int i)
+int	ft_dollor(char *str, t_type *line, int i)
 {
 	t_type	*new;
 	int		j;
 
-	if (!line->prev)
-		return (2);		//command error;
 	new = init_line(new);
-	j = i;
-	while (!check_type(str, j))
+	j = i + 1;
+	while (!check_type(str, j) || check_type(str, j) == DOLLOR)
 		j++;
 	new->str = mini_strdup(str, i, j);
-	new->type = STRING;
+	new->type = check_type(str, i);
 	line_add_back(line, new);
 	return (j);
-}
-
-int	storage_token(char *str, t_type *line)
-{
-	return (0);
-}
-
-void	ft_dollor(char *str, t_type *line, int i)
-{
 	// envp find val -> replace str[i]~str[i+j] ${ } = { }
 }
 
 int	ft_space(char *str, int i)
 {
 	while (str[i] == ' ')
+	{
+		// if (str[i + 1] != ' ')
+		// 	break ;
 		i++;
+	}
 	return (i);
 }
 
 int	ft_quote_size(char *str, int i, char c)
 {
-	return (0);	
+	int	j;
+
+	j = 0;
+	while (str[i + j])
+	{
+		if (str[i + j] == c)
+			break;
+		j++;
+	}
+	return (i + j + 1);	
 }
 
 int	ft_quote(char *str, t_type *line, int i, int t)
@@ -145,6 +146,40 @@ int	ft_quote(char *str, t_type *line, int i, int t)
 	return (j);
 }
 
+int	storage_string(char *str, t_type *line, int i)
+{
+	t_type	*new;
+	int		j;
+
+//	if (!line->prev)
+//		return (2);		//command error;
+	new = init_line(new);
+	j = i;
+	while (!check_type(str, j))
+		j++;
+	new->str = mini_strdup(str, i, j);
+	new->type = check_type(str, i);
+	line_add_back(line, new);
+	return (j);
+}
+
+int	storage_token(char *str, t_type *line, int i)
+{
+	t_type	*new;
+	int		j;
+
+	// if (!line->prev)
+	// 	return (-1);
+	if (!str[i])
+		return (i);
+	new = init_line(new);
+	j = i + 1;
+	new->str = mini_strdup(str, i, j);
+	new->type = check_type(str, i);
+	line_add_back(line, new);
+	return (j);
+}
+
 void	make_line(char *str, t_type *line)
 {
 	int	i;
@@ -154,15 +189,27 @@ void	make_line(char *str, t_type *line)
 	while (str[i])
 	{
 		t = check_type(str, i);
-		if (!t)
-			i = storage_string(str, line, i);
+		if (t == QUOTE || t == QUOTES)
+			i = ft_quote(str, line, i, t);
 		else if (t == SP)
 			i = ft_space(str, i);
 		else if (t == DOLLOR)
-			ft_dollor(str, line, i);
-		else if (t == QUOTE || t == QUOTES)
-			i = ft_quote(str, line, i, t);
-		i = storage_token(str, line);
+			i = ft_dollor(str, line, i);
+		else if (!t)
+			i = storage_string(str, line, i);
+		// printf("*%d\n", (unsigned int)str[i + 1]);
+		if (t && t != SP)
+			i = storage_token(str, line, i);
+		// printf("%d %d %d %d\n", (unsigned int)str[0], (unsigned int)str[1], (unsigned int)str[2], i);
+	}
+}
+
+void	test_line(t_type *line)
+{
+	while (line)
+	{
+		printf("type:%d:%s\n", line->type, line->str);
+		line = line->next;
 	}
 }
 
@@ -172,6 +219,7 @@ void	ft_parsing(char *str)
 
 	head = init_line(head);
 	make_line(str, head);
+	test_line(head);
 }
 
 void	ft_readline(void)
@@ -209,6 +257,7 @@ int	main(int ac, char **av, char *envp[])
 		printf("error\n");
 		return (2);
 	}
+	//token : envp -> struct
 	ft_signal();
 	ft_readline();
 	return (0);

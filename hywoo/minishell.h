@@ -15,15 +15,15 @@
 # define SP 1
 # define QUOTE 2
 # define QUOTES 3
-# define SEMICOLON 4
-# define BACK 5
-# define DOLLOR 6
-# define INPUT 7
-# define OUTPUT 8
-# define APPEND 9
-# define PIPE 10
+# define DOLLOR 4
+# define INPUT 5
+# define OUTPUT 6
+# define APPEND 7
+# define PIPE 8
 # define ERROR -1
 
+// # define BACK 5
+// # define SEMICOLON 4
 typedef struct	s_type
 {
 	char			*str;
