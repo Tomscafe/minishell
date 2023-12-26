@@ -25,7 +25,7 @@ int	main(int ac, char **av)
 								// TCSANOW : change terminal properties
 	signal(SIGINT, handler);	// ctr + c : handler(SIGINT)
 	signal(SIGQUIT, SIG_IGN);	// ctr + / : signal ignore (SIG_IGN)
-	//signal(SIGTERM, handler);	// ctr + d : can't handle sigterm
+//	signal(SIGTERM, handler);	// ctr + d : can't handle sigterm
 	while (1)
 	{
 		str = readline("minishell$ ");
@@ -40,7 +40,7 @@ int	main(int ac, char **av)
 			printf("\033[1A");	// cursor move up 1 line
 			printf("\033[10C");	// cursor move forward 10 lines
 			printf(" exit\n");
-			exit(-1);
+			exit (1);
 		}
 		else if (*str == '\0')
 			free (str);

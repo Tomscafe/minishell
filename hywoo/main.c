@@ -258,6 +258,9 @@ int	main(int ac, char **av, char *envp[])
 		return (2);
 	}
 	//token : envp -> struct
+	int i = -1;
+//	while (envp[++i])
+//		printf("%s\n", envp[i]);
 	ft_signal();
 	ft_readline();
 	return (0);
