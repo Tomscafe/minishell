@@ -11,25 +11,65 @@
 # include <readline/history.h>
 # include "libft/libft.h"
 
-# define STRING 0
-# define SP 1
+# define WARD 0
+# define COMMAND 1
 # define QUOTE 2
 # define QUOTES 3
-# define DOLLOR 4
-# define INPUT 5
-# define OUTPUT 6
-# define APPEND 7
-# define PIPE 8
-# define ERROR -1
+# define REDIRECTION 4
+# define PIPE 5
+# define SP 6
 
-// # define BACK 5
-// # define SEMICOLON 4
-typedef struct	s_type
+typedef struct	s_redirection
 {
-	char			*str;
-	int				type;
-	struct s_type	*prev;
-	struct s_type	*next;
-}	t_type;
+	char					*symbol;
+	char					*file;
+	struct s_redirection	*next;
+}	t_redirection;
+
+typedef struct	s_simple
+{
+	char	*command;
+	char	*ward;
+}	t_simple;
+
+typedef struct	s_command
+{
+	t_simple		*simple_command;
+	t_redirection	*redirection;
+}	t_command;
+
+typedef struct	s_pipe
+{
+	t_command		*first;
+	t_command		*second;
+	struct s_pipe	*next;
+}	t_pipe;
+
+typedef struct	s_token
+{
+	char		*str;
+	int			type;
+	struct s_token	*next;
+}	t_token;
+
+void	handler(int sig);
+void	ft_signal(void);
+char	*mini_strdup(char *s, int i, int j);
+
+int	valid_quotes(char *str);
+int	check_type(char c);
+t_token	*init_token(t_token *token);
+void	add_token_back(t_token *token, char *str, int type);
+int	ignore_space(char *str, int i, int type);
+int	ignore_quotes(char *str, int j, char c);
+int	token_command(t_token *token, char *str, int i, int type);
+int	end_of_ward(char c);
+int	token_ward(t_token *token, char *str, int i, int type);
+int	token_redirection(t_token *token, char *str, int i, int type);
+int	token_pipe(t_token *token, char *str, int i, int type);
+int	token_flag(t_token *token);
+void	tokenizer(t_token *token, char *str);
+
+void	ft_parsing(char *str);
 
 #endif
