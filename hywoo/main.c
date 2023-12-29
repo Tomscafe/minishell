@@ -55,13 +55,12 @@ t_token	*add_back_rd(t_token *curr, t_redirection *rd)
 
 	new_rd = init_redirection(new_rd);
 	new_rd->symbol = ft_strdup(curr->str);
-	curr = curr->next;
-	if (!curr)
+	// curr = curr->next;
+	if (!curr->next)
 		new_rd->file = ft_strdup("");
-	else if (curr->type == WARD)
-		new_rd->file = ft_strdup(curr->str);
+	else if (curr->next->type == WARD)
+		new_rd->file = ft_strdup(curr->next->str);
 	rd->next = new_rd;
-	//curr = curr->next;
 	return (curr);
 }
 
@@ -254,7 +253,7 @@ void	test_pipe(t_pipe *pipe)
 		printf("\033[0;34mfirst\033[0m");
 		printf("\033[0;33m(com)%s(ward)%s\033[0m", com1, first);
 		test_redirection(pipe, 1);
-		printf("      : ");
+		printf("\033[0;32m      : \033[0m");
 		printf("\033[0;35msecond\033[0m");
 		printf("\033[0;33m(com)%s(ward)%s\033[0m", com2, second);
 		test_redirection(pipe, 2);
