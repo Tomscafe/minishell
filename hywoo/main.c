@@ -235,7 +235,7 @@ void	test_pipe(t_pipe *pipe)
 	char	*com2;
 	char	*first;
 	char	*second;
-	int		i = 0;
+	int		i = 1;
 
 	while (pipe)
 	{
@@ -250,10 +250,12 @@ void	test_pipe(t_pipe *pipe)
 			com2 = NULL;
 			second = NULL;
 		}
-		printf("\033[0;32mPIPE %d: first\033[0m", i);
+		printf("\033[0;32mPIPE %d: \033[0m", i);
+		printf("\033[0;34mfirst\033[0m");
 		printf("\033[0;33m(com)%s(ward)%s\033[0m", com1, first);
 		test_redirection(pipe, 1);
-		printf("\033[0;32msecond\033[0m");
+		printf("      : ");
+		printf("\033[0;35msecond\033[0m");
 		printf("\033[0;33m(com)%s(ward)%s\033[0m", com2, second);
 		test_redirection(pipe, 2);
 		pipe = pipe->next;
