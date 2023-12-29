@@ -86,15 +86,18 @@ int	token_command(t_token *token, char *str, int i, int type)
 	int		j;
 	char	*command;
 
-	if (type == SP)
+	if (type == SP || type == PIPE || type == REDIRECTION)
 		return (i);
 	j = i;
-	while (str[j] != ' ' && str[j])
+	while (str[j] && str[j] != ' ')
 	{
+		type = check_type(str[j]);
 		if (str[j] == '\'')
 			j = ignore_quotes(str, j, '\'');
 		if (str[j] == '\"')
 			j = ignore_quotes(str, j, '\"');
+		if (type == PIPE || type == REDIRECTION)
+			break;
 		j++;
 	}
 	command = mini_strdup(str, i, j);
@@ -119,7 +122,7 @@ int	token_ward(t_token *token, char *str, int i, int type)
 	int		j;
 	char	*ward;
 
-	if (type == SP)
+	if (type == SP || type == PIPE || type == REDIRECTION)
 		return (i);
 	j = i;
 	while (str[j])
@@ -187,8 +190,8 @@ void	tokenizer(t_token *token, char *str)
 	flag = 1;
 	while (str[i])
 	{
+		i = ignore_space(str, i, check_type(str[i]));
 		type = check_type(str[i]);
-		i = ignore_space(str, i, type);
 		if (flag)
 			i = token_command(token, str, i, type);
 		else
