@@ -51,16 +51,30 @@ t_simple	*make_simple_command(t_token *front, t_command *com)
 
 t_token	*add_back_rd(t_token *curr, t_redirection *rd)
 {
-	t_redirection	*new;
+	t_redirection	*new_rd;
 
-	new = init_redirection(new);
-	new->symbol = ft_strdup(curr->str);
+	new_rd = init_redirection(new_rd);
+	new_rd->symbol = ft_strdup(curr->str);
 	curr = curr->next;
-	if (curr->type == WARD)
-		new->file = ft_strdup(curr->str);
-	rd->next = new;
-	curr = curr->next;
+	if (!curr)
+		new_rd->file = ft_strdup("");
+	else if (curr->type == WARD)
+		new_rd->file = ft_strdup(curr->str);
+	rd->next = new_rd;
+	//curr = curr->next;
 	return (curr);
+}
+
+t_redirection	*last_redirection(t_redirection *rd)
+{
+	t_redirection	*last;
+
+	last = rd;
+	if (!rd)
+		return (NULL);
+	while (last->next)
+		last = last->next;
+	return (last);
 }
 
 t_redirection	*make_redirection(t_token *front, t_command *com)
@@ -71,23 +85,29 @@ t_redirection	*make_redirection(t_token *front, t_command *com)
 
 	curr = front;
 	rd = init_redirection(rd);
+	head = rd;
 	while (curr)
 	{
 		if (curr->type == REDIRECTION)
+		{
 			curr = add_back_rd(curr, rd);
+			rd = rd->next;
+			if (!curr)
+				break;
+		}
 		if (curr->type == PIPE)
 			break;
 		curr = curr->next;
 	}
-	head = rd;
-	rd = rd->next;
+	rd = head->next;
 	free (head);
 	return (rd);
 }
 
 t_command	*make_command(t_token *front)
 {
-	t_command	*com;
+	t_command		*com;
+	t_redirection	*last;
 
 	com = init_com(com);
 	com->simple_command = make_simple_command(front, com);
@@ -109,9 +129,23 @@ t_token	*find_next_front(t_token *front)
 	return (front);
 }
 
+t_pipe	*last_pipe(t_pipe *pipe)
+{
+	t_pipe	*last;
+
+	last = pipe;
+	while (last)
+	{
+		if (!last->next)
+			break;
+		last = last->next;
+	}
+	return (last);
+}
+
 t_pipe	*new_pipe(t_pipe *pipe, t_token *front)
 {
-	t_pipe	*new;
+	t_pipe	*new_pipe;
 
 	if (!pipe->first)
 	{
@@ -123,11 +157,11 @@ t_pipe	*new_pipe(t_pipe *pipe, t_token *front)
 		pipe->second = make_command(front);
 		return (pipe);
 	}
-	new = init_pipe(pipe);
-	new->first = pipe->second;
-	new->second = make_command(front);
-	pipe->next = new;
-	return (new);
+	new_pipe = init_pipe(pipe);
+	new_pipe->first = last_pipe(pipe)->second;
+	new_pipe->second = make_command(front);
+	last_pipe(pipe)->next = new_pipe;
+	return (new_pipe);
 }
 
 t_pipe	*make_pipe_tree(t_pipe *pipe, t_token *token)
@@ -154,11 +188,9 @@ t_pipe	*make_pipe_tree(t_pipe *pipe, t_token *token)
 		curr = curr->next;
 	}
 	if (!cnt)
-		pipe->first = make_command(front);
-	printf("token:%s\n", front->str);
-	// printf("%s\n",pipe->first->simple_command->command);
-	// else
-	// 	next_pipe->second = make_command(front);
+		pipe = new_pipe(pipe, front);
+	else
+		next_pipe = new_pipe(pipe, front);
 	return (pipe);
 }
 
@@ -171,17 +203,61 @@ void	test_token(t_token *token)
 	}
 }
 
+void	test_redirection(t_pipe *pipe, int i)
+{
+	t_redirection	*rd;
+
+	if (i == 1)
+	{
+		if (!pipe->first){
+			printf("\n");
+			return;}
+		rd = pipe->first->redirection;
+	}
+	else if (i == 2)
+	{
+		if (!pipe->second){
+			printf("\n");
+			return;}
+		rd = pipe->second->redirection;
+	}
+	while (rd)
+	{
+		printf("\033[0;36m%s %s\033[0m", rd->symbol, rd->file);
+		rd = rd->next;
+	}
+	printf("\n");
+}
+
 void	test_pipe(t_pipe *pipe)
 {
-	char	*com;
-	char	*ward;
+	char	*com1;
+	char	*com2;
+	char	*first;
+	char	*second;
+	int		i = 0;
 
-	com = pipe->first->simple_command->command;
-	ward = pipe->first->simple_command->ward;
 	while (pipe)
 	{
-		printf("COM:%s WARD:%s\n", com, ward);
+		com1 = pipe->first->simple_command->command;
+		first = pipe->first->simple_command->ward;
+		if (pipe->second)
+		{
+			com2 = pipe->second->simple_command->command;
+			second = pipe->second->simple_command->ward;
+		}
+		else {
+			com2 = NULL;
+			second = NULL;
+		}
+		printf("\033[0;32mPIPE %d: first\033[0m", i);
+		printf("\033[0;33m(com)%s(ward)%s\033[0m", com1, first);
+		test_redirection(pipe, 1);
+		printf("\033[0;32msecond\033[0m");
+		printf("\033[0;33m(com)%s(ward)%s\033[0m", com2, second);
+		test_redirection(pipe, 2);
 		pipe = pipe->next;
+		i++;
 	}
 }
 
@@ -196,7 +272,7 @@ void	ft_parsing(char *str)
 	tokenizer(token, str);
 	pipe_tree = make_pipe_tree(pipe_tree, token->next);
 	// test_token(token);
-	// test_pipe(pipe_tree);
+	test_pipe(pipe_tree);
 }
 
 void	ft_readline(void)
@@ -206,7 +282,12 @@ void	ft_readline(void)
 	while (1)
 	{
 		str = readline("minishell$ ");
-		if (str)
+		if (str && !*str)
+		{
+			free (str);
+			str = NULL;
+		}
+		else if (str)
 		{
 			add_history(str);
 			ft_parsing(str);

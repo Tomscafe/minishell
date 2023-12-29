@@ -1,6 +1,6 @@
 NAME	= minishell
 CC		= CC
-CFLAGS	= -g3 -fsanitize=address #-Werror -Wall -Wextra
+CFLAGS	= -g3 #-fsanitize=address #-Werror -Wall -Wextra
 COMFILE	= -lreadline -L${HOME}/.brew/opt/readline/lib
 OBFLAGS	= -I{HOME}/.brew/opt/readline/include
 SRC		= main.c signal.c tokenizer.c

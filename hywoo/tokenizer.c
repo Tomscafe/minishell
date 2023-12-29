@@ -86,7 +86,7 @@ int	token_command(t_token *token, char *str, int i, int type)
 	int		j;
 	char	*command;
 
-	if (type == SP || type == QUOTE || type == QUOTES)
+	if (type == SP)
 		return (i);
 	j = i;
 	while (str[j] != ' ' && str[j])
@@ -119,7 +119,7 @@ int	token_ward(t_token *token, char *str, int i, int type)
 	int		j;
 	char	*ward;
 
-	if (type == SP || type == QUOTE || type == QUOTES)
+	if (type == SP)
 		return (i);
 	j = i;
 	while (str[j])
