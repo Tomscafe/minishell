@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/28 21:05:28 by juhyelee          #+#    #+#             */
-/*   Updated: 2023/12/30 09:44:40 by juhyelee         ###   ########.fr       */
+/*   Updated: 2023/12/30 09:57:36 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,5 +40,8 @@ void	execute_child(t_list *cmd, t_proc *proc, int in, int out);
 
 char	*find_exepath(char **path, char *cmd);
 char	*merge(char *s1, char *s2);
+
+void	clear_proc(t_proc *proc);
+void	clear_strs(void *arg);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 09:23:29 by juhyelee          #+#    #+#             */
-/*   Updated: 2023/12/30 09:52:05 by juhyelee         ###   ########.fr       */
+/*   Updated: 2023/12/30 10:22:40 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ void	execute_command(t_list *cmd, t_proc *proc, size_t cmdidx)
 {
 	pid_t	child;
 
+	pipe(proc->pipefd);
+	if (proc->prevfd != -1)
+		dup2(proc->prevfd, proc->pipefd[0]);
 	child = fork();
 	if (child == -1)
 	{
@@ -33,6 +36,8 @@ void	execute_command(t_list *cmd, t_proc *proc, size_t cmdidx)
 	}
 	wait(NULL);
 	proc->prevfd = dup(proc->pipefd[0]);
+	close(proc->pipefd[0]);
+	close(proc->pipefd[1]);
 }
 
 void	execute_child(t_list *cmd, t_proc *proc, int in, int out)
@@ -42,6 +47,7 @@ void	execute_child(t_list *cmd, t_proc *proc, int in, int out)
 
 	dup2(in, STDIN_FILENO);
 	dup2(out, STDOUT_FILENO);
+	puts("here");
 	close(proc->infd);
 	close(proc->outfd);
 	close(proc->prevfd);
@@ -54,6 +60,7 @@ void	execute_child(t_list *cmd, t_proc *proc, int in, int out)
 		perror("fail to execute");
 		exit(EXIT_FAILURE);
 	}
+	exit(EXIT_SUCCESS);
 }
 
 char	*find_exepath(char **path, char *cmd)
@@ -71,4 +78,38 @@ char	*find_exepath(char **path, char *cmd)
 	}
 	perror("invalid command");
 	exit(EXIT_FAILURE);
+}
+
+char	*merge(char *s1, char *s2)
+{
+	int		size;
+	char	*ret;
+
+	size = ft_strlen(s1) + ft_strlen(s2) + 2;
+	ret = (char *)malloc(sizeof(char) * size);
+	if (!ret)
+	{
+		perror("fail to merge");
+		exit(EXIT_FAILURE);
+	}
+	ft_strlcpy(ret, s1, size);
+	ft_strlcat(ret, "/", size);
+	ft_strlcat(ret, s2, size);
+	return (ret);
+}
+
+void	clear_strs(void *arg)
+{
+	char	**strs;
+	size_t	index;
+
+	strs = arg;
+	index = 0;
+	while (strs[index])
+	{
+		free(strs[index]);
+		index++;
+	}
+	free(strs[index]);
+	free(strs);
 }

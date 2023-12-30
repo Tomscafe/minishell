@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 09:07:15 by juhyelee          #+#    #+#             */
-/*   Updated: 2023/12/30 09:53:49 by juhyelee         ###   ########.fr       */
+/*   Updated: 2023/12/30 10:21:33 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,12 +21,14 @@ int	main(int argc, char *argv[], char *envp[])
 	set_proc(argc, argv, envp, &proc);
 	cmd = proc.clist;
 	index = 0;
-	while (cmd)
+	while (cmd->next)
 	{
 		execute_command(cmd, &proc, index);
 		cmd = cmd->next;
 		index++;
 	}
+	execute_command(cmd, &proc, index);
+	clear_proc(&proc);
 	exit(EXIT_SUCCESS);
 }
 
@@ -37,7 +39,6 @@ void	set_proc(int argc, char *argv[], char *envp[], t_proc *proc)
 		perror("need more arguments");
 		exit(EXIT_FAILURE);
 	}
-	pipe(proc->pipefd);
 	proc->infd = open(argv[1], O_RDONLY);
 	if (proc->infd == -1)
 	{
@@ -51,6 +52,7 @@ void	set_proc(int argc, char *argv[], char *envp[], t_proc *proc)
 		perror("fail to open outfile");
 		exit(EXIT_FAILURE);
 	}
+	proc->prevfd = -1;
 	proc->envp = envp;
 	proc->path = set_path(envp);
 	proc->clist = NULL;
@@ -107,20 +109,13 @@ char	**set_path(char *envp[])
 	exit(EXIT_FAILURE);
 }
 
-char	*merge(char *s1, char *s2)
+void	clear_proc(t_proc *proc)
 {
-	int		size;
-	char	*ret;
-
-	size = ft_strlen(s1) + ft_strlen(s2) + 2;
-	ret = (char *)malloc(sizeof(char) * size);
-	if (!ret)
-	{
-		perror("fail to merge");
-		exit(EXIT_FAILURE);
-	}
-	ft_strlcpy(ret, s1, size);
-	ft_strlcat(ret, "/", size);
-	ft_strlcat(ret, s2, size);
-	return (ret);
+	close(proc->infd);
+	close(proc->outfd);
+	close(proc->prevfd);
+	close(proc->pipefd[0]);
+	close(proc->pipefd[1]);
+	clear_strs(proc->path);
+	ft_lstclear(&proc->clist, clear_strs);
 }
