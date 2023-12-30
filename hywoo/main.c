@@ -284,6 +284,17 @@ int	valid_redirection(t_token *curr)
 	{
 		if (curr->str[0] != curr->str[1])
 		{
+			if (curr->next)
+			{
+				if (curr->next->type == REDIRECTION && curr->next->str)
+				{
+					if (curr->str[1] == curr->next->str[0])
+					{
+						printf("syntax error near unexpected token `%c%c'\n", curr->str[1], curr->str[1]);
+						return (2);
+					}
+				}
+			}
 			printf("syntax error near unexpected token `%c'\n", curr->str[1]);
 			return (2);
 		}
