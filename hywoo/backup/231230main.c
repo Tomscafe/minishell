@@ -398,11 +398,7 @@ void	all_free(t_token *token, t_pipe *pipe)
 			if (pipe->first)
 				free_command(pipe->first);
 			if (pipe->second)
-			{
 				free_command(pipe->second);
-				if (pipe_next)
-					pipe_next->first = NULL;
-			}
 			free (pipe);
 			pipe = pipe_next;
 		}

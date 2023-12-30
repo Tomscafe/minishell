@@ -52,6 +52,13 @@ typedef struct	s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef struct	s_envp
+{
+	char		*variable;
+	char		*value;
+	struct s_envp	*next;
+}	t_envp;
+
 void	handler(int sig);
 void	ft_signal(void);
 char	*mini_strdup(char *s, int i, int j);
