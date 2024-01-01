@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/01 15:12:54 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/01 15:56:49 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/01 16:01:58 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,9 @@ int	main(int argc, char *argv[])
 	size_t	index;
 	int		is_newline;
 
-	index = preprocess(argv[1], &is_newline);
+	index = 1;
+	if (argc >= 2)
+		index = preprocess(argv[1], &is_newline);
 	while (index  + 1 < (size_t)argc)
 	{
 		write(STDOUT_FILENO, argv[index], strlen(argv[index]));
@@ -30,7 +32,7 @@ int	main(int argc, char *argv[])
 		index++;
 	}
 	if (index < (size_t)argc)
-	write(STDOUT_FILENO, argv[index], strlen(argv[index]));
+		write(STDOUT_FILENO, argv[index], strlen(argv[index]));
 	if (is_newline)
 		write(STDOUT_FILENO, "\n", 1);
 	exit(EXIT_SUCCESS);
