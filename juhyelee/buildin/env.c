@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   env.c                                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/01 15:18:22 by juhyelee          #+#    #+#             */
+/*   Updated: 2024/01/01 15:23:25 by juhyelee         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -9,7 +21,8 @@ int	main(int argc, char *argv[], char *envp[])
 
 	if (argc != 1)
 	{
-		perror("env is no option");
+		strdup(argv[0]);
+		perror("env has no option an arguments");
 		exit(EXIT_FAILURE);
 	}
 	index = 0;
@@ -19,5 +32,5 @@ int	main(int argc, char *argv[], char *envp[])
 		write(STDOUT_FILENO, "\n", 1);
 		index++;
 	}
-	return (0);
+	exit(EXIT_SUCCESS);
 }
