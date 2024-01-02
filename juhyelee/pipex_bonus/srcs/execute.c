@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 09:23:29 by juhyelee          #+#    #+#             */
-/*   Updated: 2023/12/30 10:22:40 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/02 21:07:39 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,6 @@ void	execute_command(t_list *cmd, t_proc *proc, size_t cmdidx)
 	pid_t	child;
 
 	pipe(proc->pipefd);
-	if (proc->prevfd != -1)
-		dup2(proc->prevfd, proc->pipefd[0]);
 	child = fork();
 	if (child == -1)
 	{
@@ -47,7 +45,6 @@ void	execute_child(t_list *cmd, t_proc *proc, int in, int out)
 
 	dup2(in, STDIN_FILENO);
 	dup2(out, STDOUT_FILENO);
-	puts("here");
 	close(proc->infd);
 	close(proc->outfd);
 	close(proc->prevfd);

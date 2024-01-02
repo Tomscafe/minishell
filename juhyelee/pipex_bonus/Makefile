@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
+#    By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/28 21:05:25 by juhyelee          #+#    #+#              #
-#    Updated: 2023/12/30 09:23:26 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/02 18:58:42 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,7 +23,7 @@ RM=rm -rf
 MK=make -C
 
 CC=cc
-CFLAG=-Wall -Wextra -Werror
+CFLAG=-Wall -Wextra -Werror -g3
 LFLAG=-L$(LIBFTDIR) -lft
 
 .PHONY=all clean fclean re
