@@ -6,7 +6,7 @@
 #    By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/28 21:05:25 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/04 12:21:14 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/04 14:48:49 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ MK=make -C
 
 CC=cc
 CFLAG=-Wall -Wextra -Werror -g
-LFLAG=-L$(LIBFTDIR) -lft
+LFLAG=-L$(LIBFTDIR) -lft -lreadline
 
 .PHONY=all clean fclean re
 

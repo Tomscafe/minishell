@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 19:55:23 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/04 13:05:33 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/04 14:48:16 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,10 @@
 # include <stdio.h>
 # include <fcntl.h>
 # include <signal.h>
+# include <readline/readline.h>
 # define BUFFER_SIZE 4
 
-void	heredoc(const char *end_str);
+void	heredoc(const char *end_str, const int output);
 
 int		contain_new_line(char *str);
 char	*input(int fd);

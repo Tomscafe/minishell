@@ -6,13 +6,13 @@
 /*   By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/04 11:59:54 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/04 13:05:31 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/04 14:48:24 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/here_doc.h"
 
-void	heredoc(const char *end_str)
+void	heredoc(const char *end_str, const int output)
 {
 	char	*input_line;
 
@@ -20,13 +20,12 @@ void	heredoc(const char *end_str)
 	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
-		write(STDOUT_FILENO, "> ", 2);
-		input_line = input(STDIN_FILENO);
+		input_line = readline("> ");
 		if (input_line == NULL)
 			exit(0);
 		if (ft_strncmp(input_line, end_str, ft_strlen(input_line)) == 0)
 			break ;
-		ft_putendl_fd(input_line, STDOUT_FILENO);
+		ft_putendl_fd(input_line, output);
 		free(input_line);
 	}
 }
