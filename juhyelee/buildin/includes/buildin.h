@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 16:20:06 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/04 11:45:35 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/04 14:09:25 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ int		del_envs(char *envs[], const char *env);
 char	**dup_envs(const char *envp[]);
 char	**add_envs(const char *envs[], const char *env);
 
+// 환경 변수는 내부에서 어떻게 구조를 이루고 있는지.
+// 우선 배열로 환경 변수를 관리했지만, 해시로 한다고 한다면 해시 관련 API를 만들어 적용
 int		copy_envs(char *new_envs[], const char *org_envs[]);
 char	**create_new_envs(const size_t size);
 void	clear_envs(char *envs[]);
