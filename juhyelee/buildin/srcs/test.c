@@ -2,16 +2,10 @@
 
 int	main(int argc, char *argv[], char *envp[])
 {
-	t_list	*envs;
+	char	**envs;
 
-	convert_env_list(&envs, (const char **)envp);
-	export_cmd(&envs, argc, (const char **)argv);
-	t_list *p = envs;
-	while (p)
-	{
-		t_env *env = p->content;
-		printf("%s\n", env->env);
-		p = p->next;
-	}
+	envs = dup_envs((const char **)envp);
+	envs = export_cmd(argc, (const char **)argv, (const char **)envs);
+	export_cmd(1, (const char **)argv, (const char **)envs);
 	return (0);
 }

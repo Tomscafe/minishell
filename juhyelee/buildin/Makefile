@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+         #
+#    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/03 16:13:44 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/03 21:19:05 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/04 10:10:52 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ INCS = includes
 SRCS = srcs/command_1.c \
 	   srcs/command_2.c \
 	   srcs/option.c \
-	   srcs/env.c \
+	   srcs/env_1.c \
+	   srcs/env_2.c \
 	   srcs/test.c
 OBJS = $(SRCS:.c=.o)
 NAME= buildin

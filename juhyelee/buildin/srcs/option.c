@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   option.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 18:23:17 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/03 21:43:00 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/04 09:56:05 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,4 +44,10 @@ void	clear_strs(char **strs)
 	}
 	free(strs[index]);
 	free(strs);
+}
+
+void	print_error(const char *cmd, const char *message, const char *arg)
+{
+	dup2(STDERR_FILENO, STDOUT_FILENO);
+	printf("%s: %s: %s\n", cmd, arg, message);
 }

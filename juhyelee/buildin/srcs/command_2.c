@@ -3,88 +3,68 @@
 /*                                                        :::      ::::::::   */
 /*   command_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 21:19:09 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/03 21:50:01 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/04 10:25:51 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/buildin.h"
 
-void	export_cmd(t_list **env_list, const size_t argc, const char *argv[])
-{
-	close(STDIN_FILENO);
-	if (argc == 1)
-		print_envs(*env_list);
-	else
-		reg_envs(env_list, argc, argv);
-}
-
-void	print_envs(t_list *env_list)
-{
-	t_list	*p;
-	t_env	*env;
-
-	p = env_list;
-	while (p)
-	{
-		env = p->content;
-		printf("declare -x %s", env->env);
-		if (env->val)
-			printf("=\"%s\"", env->val);
-		printf("\n");
-		p = p->next;
-	}
-}
-
-void	reg_envs(t_list **env_list, const size_t argc, const char *argv[])
+int	contain_equ(const char *env)
 {
 	size_t	index;
 
-	index = 1;
-	while (index < argc)
+	index = 0;
+	while (env[index])
 	{
-		add_env(env_list, argv[index]);
+		if (env[index] == '=')
+			return (1);
+		index++;
+	}
+	return (0);
+}
+
+void	env_cmd(const char *envs[])
+{
+	size_t	index;
+
+	close(STDIN_FILENO);
+	index = 0;
+	while (envs[index])
+	{
+		if (contain_equ(envs[index]))
+			printf("%s\n", envs[index]);
 		index++;
 	}
 }
 
-void	unset_cmd(t_list **env_list, const size_t argc, const char *argv[])
+char	**export_cmd(const size_t argc, const char *argv[], const char *envs[])
 {
 	size_t	index;
-	t_list	*p;
-	t_env	*env;
+	char	**new_envs;
 
-	if (argc > 1)
+	close(STDIN_FILENO);
+	if (argc == 1)
 	{
 		index = 0;
-		while (index < argc)
+		while (envs[index])
 		{
-			p = *env_list;
-			while (p)
-			{
-				env = p->content;
-				if (ft_strncmp(argv, env->env, ft_strlen(argv)) == 0)
-				p = p->next;
-			}
+			printf("declare -x %s\n", envs[index]);
 			index++;
 		}
 	}
-}
-
-void	env_cmd(t_list *env_list)
-{
-	t_list	*p;
-	t_env	*env;
-
-	close(STDIN_FILENO);
-	p = env_list;
-	while (p)
+	else
 	{
-		env = p->content;
-		if (env->val)
-			printf("%s=%s\n", env->env, env->val);
-		p = p->next;
+		new_envs = add_envs(envs, argv[1]);
+		index = 2;
+		while (index < argc)
+		{
+			new_envs = add_envs((const char **)new_envs, argv[index]);
+			index++;
+		}
+		return (new_envs);
 	}
+	return (NULL);
 }
