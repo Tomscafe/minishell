@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env_1.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 21:17:13 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/04 10:25:59 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/04 11:50:27 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,7 @@ int	del_envs(char *envs[], const char *env)
 		envs[index - 1] = envs[index];
 		index++;
 	}
+	envs[index - 1] = NULL;
 	return (1);
 }
 

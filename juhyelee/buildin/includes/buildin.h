@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   buildin.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 16:20:06 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/04 10:25:27 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/04 11:45:35 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,6 +39,7 @@ int		exit_cmd(const size_t argc, const char *argv[]);
 void	pwd_cmd(void);
 
 int		contain_equ(const char *env);
+void	unset_cmd(const size_t argc, const char *argv[], char *envs[]);
 void	env_cmd(const char *envs[]);
 char	**export_cmd(const size_t argc, const char *argv[], const char *envs[]);
 

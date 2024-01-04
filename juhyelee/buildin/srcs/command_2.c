@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   command_2.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/03 21:19:09 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/04 10:25:51 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/04 11:45:43 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,18 @@ int	contain_equ(const char *env)
 		index++;
 	}
 	return (0);
+}
+
+void	unset_cmd(const size_t argc, const char *argv[], char *envs[])
+{
+	size_t	index;
+
+	index = 1;
+	while (index < argc)
+	{
+		del_envs(envs, argv[index]);
+		index++;
+	}
 }
 
 void	env_cmd(const char *envs[])
@@ -66,5 +78,5 @@ char	**export_cmd(const size_t argc, const char *argv[], const char *envs[])
 		}
 		return (new_envs);
 	}
-	return (NULL);
+	return ((char **)envs);
 }
