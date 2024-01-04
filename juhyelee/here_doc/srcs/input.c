@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   input.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/12/30 19:54:36 by juhyelee          #+#    #+#             */
-/*   Updated: 2023/12/30 21:16:10 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/04 12:36:53 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,12 +46,7 @@ char	*input(int fd)
 		}
 		remain = merge(remain, buffer, BUFFER_SIZE);
 	}
-	if (remain)
-	{
-		free(remain);
-		remain = NULL;
-	}
-	return (NULL);
+	return (check_remain(remain));
 }
 
 char	*merge(char *s1, char *s2, size_t s2_len)
@@ -75,6 +70,16 @@ char	*merge(char *s1, char *s2, size_t s2_len)
 		ft_strlcat(ret, s2, ret_size);
 	}
 	return (ret);
+}
+
+char	*check_remain(char *remain)
+{
+	if (remain)
+	{
+		free(remain);
+		remain = NULL;
+	}
+	return (remain);
 }
 
 size_t	get_line_size(char *str)
