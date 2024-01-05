@@ -1,0 +1,85 @@
+명령어는 파싱부에서 트리 구조로 들어옴
+PIPE1 first(com)cmd (word)option and args (rd)< or > or << or >>
+	  second(com)cmd (word)option and args (rd)< or > or << or >>
+PIPE2 first(com)cmd (word)option and args (rd)< or > or << or >>
+	  second(com)cmd (word)option and args (rd)< or > or << or >>
+PIPE3 first(com)cmd (word)option and args (rd)< or > or << or >>
+	  second(com)cmd (word)option and args (rd)< or > or << or >>
+...
+
+PIPEn first(com)cmd (word)option and args (rd)< or > or << or >>
+	  second(com)cmd (word)option and args (rd)< or > or << or >>
+	  or
+	  second(com)(null) (word)(null) (rd)(null) 
+
+structures
+{
+	redirection(linked list) : symbol(string), file(string)
+	simple : command(string), word(stirng) // word는 명령어 인자값(option 포함)
+	command : simple command(simple), redirection(redirection)
+	pipe(linked list + tree) : first command(command), second command(command)
+}
+
+return 
+execute (constant pipe pointer commands)
+{
+	get commands length
+	p is commands
+	index is zero
+	while index is not over commands length - 1
+	{
+		set pipe
+		if command of first command of p is builtin
+			execute builtin
+		else
+			execute at child
+		duplicate write part of pipe to prev fd
+		close write part of pipe
+		close read part of pipe
+		p is next of p
+		index increase one
+	}
+	if command of second command of p is builtin
+		execute builtin
+	else
+		execute at child
+	clear commands
+}
+
+return size
+get commands length(constant pipe pointer commands)
+{
+	size is zero
+	p is commands
+	while p is not null
+	{
+		size increase one
+		p is next of p
+	}
+	return size
+}
+
+return bool
+is builtin(command string)
+{
+	if command equal echo
+		return true
+	if command equal cd
+		return true
+	if command equal pwd
+		return true
+	if command equal export
+		return true
+	if command equal unset
+		return true
+	if command equal env
+		return true
+	if command equal exit
+		return true
+	return false
+}
+
+return output fd
+execute builtin(constant pipe node command)
+{
+}
