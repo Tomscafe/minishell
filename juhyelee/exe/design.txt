@@ -20,66 +20,111 @@ structures
 	pipe(linked list + tree) : first command(command), second command(command)
 }
 
-return 
-execute (constant pipe pointer commands)
+exe structures
 {
-	get commands length
-	p is commands
-	index is zero
-	while index is not over commands length - 1
+	pipe pointer, number of command, command index, pipe fd, prev fd
+}
+
+return void
+execute(constant pipe tree)
+{
+	exe structures command
+	
+	pipe pointer of command is first of pipe tree
+	get number of command
+	command index of command is zero
+	if number of command is one
+		execute first command
+	while command is not over number of command - 1
+		execute first command
+	if number of command is not one
+		execute second command
+}
+
+return size_t
+get number of command(constant pipe start pointer)
+{
+	size_t number of command
+	pipe pointer
+
+	number of command
+	pipe pointer is pipe start pointer
+	while pipe pointer is not null
 	{
-		set pipe
-		if command of first command of p is builtin
-			execute builtin
-		else
-			execute at child
-		duplicate write part of pipe to prev fd
-		close write part of pipe
-		close read part of pipe
-		p is next of p
-		index increase one
+		number of command increase one
+		pipe pointer is next of pipe pointer
 	}
-	if command of second command of p is builtin
+	return number of command
+}
+
+return void
+execute command(exe structures, command string)
+{
+	if command string is builtin
 		execute builtin
 	else
 		execute at child
-	clear commands
+	pipe pointer of exe structures is next pipe pointer itself
+	command index of exe structures increase one
 }
 
-return size
-get commands length(constant pipe pointer commands)
-{
-	size is zero
-	p is commands
-	while p is not null
-	{
-		size increase one
-		p is next of p
-	}
-	return size
-}
-
-return bool
+return int
 is builtin(command string)
 {
-	if command equal echo
+	if command string is echo
 		return true
-	if command equal cd
+	if command string is cd
 		return true
-	if command equal pwd
+	if command string is pwd
 		return true
-	if command equal export
+	if command string is export
 		return true
-	if command equal unset
+	if command string is unset
 		return true
-	if command equal env
+	if command string is env
 		return true
-	if command equal exit
+	if command string is exit
 		return true
 	return false
 }
 
-return output fd
-execute builtin(constant pipe node command)
+return void
+execute builtin(exe structures)
+{
+	if command string of exe structures is echo
+		run echo
+	if command string of exe structures is cd
+		run cd
+	if command string of exe structures is pwd
+		run pwd
+	if command string of exe structures is export
+		run export
+	if command string of exe structures is unset
+		run unset
+	if command string of exe structures is env
+		run env
+	if command string of exe structures is exit
+		run exit
+}
+
+return void
+run exit(exe structures)
+{
+	if number of command of exe structures is one
+		exit
+	else
+	{
+		set pipe fd of exe structures
+		create child process
+		if child process
+			execute exit
+		wait
+		duplicate read part of pipe fd to prev fd
+		close all pipe
+	}
+}
+
+return void
+execute at child(exe structures, command string)
 {
 }
