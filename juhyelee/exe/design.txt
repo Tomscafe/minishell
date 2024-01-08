@@ -24,6 +24,7 @@ table
 {
 	string command
 	stirng argument
+	string array env
 	int input
 	int output
 }
@@ -33,62 +34,92 @@ execution structure : execution
 	pipe tree pointer currp
 	int pipefd[2]
 	int prevfd
-	int is first
 }
 
 void execute(pipe tree pointer pipe)
 {
-	executtion exe
-	table command table
+	execution exe
+	process first command(&exe)
+	process middle command(&exe)
+	process last command(&exe)
+}
 
-	exe.currp = pipe
-	exe.is first = true
-	if exe.currp->second is null and is builtin
+void process first command(execution pointer exe)
+{
+	table table
+
+	table.command = exe->currp->first->com
+	table.argument = exe->currp->first->word
+	table.input = stdin
+	if exe->currp->second is null and is builtin(exe->curr->first->com)
 	{
-		if not fail to create first command table(&table, &exe, stdin, stdout)
-			builtin(command table)
+		table.output = stdout
+		if not fail to set redirection(&table, exe->currp->first->rd)
+			builtin(table)
 	}
 	else
 	{
-		create first command table(&command table, exe.currp->first, stdin, -1)
-		execute at child(&exe)
-		close(exe.pipefd)
-	}
-	exe.is first = false
-	while exe.currp->next is not null
-	{
-		create second command table(&command table, exe.currp->second, exe.prevfd, -1)
-		execute at child(&exe)
-		close(exe.pipefd)
-		exe.currp = exe.currp->next
-	}
-	if exe.currp->second is not null
-	{
-		create second command table(&command table, exe.currp->second, exe.prevfd , stdout)
-		execute at child(&exe)
-		close(exe.prevfd)
+		if fail to pipe(exe->pipefd)
+		{
+			print error
+			return
+		}
+		table.output = exe->pipefd[write]
+		if not fail to set redirection(&table, exe->currp->first->rd)
+				execute at child(table)
 	}
 }
 
-int create command table(table pointer table, executtion pointer exe, int indef, int outdef)
+void process middle command(execution pointer exe)
 {
-	table->input = indef
-	table->output = outdef
-	if exe->is first is true
+	table table
+	
+	while exe->currp->next is not null
 	{
-		table->command = exe->currp->first->com
-		table->argument = exe->currp->first->word
-		if fail to set redirection(table, exe->currp->first->rd)
-			return false
+		table.command = exe->currp->second->com
+		table.argument = exe->currp->second->word
+		table.input = exe->prevfd
+		if fail to pipe(exe->pipefd)
+			table.output = exe->pipefd[write]
+		if not fail to set redirection(&table, exe->currp->second->rd)
+			execute at child(table)
+		exe->currp = exe->currp->next
 	}
-	else
+}
+
+void process last command(execution pointer exe)
+{
+	table table
+	
+	if exe->currp->second is not null
 	{
-		table->command = exe->currp->second->com
-		table->argument = exe->currp->second->word
-		if fail to set redirection(table, exe->currp->second->rd)
-			return false
+		table.command = exe->currp->second->com
+		table.argument = exe->currp->second->word
+		table.input = exe->prevfd
+		table.output = stdout
+		if not fail to set redirection(&table, exe->currp->second->rd)
+				execute at child(table)
 	}
-	return true
+	close(exe->prevfd)
+}
+
+int is builtin(string command)
+{
+	if command equal echo
+		return true
+	if command equal exit
+		return true
+	if command equal cd
+		return true
+	if command equal pwd
+		return true
+	if command equal export
+		return true
+	if command equal unset
+		return true
+	if command equal env
+		return true
+	return false
 }
 
 int	set redirection(table pointer table, list pointer rd)
@@ -114,4 +145,47 @@ int	set redirection(table pointer table, list pointer rd)
 		rd = next of rd
 	}
 	return true
+}
+
+void builtin(table table)
+{
+	if table.command equal echo
+		echo(table)
+	else if table.command equal exit
+		exit(table)
+	else if table.command equal cd
+		cd(table)
+	else if table.command equal pwd
+		pwd(table)
+	else if table.command equal export
+		export(table)
+	else if table.command equal unset
+		unset(table)
+	else if table.command equal env
+		env(table)
+}
+
+void execute at child (table table, execution pointer exe)
+{
+	string path
+
+	create child
+	if fail to create child
+	{
+		print error
+		return
+	}
+	else if is child
+	{
+		dup2(table.input, stdin)
+		dup2(table.output, stdout)
+		close(table.input)
+		close(table.output)
+		close exe->pipefd
+		path = is executable(table.command)
+		execve(path, table.argument, table.env)
+	}
+	wait child
+	exe->prevfd = dup(exe->pipefd[read])
+	close exe->pipefd
 }
