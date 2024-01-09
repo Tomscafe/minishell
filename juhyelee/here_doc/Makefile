@@ -6,7 +6,7 @@
 #    By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/12/28 21:05:25 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/02 18:58:42 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/04 14:48:49 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,8 +14,9 @@ LIBFTDIR=libft
 LIBFT=$(LIBFTDIR)/libft.a
 
 INCS=includes
-SRCS=srcs/main.c \
-	 srcs/execute.c
+SRCS=srcs/heredoc.c \
+	 srcs/input.c \
+	 srcs/main.c
 OBJS=$(SRCS:.c=.o)
 NAME=pipex
 
@@ -23,8 +24,8 @@ RM=rm -rf
 MK=make -C
 
 CC=cc
-CFLAG=-Wall -Wextra -Werror -g3
-LFLAG=-L$(LIBFTDIR) -lft
+CFLAG=-Wall -Wextra -Werror -g
+LFLAG=-L$(LIBFTDIR) -lft -lreadline
 
 .PHONY=all clean fclean re
 
@@ -41,6 +42,5 @@ $(NAME): $(OBJS) $(LIBFT)
 	$(CC) $(LFLAG) $(OBJS) -o $(NAME)
 $(LIBFT):
 	$(MK) $(LIBFTDIR)
-	$(MK) $(LIBFTDIR) bonus
 %.o: %.c
 	$(CC) $(CFLAG) $< -o $@ -c

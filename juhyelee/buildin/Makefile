@@ -3,44 +3,48 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+         #
+#    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
-#    Created: 2023/12/28 21:05:25 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/02 18:58:42 by juhyelee         ###   ########.fr        #
+#    Created: 2024/01/03 16:13:44 by juhyelee          #+#    #+#              #
+#    Updated: 2024/01/04 10:10:52 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-LIBFTDIR=libft
-LIBFT=$(LIBFTDIR)/libft.a
+LIBFTDIR = libft
+LIBFT = $(LIBFTDIR)/libft.a
 
-INCS=includes
-SRCS=srcs/main.c \
-	 srcs/execute.c
-OBJS=$(SRCS:.c=.o)
-NAME=pipex
+INCS = includes
+SRCS = srcs/command_1.c \
+	   srcs/command_2.c \
+	   srcs/option.c \
+	   srcs/env_1.c \
+	   srcs/env_2.c \
+	   srcs/test.c
+OBJS = $(SRCS:.c=.o)
+NAME= buildin
 
-RM=rm -rf
-MK=make -C
+RM = rm -rf
+MK = make -C
 
-CC=cc
-CFLAG=-Wall -Wextra -Werror -g3
-LFLAG=-L$(LIBFTDIR) -lft
+CC = cc
+CFLAG = -Wall -Wextra -Werror -g3
+LFLAG = -L$(LIBFTDIR) -lft
 
-.PHONY=all clean fclean re
+.PHONY = all clean fclean re
 
-all: $(NAME)
-clean:
+all : $(NAME)
+clean :
 	$(RM) $(OBJS)
 	$(MK) $(LIBFTDIR) clean
-fclean: clean
+fclean : clean
 	$(RM) $(NAME)
 	$(MK) $(LIBFTDIR) fclean
-re: fclean all
+re : fclean all
 
-$(NAME): $(OBJS) $(LIBFT)
+$(NAME) : $(OBJS) $(LIBFT)
 	$(CC) $(LFLAG) $(OBJS) -o $(NAME)
-$(LIBFT):
+$(LIBFT) : 
 	$(MK) $(LIBFTDIR)
 	$(MK) $(LIBFTDIR) bonus
-%.o: %.c
+%.o : %.c
 	$(CC) $(CFLAG) $< -o $@ -c
