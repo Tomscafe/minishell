@@ -6,7 +6,7 @@
 #    By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/09 14:39:57 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/09 19:53:20 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/09 20:07:03 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,10 @@ LIBSRC	= libft/ft_split.c libft/ft_strdup.c libft/ft_strlen.c libft/ft_strjoin.c
 OBJS	= ${SRC:.c=.o}
 OBJS2	= ${LIBSRC:.c=.o}
 
+## JUHYELEE
+JU_INCS = includes
+JU_LIBFTDIR = libft
+JU_LIBFT = ${JU_LIBFTDIR}/libft.a
 JU_SRCS = srcs/execute.c \
 		  srcs/env.c \
 		  srcs/builtin_1.c \
@@ -28,18 +32,18 @@ JU_SRCS = srcs/execute.c \
 		  srcs/builtin_4.c \
 		  srcs/utils.c
 JU_OBJS = ${JU_SRCS:.c=.o}
-JU_LFLAG = -lft -Llibft
+JU_LFLAG = -lft -L${JU_LIBFTDIR} -I${JU_INCS}
 
 all : ${NAME}
 
-${NAME} : ${OBJS} ${OBJS2} $(JU_OBJS)
-	${CC} ${CFLAGS} ${JU_LFLAG}${COMFILE} ${OBJS} ${OBJS2} -o ${NAME}
+${NAME} : ${OBJS} ${OBJS2} ${JU_OBJS} ${JU_LIBFT}
+	${CC} ${CFLAGS} ${JU_LFLAG} ${COMFILE} ${OBJS} ${OBJS2} -o ${NAME}
 
 .c.o:
 	${CC} ${CFLAGS} ${OBFLAGS} -c $< -o $@
 
 clean :
-	rm -rf ${OBJS} ${OBJS2}
+	rm -rf ${OBJS} ${OBJS2} ${JU_OBJS}
 
 fclean : clean
 	rm -rf ${NAME}
@@ -49,3 +53,7 @@ re :
 	make all
 
 .PHONY : all clean fclean re
+
+##JUHYELEE
+${JU_LIBFT}:
+	make -C ${JU_LIBFTDIR}
