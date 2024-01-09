@@ -39,6 +39,7 @@ execution structure : execution
 void execute(pipe tree pointer pipe)
 {
 	execution exe
+
 	process first command(&exe)
 	process middle command(&exe)
 	process last command(&exe)
@@ -182,10 +183,39 @@ void execute at child (table table, execution pointer exe)
 		close(table.input)
 		close(table.output)
 		close exe->pipefd
-		path = is executable(table.command)
-		execve(path, table.argument, table.env)
+		path = is executable(table)
+		if path is null
+			print error
+		if is builtin(table.command)
+			builtin(table)
+		else
+			execve(path, table.argument, table.env)
 	}
 	wait child
 	exe->prevfd = dup(exe->pipefd[read])
 	close exe->pipefd
+}
+
+stirng is executable(table table)
+{
+	string path
+	struct stat protect
+	mode mode
+	size index
+
+	index = 0
+	while table.env[index]
+	{
+		path = merge(table.env[index], table.command)
+		if fail to stat(path, &protect)
+		{
+			print error
+			return null
+		}
+		mode = protext.st mode
+		if ((((mode & 0700) >> 6) & 1) && (((mode & 070) >> 3) & 1) && (mode & 1))
+			return path
+		index++
+	}
+	return null
 }
