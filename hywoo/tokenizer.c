@@ -100,6 +100,7 @@ int	token_command(t_token *token, char *str, int i, int type)
 			break;
 		j++;
 	}
+	// str = find_dollor(token, str, i, &j);
 	command = mini_strdup(str, i, j);
 	add_token_back(token, command, COMMAND);
 	return (j);
