@@ -1,11 +1,27 @@
 return bool
 set table(table pointer, constant simple command, constant integer input def, constant integer output def)
 {
-	table's command is tree's command
-	table's argument is tree's command + ' ' + tree's + tree's argument
+	table's command is simple command's command
+	table's argument is {merge}(simple command)
 	if {set redirection}(table address, simple command's redirection, input def, output def) is fail
 		return false
 	return true
+}
+
+return string
+merge(constant simple command)
+{
+	command length is length of simple command's length
+	argument length is length of simple command's length
+	size is command length + argument length + 2
+	malloc size to result
+
+	if result is null
+		exit fail
+	copy simple command's command to result
+	cat ' ' to result
+	cat simple command's argument to result
+	return result
 }
 
 return bool

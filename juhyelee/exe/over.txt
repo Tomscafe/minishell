@@ -11,7 +11,7 @@ pipe command(execution pointer, constant simple command, constant integer input 
 		exit fail
 	if {set table}(table address, simple command, input def, pipe[1]) fail
 		return
-	execution's exit number is result of {execute commands}(table, execution's env list)
+	execution's exit number is result of {execute commands}(table, execution's env list, execution's exit number)
 	dup pipe[0] to execution's prev
 	close pipe[0]
 	close pipe[1]
@@ -24,12 +24,12 @@ last command(execution pointer, constant simple command pointer)
 
 	if {set table}(table address, simple command, execution's prev, stdout)
 		return
-	execution's exit number is result of {execute commands}(table, env list)
+	execution's exit number is result of {execute commands}(table, env list, execution's exit number)
 	close(execution's prev)
 }
 
 return integer
-execute commands(table, env list)
+execute commands(table, env list, exit number)
 {
 	child pid
 	struct stat
@@ -43,7 +43,7 @@ execute commands(table, env list)
 	{
 		{apply redirect}(table's input, table's output)
 		if {is builtin}(table's command)
-			exit number is result of {buitlin}(table's command, table's argument, env list)
+			exit number is result of {buitlin}(table, env list, exit number)
 		else
 			{execute at child}(table, env list)
 	}

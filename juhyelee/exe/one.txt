@@ -18,15 +18,16 @@ precess commands(execution pointer)
 }
 
 return integer
-process one command(constant simple command)
+process one command(constant simple command, exit number)
 {
 	table
 	exit number
 
 	if !{set table}(table pointer,  simple command, stdin, stdout)
 		return fail
+	table's argument is {merge}(simple command)
 	if command {is builtin}(command)
-		exit number = {builtin}(command, argument, env list)
+		exit number = {builtin}(table, env list, exit number)
 	else
 		exit number = {execute one command at child}(table)
 	return exit number

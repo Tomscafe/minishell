@@ -39,23 +39,21 @@ heredoc(constant string end point)
 }
 
 return integer
-builtin(command, argument, env list)
+builtin(table, env list, exit number)
 {
 	if command is echo
-		retrun {echo}(argument)
+		retrun {echo}(table's argument, exit number)
 	if command is cd
-		return {cd}(argument)
+		return {cd}(table's argument)
 	if command is pwd
 		return {pwd}
 	if command is export
-		return {export}(argument, env list)
+		return {export}(table's argument, env list)
 	if command is unset
-		return {unset}(argument, env list)
+		return {unset}(table's argument, env list)
 	if command is env
-		return {env}
+		return {env}(env list)
 	if command is exit
-		return {exit}(argument)
-	return ? -> 어떤 값이 있어야...
+		return {exit}(table's argumentargument)
+	return fail
 }
-
-return integer

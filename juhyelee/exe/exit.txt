@@ -1,0 +1,11 @@
+return integer
+exit(argument)
+{
+	exit number
+
+	argument + length of "exit "
+	if argument's zero is null
+		exit(0)
+	exit number is result of itoa argument
+	exit(exit number %= 256)
+}
