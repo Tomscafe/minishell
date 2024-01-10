@@ -14,6 +14,7 @@
 /*juhyelee*/
 # include "libft.h"
 # include <fcntl.h>
+# include <sys/stat.h>
 
 # define WARD 0
 # define COMMAND 1
@@ -86,25 +87,25 @@ typedef struct s_execution
 	int		prevfd;
 }t_execution;
 
-void	handler(int sig);
-void	ft_signal(void);
-char	*mini_strdup(char *s, int i, int j);
+//void	handler(int sig);
+//void	ft_signal(void);
+//char	*mini_strdup(char *s, int i, int j);
 
-int	valid_quotes(char *str);
-int	check_type(char c);
-t_token	*init_token(t_token *token);
-void	add_token_back(t_token *token, char *str, int type);
-int	ignore_space(char *str, int i, int type);
-int	ignore_quotes(char *str, int j, char c);
-int	token_command(t_token *token, char *str, int i, int type);
-int	end_of_ward(char c);
-int	token_ward(t_token *token, char *str, int i, int type);
-int	token_redirection(t_token *token, char *str, int i, int type);
-int	token_pipe(t_token *token, char *str, int i, int type);
-int	token_flag(t_token *token);
-void	tokenizer(t_token *token, char *str);
+//int	valid_quotes(char *str);
+//int	check_type(char c);
+//t_token	*init_token(t_token *token);
+//void	add_token_back(t_token *token, char *str, int type);
+//int	ignore_space(char *str, int i, int type);
+//int	ignore_quotes(char *str, int j, char c);
+//int	token_command(t_token *token, char *str, int i, int type);
+//int	end_of_ward(char c);
+//int	token_ward(t_token *token, char *str, int i, int type);
+//int	token_redirection(t_token *token, char *str, int i, int type);
+//int	token_pipe(t_token *token, char *str, int i, int type);
+//int	token_flag(t_token *token);
+//void	tokenizer(t_token *token, char *str);
 
-void	ft_parsing(char *str);
+//void	ft_parsing(char *str);
 
 /*juhyelee*/
 void	execute(t_pipe *pipe, t_envp *env);

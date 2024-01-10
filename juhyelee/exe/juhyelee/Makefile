@@ -6,7 +6,7 @@
 #    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/10 14:10:35 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/10 14:18:31 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/10 14:46:42 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,11 +15,12 @@ LIBFT		= ${LIBFT_DIR}/libft.a
 INCS		= includes
 SRCS		= srcs/execute.c \
 			   srcs/env.c \
-			   srcs/builtin1.c \
-			   srcs/builtin2.c \
-			   srcs/builtin3.c \
-			   srcs/builtin4.c \
-			   srcs/utils.c
+			   srcs/builtin_1.c \
+			   srcs/builtin_2.c \
+			   srcs/builtin_3.c \
+			   srcs/builtin_4.c \
+			   srcs/utils.c \
+			   srcs/heredoc.c
 OBJS		= ${SRCS:.c=.o}
 NAME		= exe
 

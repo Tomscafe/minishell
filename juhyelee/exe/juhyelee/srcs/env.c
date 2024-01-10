@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 15:17:34 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/09 19:43:31 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/10 14:32:02 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,17 @@ char	*set_value(const t_envp *const envp_list)
 	return (value);
 }
 
-void	clear_str(char **env)
+void	clear_strs(char **strs)
 {
 	size_t	index;
 
 	index = 0;
-	while (env[index])
+	while (strs[index])
 	{
-		free(env[index]);
+		free(strs[index]);
 		index++;
 	}
-	free(env[index]);
+	free(strs[index]);
 }
 
 int	set_redirection(t_table *table, const t_redirection *rd)

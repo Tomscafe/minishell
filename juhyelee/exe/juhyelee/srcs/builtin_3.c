@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   builtin_3.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 16:54:30 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/09 19:47:17 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/10 14:32:51 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	run_export(const t_table table, t_execution *exe, const int is_child)
 	export_core(arg, exe);
 }
 
-void	exeport_core(const char **arg, t_execution *exe)
+void	export_core(const char **arg, t_execution *exe)
 {
 	t_envp	*p;
 	size_t	index;
