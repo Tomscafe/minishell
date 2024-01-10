@@ -1,0 +1,39 @@
+만약 명령어 개수가 한개인 경우
+{
+	init redirection(input : stdin, output : stdout)
+	set redirection
+	if is builtin
+		run builtin
+	else
+		run child
+}
+
+만약 명령어 개수가 두개인 경우
+{
+	init redirection(input : stdin, output : pipe[1])
+	set redirection pipe->first
+	run child
+	init redirection(input : prev, output : stdout)
+	set redirection pipe->second
+	run child
+}
+
+만약 명령어 개수가 세개 이상인 경우
+{
+	init redirection(input : stdin, output : pipe[1])
+	set redirection pipe->first
+	run child
+	while pipe->next
+		init redirection(input : prev, output : pipe[1])
+		set redirection pipe->first
+		run child
+		pipe = pipe->next
+	if !pipe->second
+		init redirection(input : prev, output : stdout)
+		set redirection pipe->first
+		run child
+	else
+		init redirection(input : prev, output : pipe [1])
+		set redirection pipe->second
+		run child
+}
