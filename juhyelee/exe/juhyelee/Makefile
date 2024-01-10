@@ -6,7 +6,7 @@
 #    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/10 14:10:35 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/10 14:46:42 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/10 15:06:59 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,19 +14,19 @@ LIBFT_DIR	= libft
 LIBFT		= ${LIBFT_DIR}/libft.a
 INCS		= includes
 SRCS		= srcs/execute.c \
-			   srcs/env.c \
-			   srcs/builtin_1.c \
-			   srcs/builtin_2.c \
-			   srcs/builtin_3.c \
-			   srcs/builtin_4.c \
-			   srcs/utils.c \
-			   srcs/heredoc.c
+			  srcs/env.c \
+			  srcs/builtin_1.c \
+			  srcs/builtin_2.c \
+			  srcs/builtin_3.c \
+			  srcs/builtin_4.c \
+			  srcs/utils.c \
+			  srcs/heredoc.c
 OBJS		= ${SRCS:.c=.o}
 NAME		= exe
 
 CC			= cc
 CFLAG		= -Wall -Wextra -Werror -I${INCS}
-LFLAG		= -lft -L${LIBFT_DIR}
+LFLAG		= -lft -L${LIBFT_DIR} -lreadline
 
 RM			= rm -rf
 MK			= make -C ${LIBFT_DIR}
@@ -43,8 +43,7 @@ fclean : clean
 re : fclean all
 
 ${NAME} : ${OBJS} ${LIBFT}
-	${CC} ${LFLAG} ${OBJS} -o ${NAME}
 ${LIBFT} :
 	${MK}
 %.o : %.c
-	${CC} ${CFLAG} $< -o $@
+	${CC} ${CFLAG} $< -o $@ -c

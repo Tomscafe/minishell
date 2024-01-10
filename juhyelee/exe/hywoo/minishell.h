@@ -109,4 +109,7 @@ void	test_pipe(t_pipe *pipe);
 void	test_envp(t_envp *env);
 void	ft_parsing(char *str, t_envp *env);
 
+// juhyelee
+void	execute(t_pipe *pipe, t_envp *env);
+
 #endif

@@ -18,6 +18,10 @@ void	ft_parsing(char *str, t_envp *env)
 	pipe_tree = make_pipe_tree(pipe_tree, token->next);
 	// test_token(token);
 	// test_pipe(pipe_tree);
+	
+	// juhyelee
+	execute(pipe_tree, env);
+
 	all_free(token, pipe_tree);
 }
 
