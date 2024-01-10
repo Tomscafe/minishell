@@ -1,0 +1,70 @@
+return bool
+set table(table pointer, constant simple command, constant integer input def, constant integer output def)
+{
+	table's command is tree's command
+	table's argument is tree's command + ' ' + tree's + tree's argument
+	if {set redirection}(table address, simple command's redirection, input def, output def) is fail
+		return false
+	return true
+}
+
+return bool
+set redirection(table pointer, redirection list, consttant integer input def, constant integer output def)
+{
+	table's input = {set input}(redirection, stdin)
+	if input is negative
+		return false
+	table's output = {set output}(redirection, stdout)
+	return true
+}
+
+return integer
+set input(constant redirection list, constant integer def)
+{
+	input
+
+	input is def
+	while list is not null
+	{
+		if list's symbol is <
+		{
+			input is result of open list'sfile for read mode
+			if input is negative
+			{
+				print error message
+				return negative
+			}
+		}
+		if list's symbol is <<
+		{
+			input is result of run {heredoc}(list's file)
+			if input is negative
+				exit program -> 파일 디스크립트가 없을 정도면...
+		}
+		list is list's next
+	}
+	return input
+}
+
+return void
+set output(constant redirection list, constant integer def)
+{
+	output
+
+	output is def
+	while list is not null
+	{
+		if list's symbol is >
+		{
+			output is result of open list's file for write mode
+			if output is negative
+				exit program
+		}
+		if list's symbol is >>
+		{
+			output is result of open list's file for write and appen mode
+			if output is negative
+				exit program
+		}
+	}
+}

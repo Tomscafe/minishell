@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/10 14:34:40 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/10 15:05:01 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/10 18:33:45 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int	heredoc(const char *end_point)
 	char	*input_line;
 	int		heredoc_fd;
 
-	heredoc_fd = open("hereodc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	heredoc_fd = open("heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (heredoc_fd == -1)
 	{
 		fprintf(stderr, "here doc: fail open\n");

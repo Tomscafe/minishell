@@ -1,0 +1,67 @@
+
+
+return void
+pipe command(execution pointer, constant simple command, constant integer input def)
+{
+	table
+	pipe[2]
+	prev
+
+	if pipe(pipe) is fail
+		exit fail
+	if {set table}(table address, simple command, input def, pipe[1]) fail
+		return
+	execution's exit number is result of {execute commands}(table, execution's env list)
+	dup pipe[0] to execution's prev
+	close pipe[0]
+	close pipe[1]
+}
+
+return void
+last command(execution pointer, constant simple command pointer)
+{
+	table
+
+	if {set table}(table address, simple command, execution's prev, stdout)
+		return
+	execution's exit number is result of {execute commands}(table, env list)
+	close(execution's prev)
+}
+
+return integer
+execute commands(table, env list)
+{
+	child pid
+	struct stat
+	exit number
+	env array
+
+	child pid is result of fork
+	if child pid is negative
+		exit fail
+	else if child pid is zero
+	{
+		{apply redirect}(table's input, table's output)
+		if {is builtin}(table's command)
+			exit number is result of {buitlin}(table's command, table's argument, env list)
+		else
+			{execute at child}(table, env list)
+	}
+	wait(child, status pointer)
+	exit number is WEXITSTATUS(status)
+	return exit number
+}
+
+return void
+execute at child(table, env list)
+{
+	env array
+
+	env array is result of change env list to array
+	if {is executable}(command, env array) is fail
+	{
+		print error message
+		exit fail
+	}
+	execve(table's command, table's argument, env array)
+}

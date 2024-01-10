@@ -7,6 +7,7 @@ clean :
 fclean :
 	make -C juhyelee fclean
 	make -C hywoo fclean
+	rm -rf minishell
 re :
 	make -C juhyelee re
 	make -C hywoo re

@@ -6,7 +6,7 @@
 #    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/10 14:10:35 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/10 15:06:59 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/10 15:33:58 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,7 +25,7 @@ OBJS		= ${SRCS:.c=.o}
 NAME		= exe
 
 CC			= cc
-CFLAG		= -Wall -Wextra -Werror -I${INCS}
+CFLAG		= -Wall -Wextra -Werror -I${INCS} -g3
 LFLAG		= -lft -L${LIBFT_DIR} -lreadline
 
 RM			= rm -rf
