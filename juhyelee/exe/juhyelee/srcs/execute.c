@@ -3,19 +3,21 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juhyelee <juhyelee@student.42.fr>          +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/09 14:49:26 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/09 19:39:25 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/10 14:20:24 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	execute(t_pipe pipe)
+void	execute(t_pipe *pipe, t_envp *env)
 {
 	t_execution	exe;
 
+	exe.tree = pipe;
+	exe.env = env;
 	process_first_command(&exe);
 	process_middle_command(&exe);
 	process_last_command(&exe);
@@ -94,7 +96,6 @@ void	process_last_command(t_execution *exe)
 void	execute_at_child(const t_table table, t_execution *exe)
 {
 	pid_t	child;
-	char	*path;
 
 	child = fork();
 	if (child == -1)

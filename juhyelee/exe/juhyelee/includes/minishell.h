@@ -107,7 +107,7 @@ void	tokenizer(t_token *token, char *str);
 void	ft_parsing(char *str);
 
 /*juhyelee*/
-void	execute(t_pipe pipe);
+void	execute(t_pipe *pipe, t_envp *env);
 void	process_first_command(t_execution *exe);
 void	process_middle_command(t_execution *exe);
 void	process_last_command(t_execution *exe);
