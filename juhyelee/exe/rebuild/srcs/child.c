@@ -62,11 +62,9 @@ char	*is_executable(const char *cmd, const char **env)
 	size_t	index;
 	char	**path;
 	char	*exe_path;
-	int		is_execute;
 
 	path = get_paths(env);
 	index = 0;
-	is_execute = 0;
 	while (path[index])
 	{
 		exe_path = get_exe_path(path[index], cmd);

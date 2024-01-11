@@ -15,6 +15,7 @@
 # include "libft.h"
 # include <fcntl.h>
 # include <sys/stat.h>
+# include <sys/wait.h>
 
 # define WARD 0
 # define COMMAND 1
