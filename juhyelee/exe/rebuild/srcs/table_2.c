@@ -1,25 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   table_2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/11 16:16:48 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 19:44:00 by juhyelee         ###   ########.fr       */
+/*   Created: 2024/01/11 20:17:48 by juhyelee          #+#    #+#             */
+/*   Updated: 2024/01/11 20:18:46 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	execute_pwd(void)
+void	close_input(int input)
 {
-	char	buffer[2024];
-	char	*ret;
-
-	ret = getcwd(buffer, 2024);
-	if (!ret)
-		return (EXIT_FAILURE);
-	ft_putendl_fd(buffer, STDOUT_FILENO);
-	return (EXIT_SUCCESS);
+	if (input != STDIN_FILENO)
+		close(input);
 }

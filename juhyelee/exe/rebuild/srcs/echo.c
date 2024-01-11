@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 15:52:17 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/11 19:49:40 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ int	execute_echo(const char *arg, const int n_exit)
 		return (EXIT_FAILURE);
 	else if (!is_newline)
 		arg += 2;
-	if (arg[0])
+	if (arg[0] == ' ')
 		print_arg(arg + 1, n_exit);
 	if (is_newline)
 		write(STDOUT_FILENO, "\n", 1);

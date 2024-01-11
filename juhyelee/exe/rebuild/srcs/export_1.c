@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:18:49 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 18:22:53 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/11 20:15:14 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ int	execute_export(const char *arg, t_envp **list)
 			add_variable(list, var, val);
 		index++;
 	}
+	clear_strs(envs);
 	return (EXIT_SUCCESS);
 }
 
@@ -49,6 +50,7 @@ void	print_env_for_export(const t_envp *list)
 			ft_putstr_fd(list->value, STDOUT_FILENO);
 		}
 		ft_putchar_fd('\n', STDOUT_FILENO);
+		list = list->next;
 	}
 }
 

@@ -2,6 +2,8 @@
 	"files.associations": {
 		"iterator": "c",
 		"minishell.h": "c",
-		"stat.h": "c"
+		"stat.h": "c",
+		"memory": "c",
+		"utility": "c"
 	}
 }

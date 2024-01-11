@@ -124,6 +124,7 @@ char	*get_argument(const t_simple cmd);
 int		set_redirection(t_table *table, const t_redirection *rd, \
 						const int input, const int output);
 int		set_input(const t_redirection *rd, const int indef);
+void	close_input(int input);
 int		set_output(const t_redirection *rd, const int outdef);
 int		heredoc(const char *end);
 void	apply_redirection(const int input, const int output);
@@ -136,8 +137,10 @@ int		get_echo_option(const char *arg);
 void	print_arg(const char *str, const int n_exit);
 
 int		execute_cd(const char *arg, t_envp **list);
+void	change_pwd(const char *path, t_envp **list);
 void	change_oldpwd(t_envp **list);
 char	*get_first_arg(const char *arg);
+char	*get_home(const t_envp *list);
 
 int		execute_pwd(void);
 
@@ -162,6 +165,6 @@ char	*is_executable(const char *cmd, const char **env);
 char	*get_env_string(const t_envp *env);
 char	**get_paths(const char **env);
 char	*get_exe_path(const char *path, const char *cmd);
-void	clear_path(char **path);
+void	clear_strs(char **strs);
 
 #endif

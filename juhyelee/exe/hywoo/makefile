@@ -13,7 +13,8 @@ EXE_DIR = ${JU_DIR}/srcs
 EXE_SRCS = ${EXE_DIR}/execute.c \
 		   ${EXE_DIR}/child.c \
 		   ${EXE_DIR}/over.c \
-		   ${EXE_DIR}/table.c \
+		   ${EXE_DIR}/table_1.c \
+		   ${EXE_DIR}/table_2.c \
 		   ${EXE_DIR}/builtin.c \
 		   ${EXE_DIR}/heredoc.c \
 		   ${EXE_DIR}/env.c \

@@ -6,7 +6,7 @@
 #    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/11 03:19:53 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/11 18:42:28 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/11 20:18:56 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,8 @@ INCS		= includes
 SRCS		= srcs/execute.c \
 			  srcs/child.c \
 			  srcs/over.c \
-			  srcs/table.c \
+			  srcs/table_1.c \
+			  srcs/table_2.c \
 			  srcs/builtin.c \
 			  srcs/heredoc.c \
 			  srcs/env.c \

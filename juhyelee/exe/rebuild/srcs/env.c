@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:00:02 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 19:33:25 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/11 20:19:54 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,24 +69,24 @@ char	*get_exe_path(const char *path, const char *cmd)
 	return (ret);
 }
 
-void	clear_path(char **path)
+void	clear_strs(char **strs)
 {
 	size_t	index;
 
 	index = 0;
-	while (path[index])
+	while (strs[index])
 	{
-		free(path[index]);
+		free(strs[index]);
 		index++;
 	}
-	free(path);
+	free(strs);
 }
 
 int	execute_env(const t_envp *list)
 {
 	while (list)
 	{
-		if (list->value)
+		if (list->value && list->value[0])
 		{
 			ft_putstr_fd(list->variable, STDOUT_FILENO);
 			ft_putchar_fd('=', STDOUT_FILENO);

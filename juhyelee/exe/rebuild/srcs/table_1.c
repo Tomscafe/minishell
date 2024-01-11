@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 18:52:56 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/11 20:18:28 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,16 +55,14 @@ int	set_input(const t_redirection *rd, const int indef)
 	{
 		if (ft_strncmp(rd->symbol, "<<", 2) == 0)
 		{
-			if (input != STDIN_FILENO)
-				close(input);
+			close_input(input);
 			input = heredoc(rd->file);
 			if (input < 0)
 				return (-1);
 		}
 		else if (rd->symbol[0] == '<')
 		{
-			if (input != STDIN_FILENO)
-				close(input);
+			close_input(input);
 			input = open(rd->file, O_RDONLY);
 			if (input < 0)
 			{

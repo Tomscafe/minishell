@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 19:34:38 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/11 20:20:29 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,10 @@ void	execute_at_child(const t_table table, const t_envp *list)
 		printf("minishell: %s: Not found command\n", table.command);
 		exit(EXIT_FAILURE);
 	}
-	printf("%s\n", path);
 	execve(path, (char *const *)arg, (char *const *)env);
+	clear_strs((char **)env);
+	clear_strs((char **)arg);
+	free(path);
 }
 
 char	**convert_to_array(const t_envp *list)
@@ -73,6 +75,6 @@ char	*is_executable(const char *cmd, const char **env)
 		index++;
 		free(exe_path);
 	}
-	clear_path(path);
+	clear_strs(path);
 	return (NULL);
 }
