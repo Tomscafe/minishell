@@ -1,13 +1,15 @@
+JUHYELEE = rebuild
+
 all :
-	make -C juhyelee
+	make -C ${JUHYELEE}
 	make -C hywoo
 clean :
-	make -C juhyelee clean
+	make -C ${JUHYELEE} clean
 	make -C hywoo clean
 fclean :
-	make -C juhyelee fclean
+	make -C ${JUHYELEE} fclean
 	make -C hywoo fclean
 	rm -rf minishell
 re :
-	make -C juhyelee re
+	make -C ${JUHYELEE} re
 	make -C hywoo re

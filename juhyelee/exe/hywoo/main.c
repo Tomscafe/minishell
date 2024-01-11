@@ -20,7 +20,7 @@ void	ft_parsing(char *str, t_envp *env)
 	// test_pipe(pipe_tree);
 	
 	// juhyelee
-	execute(pipe_tree, env);
+	execute(pipe_tree, &env);
 
 	all_free(token, pipe_tree);
 }

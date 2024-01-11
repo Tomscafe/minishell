@@ -8,17 +8,24 @@ LIBSRC	= libft/ft_split.c libft/ft_strdup.c libft/ft_strlen.c libft/ft_strjoin.c
 OBJS	= ${SRC:.c=.o}
 OBJS2	= ${LIBSRC:.c=.o}
 
-EXE_DIR = ../juhyelee/srcs
+JU_DIR = ../rebuild
+EXE_DIR = ${JU_DIR}/srcs
 EXE_SRCS = ${EXE_DIR}/execute.c \
-		   ${EXE_DIR}/env.c \
-		   ${EXE_DIR}/utils.c \
+		   ${EXE_DIR}/child.c \
+		   ${EXE_DIR}/over.c \
+		   ${EXE_DIR}/table.c \
+		   ${EXE_DIR}/builtin.c \
 		   ${EXE_DIR}/heredoc.c \
-		   ${EXE_DIR}/builtin_1.c \
-		   ${EXE_DIR}/builtin_2.c \
-		   ${EXE_DIR}/builtin_3.c \
-		   ${EXE_DIR}/builtin_4.c
+		   ${EXE_DIR}/env.c \
+		   ${EXE_DIR}/echo.c \
+		   ${EXE_DIR}/cd.c \
+		   ${EXE_DIR}/pwd.c \
+		   ${EXE_DIR}/export_1.c \
+		   ${EXE_DIR}/export_2.c \
+		   ${EXE_DIR}/unset.c \
+		   ${EXE_DIR}/exit.c
 EXE_OBJS = ${EXE_SRCS:.c=.o}
-LIBFT_DIR = ../juhyelee/libft
+LIBFT_DIR = ${JU_DIR}/libft
 LIBFT = ${LIBFT_DIR}/libft.a
 LFLAG = -lft -L${LIBFT_DIR}
 
@@ -28,7 +35,7 @@ ${NAME} : ${OBJS} ${OBJS2} ${EXE_OBJS} ${LIBFT}
 	${CC} ${CFLAGS} ${COMFILE} ${LFLAG} ${OBJS} ${OBJS2} ${EXE_OBJS} -o ${NAME}
 
 .c.o:
-	${CC} ${CFLAGS} ${OBFLAGS} -c $< -o $@
+	${CC} ${CFLAGS} ${OBFLAGS} $< -o $@ -c
 
 clean :
 	rm -rf ${OBJS} ${OBJS2}
