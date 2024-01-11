@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 03:46:21 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/11 17:54:47 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ void	execute(t_pipe *tree, t_envp **list)
 	if (!tree->next && !tree->second)
 		exe.exit_num = process_one_command(list, *tree->first, exe.exit_num);
 	else
-		peocess_commands(&exe, list);
+		process_commands(&exe, list);
 }
 
 int	process_one_command(t_envp **list, const t_command cmd, const int n_exit)
@@ -31,7 +31,7 @@ int	process_one_command(t_envp **list, const t_command cmd, const int n_exit)
 
 	if (!set_table(&table, cmd, STDIN_FILENO, STDOUT_FILENO))
 		return (EXIT_FAILURE);
-	if (is_builtin(cmd))
+	if (is_builtin(table.command))
 		ret = builtin(table, list, n_exit);
 	else
 		ret = execute_one_command(table, *list);
