@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   table.c                                            :+:      :+:    :+:   */
+/*   table_1.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 20:18:28 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 13:12:06 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,14 +86,13 @@ int	set_output(const t_redirection *rd, const int outdef)
 		{
 			if (output != STDOUT_FILENO)
 				close(output);
-			output = open(rd->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
+			output = open(rd->file, O_WRONLY | O_APPEND |O_CREAT, 0644);
 		}
 		else if (rd->symbol[0] == '>')
 		{
 			if (output != STDOUT_FILENO)
 				close(output);
-			output = open(rd->file, O_WRONLY | O_APPEND | O_CREAT | O_TRUNC, \
-				0644);
+			output = open(rd->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		}
 		if (output < 0)
 			exit(EXIT_FAILURE);

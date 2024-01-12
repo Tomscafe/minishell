@@ -6,23 +6,23 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:18:49 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 20:15:14 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 13:05:06 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	execute_export(const char *arg, t_envp **list)
+int	execute_export(t_table table, t_envp **list)
 {
 	size_t	index;
 	char	**envs;
 	char	*var;
 	char	*val;
 
-	arg += 7;
-	if (arg[0] == '\0')
-		return (print_env_for_export((const t_envp *)(*list)), EXIT_SUCCESS);
-	envs = ft_split(arg, ' ');
+	table.argument += 7;
+	if (table.argument[0] == '\0')
+		return (print_env_for_export(table, (const t_envp *)(*list)));
+	envs = ft_split(table.argument, ' ');
 	if (!envs)
 		exit(EXIT_FAILURE);
 	index = 0;
@@ -38,20 +38,33 @@ int	execute_export(const char *arg, t_envp **list)
 	return (EXIT_SUCCESS);
 }
 
-void	print_env_for_export(const t_envp *list)
+int	print_env_for_export(const t_table table, const t_envp *list)
 {
-	while (list)
+	pid_t	child;
+	int		exit_num;
+
+	child = fork();
+	if (child < 0)
+		exit(EXIT_FAILURE);
+	else if (child == 0)
 	{
-		ft_putstr_fd("declare -x ", STDOUT_FILENO);
-		ft_putstr_fd(list->variable, STDOUT_FILENO);
-		if (list->value)
+		builtin_output(table.input, table.output);
+		while (list)
 		{
-			ft_putchar_fd('=', STDOUT_FILENO);
-			ft_putstr_fd(list->value, STDOUT_FILENO);
+			ft_putstr_fd("declare -x ", STDOUT_FILENO);
+			ft_putstr_fd(list->variable, STDOUT_FILENO);
+			if (list->value)
+			{
+				ft_putchar_fd('=', STDOUT_FILENO);
+				ft_putstr_fd(list->value, STDOUT_FILENO);
+			}
+			ft_putchar_fd('\n', STDOUT_FILENO);
+			list = list->next;
 		}
-		ft_putchar_fd('\n', STDOUT_FILENO);
-		list = list->next;
+		exit(EXIT_SUCCESS);
 	}
+	waitpid(child, &exit_num, WUNTRACED);
+	return (WEXITSTATUS(exit_num));
 }
 
 char	*get_variable(const char *env)

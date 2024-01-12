@@ -132,8 +132,9 @@ void	apply_redirection(const int input, const int output);
 
 int		is_builtin(const char *cmd);
 int		builtin(const t_table table, t_envp **list, const int n_exit);
+void	builtin_output(int input, int output);
 
-int		execute_echo(const char *arg, const int n_exit);
+int		execute_echo(t_table table, const int n_exit);
 int		get_echo_option(const char *arg);
 void	print_arg(const char *str, const int n_exit);
 
@@ -143,10 +144,10 @@ void	change_oldpwd(t_envp **list);
 char	*get_first_arg(const char *arg);
 char	*get_home(const t_envp *list);
 
-int		execute_pwd(void);
+int		execute_pwd(const t_table table);
 
-int		execute_export(const char *arg, t_envp **list);
-void	print_env_for_export(const t_envp *list);
+int		execute_export(t_table table, t_envp **list);
+int		print_env_for_export(const t_table table, const t_envp *list);
 char	*get_variable(const char *env);
 char	*get_value(const char *env);
 int		change_value(t_envp **list, const char *var, const char *val);
@@ -155,7 +156,7 @@ void	add_variable(t_envp **list, const char *var, const char *val);
 int		execute_unset(const char *arg, t_envp **list);
 void	remove_env(t_envp **list, t_envp *to_del);
 
-int		execute_env(const t_envp *list);
+int		execute_env(const t_table table, const t_envp *list);
 
 int		execute_exit(const char *arg);
 

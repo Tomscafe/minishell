@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:00:02 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 20:19:54 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 12:59:51 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,17 +82,29 @@ void	clear_strs(char **strs)
 	free(strs);
 }
 
-int	execute_env(const t_envp *list)
+int	execute_env(const t_table table, const t_envp *list)
 {
-	while (list)
+	pid_t	child;
+	int		exit_num;
+
+	child = fork();
+	if (child < 0)
+		exit(EXIT_FAILURE);
+	else if (child == 0)
 	{
-		if (list->value && list->value[0])
+		builtin_output(table.input, table.output);
+		while (list)
 		{
-			ft_putstr_fd(list->variable, STDOUT_FILENO);
-			ft_putchar_fd('=', STDOUT_FILENO);
-			ft_putendl_fd(list->value, STDOUT_FILENO);
+			if (list->value && list->value[0])
+			{
+				ft_putstr_fd(list->variable, STDOUT_FILENO);
+				ft_putchar_fd('=', STDOUT_FILENO);
+				ft_putendl_fd(list->value, STDOUT_FILENO);
+			}
+			list = list->next;
 		}
-		list = list->next;
+		exit(EXIT_SUCCESS);
 	}
-	return (EXIT_SUCCESS);
+	waitpid(child, &exit_num, WUNTRACED);
+	return (WEXITSTATUS(exit_num));
 }

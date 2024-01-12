@@ -6,20 +6,31 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:16:48 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 19:44:00 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 13:06:49 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	execute_pwd(void)
+int	execute_pwd(const t_table table)
 {
+	pid_t	child;
+	int		exit_num;
 	char	buffer[2024];
 	char	*ret;
 
-	ret = getcwd(buffer, 2024);
-	if (!ret)
-		return (EXIT_FAILURE);
-	ft_putendl_fd(buffer, STDOUT_FILENO);
-	return (EXIT_SUCCESS);
+	child = fork();
+	if (child < 0)
+		exit(EXIT_FAILURE);
+	else if (child == 0)
+	{
+		builtin_output(table.input, table.output);
+		ret = getcwd(buffer, 2024);
+		if (!ret)
+			return (EXIT_FAILURE);
+		ft_putendl_fd(buffer, STDOUT_FILENO);
+		exit(EXIT_SUCCESS);
+	}
+	waitpid(child, &exit_num, WUNTRACED);
+	return (WEXITSTATUS(exit_num));
 }

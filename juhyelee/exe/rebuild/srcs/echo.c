@@ -6,51 +6,63 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 19:49:40 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 12:54:27 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	execute_echo(const char *arg, const int n_exit)
+int	execute_echo(t_table table, const int n_exit)
 {
-	int	is_newline;
+	pid_t	child;
+	int		is_newline;
+	int		exit_num;
 
-	arg += 5;
-	is_newline = get_echo_option(arg);
-	if (is_newline < 0)
-		return (EXIT_FAILURE);
-	else if (!is_newline)
-		arg += 2;
-	if (arg[0] == ' ')
-		print_arg(arg + 1, n_exit);
-	if (is_newline)
-		write(STDOUT_FILENO, "\n", 1);
-	return (EXIT_SUCCESS);
+	child = fork();
+	if (child < 0)
+		exit(EXIT_FAILURE);
+	else if (child == 0)
+	{
+		builtin_output(table.input, table.output);
+		table.argument += 5;
+		is_newline = get_echo_option(table.argument);
+		if (is_newline < 0)
+			exit(EXIT_FAILURE);
+		else if (!is_newline)
+			table.argument += 2;
+		if (table.argument[0] == ' ')
+			table.argument++;
+		print_arg(table.argument, n_exit);
+		if (is_newline)
+			write(STDOUT_FILENO, "\n", 1);
+		exit(EXIT_SUCCESS);
+	}
+	waitpid(child, &exit_num, WUNTRACED);
+	return (WEXITSTATUS(exit));
 }
 
 int	get_echo_option(const char *arg)
 {
 	char	option[4];
-	int		is_same_option;
-	int		is_not_same_option;
 
 	if (arg[0] == '\0')
 		return (1);
 	ft_memset(option, 0, 4);
 	ft_strlcpy(option, arg, 4);
-	is_same_option = (option[0] == '-' && option[1] == 'n');
-	is_not_same_option = (option[0] == '-' && option[1] != 'n');
-	if (is_same_option && option[2] != '\0' && option[2] == ' ')
-		return (1);
-	if (is_same_option && (option[2] == '\0' || option[2] == ' '))
-		return (0);
-	if (is_not_same_option && option[2] != '\0' && option[2] != ' ')
-		return (1);
-	if (is_not_same_option && (option[2] == '0' || option[2] == ' '))
+	if (option[0] == '-')
 	{
-		printf("minishell: echo: Invalid option\n");
-		return (-1);
+		if (option[1] == 'n')
+		{
+			if (option[2] == ' ' || option[2] == '\0')
+				return (0);
+			else
+				return (1);
+		}
+		else if (option[2] == ' ' || option[2] == '\0')
+		{
+			printf("minishell: echo: Invalid option\n");
+			return (-1);
+		}
 	}
 	return (1);
 }
