@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 20:20:29 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 19:01:47 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,19 +59,43 @@ char	**convert_to_array(const t_envp *list)
 
 char	*is_executable(const char *cmd, const char **env)
 {
+	if (cmd[0] == '.')
+		return (user_command(cmd + 1));
+	return (other_builtin(cmd, env));
+}
+
+char	*user_command(const char *cmd)
+{
+	char	buffer[2024];
+	char	*pwd;
+	char	*ret;
+
+	if (!getcwd(buffer, 2024))
+		return (NULL);
+	pwd = ft_strjoin(buffer, "/");
+	if (!pwd)
+		exit(EXIT_FAILURE);
+	ret = ft_strjoin(pwd, cmd);
+	if (!ret)
+		exit(EXIT_FAILURE);
+	return (ret);
+}
+
+char	*other_builtin(const char *cmd, const char **env)
+{
 	size_t	index;
 	char	**path;
-	char	*exe_path;
+	char	*ret;
 
 	path = get_paths(env);
 	index = 0;
 	while (path[index])
 	{
-		exe_path = get_exe_path(path[index], cmd);
-		if (access(exe_path, X_OK) == 0)
-			return (exe_path);
+		ret = get_exe_path(path[index], cmd);
+		if (access(ret, X_OK) == 0)
+			return (ret);
 		index++;
-		free(exe_path);
+		free(ret);
 	}
 	clear_strs(path);
 	return (NULL);

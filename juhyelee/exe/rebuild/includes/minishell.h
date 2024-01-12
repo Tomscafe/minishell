@@ -164,6 +164,8 @@ int		execute_exit(const char *arg);
 void	execute_at_child(const t_table table, const t_envp *list);
 char	**convert_to_array(const t_envp *list);
 char	*is_executable(const char *cmd, const char **env);
+char	*user_command(const char *cmd);
+char	*other_builtin(const char *cmd, const char **env);
 
 char	*get_env_string(const t_envp *env);
 char	**get_paths(const char **env);
