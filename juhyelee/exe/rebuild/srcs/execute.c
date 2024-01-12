@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/12 13:32:08 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 19:56:29 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,8 +35,8 @@ int	process_one_command(t_envp **list, const t_command cmd, const int n_exit)
 		ret = builtin(table, list, n_exit);
 	else
 		ret = execute_one_command(table, *list);
-	close_input(table.input);
-	close_output(table.output);
+	close_input(table.input, table.indef);
+	close_output(table.output, table.outdef);
 	return (ret);
 }
 
@@ -50,23 +50,25 @@ int	execute_one_command(const t_table table, t_envp *list)
 		exit(EXIT_FAILURE);
 	else if (child == 0)
 	{
-		apply_redirection(table.input, table.output);
+		apply_redirection(table);
 		execute_at_child(table, list);
 	}
 	waitpid(child, &status, WUNTRACED);
+	if (table.is_heredoc)
+		unlink("heredoc");
 	return (WEXITSTATUS(status));
 }
 
-void	apply_redirection(const int input, const int output)
+void	apply_redirection(const t_table table)
 {
-	if (input != STDIN_FILENO)
+	if (table.input != STDIN_FILENO)
 	{
-		dup2(input, STDIN_FILENO);
-		close(input);
+		dup2(table.input, STDIN_FILENO);
+		close(table.input);
 	}
-	if (output != STDOUT_FILENO)
+	if (table.output != STDOUT_FILENO)
 	{
-		dup2(output, STDOUT_FILENO);
-		close(output);
+		dup2(table.output, STDOUT_FILENO);
+		close(table.output);
 	}
 }

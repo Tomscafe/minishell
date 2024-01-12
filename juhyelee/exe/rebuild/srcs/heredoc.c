@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 18:42:42 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 20:12:44 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,22 @@
 
 int	heredoc(const char *end)
 {
-	int		heredoc;
-	char	*inputline;
+	int		heredocfd;
+	char	*input_line;
 
-	heredoc = open("heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (!heredoc)
+	heredocfd = open("heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (!heredocfd)
 		exit(EXIT_FAILURE);
 	while (1)
 	{
-		inputline = readline("> ");
-		if (ft_strncmp(inputline, end, ft_strlen(inputline)) == 0)
-		{
-			free(inputline);
+		input_line = readline("> ");
+		if (input_line == NULL)
+			exit(0);
+		if (ft_strncmp(input_line, end, ft_strlen(input_line)) == 0)
 			break ;
-		}
-		ft_putendl_fd(inputline, heredoc);
-		free(inputline);
+		ft_putendl_fd(input_line, heredocfd);
+		free(input_line);
 	}
-	return (heredoc);
+	close(heredocfd);
+	return (open("heredoc", O_RDONLY));
 }

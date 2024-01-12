@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 17:35:43 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/12 13:47:44 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 19:30:44 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,10 @@ void	pipe_command(t_execution *exe, const t_command cmd, const int input)
 		return ;
 	exe->exit_num = execute_commands(table, exe->list, exe->exit_num);
 	exe->prev = dup(pipefd[READ]);
-	close(pipefd[WRITE]);
+	close_input(table.input, table.indef);
+	close_output(table.output, table.outdef);
 	close(pipefd[READ]);
-	close_input(table.input);
-	close_output(table.output);
+	close(pipefd[WRITE]);
 }
 
 void	last_command(t_execution *exe, const t_command cmd)
@@ -49,8 +49,8 @@ void	last_command(t_execution *exe, const t_command cmd)
 		return ;
 	exe->exit_num = execute_commands(table, exe->list, exe->exit_num);
 	close(exe->prev);
-	close_input(table.input);
-	close_output(table.output);
+	close_input(table.input, table.indef);
+	close_output(table.output, table.outdef);
 }
 
 int	execute_commands(const t_table table, t_envp **list, const int n_exit)
@@ -65,7 +65,7 @@ int	execute_commands(const t_table table, t_envp **list, const int n_exit)
 		exit(EXIT_FAILURE);
 	else if (child == 0)
 	{
-		apply_redirection(table.input, table.output);
+		apply_redirection(table);
 		if (is_builtin(table.command))
 			ret_exit = builtin(table, list, n_exit);
 		else

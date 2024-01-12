@@ -78,6 +78,9 @@ typedef struct s_table
 	char	*argument;
 	int		input;
 	int		output;
+	int		indef;
+	int		outdef;
+	int		is_heredoc;
 }t_table;
 typedef struct s_execution
 {
@@ -122,14 +125,13 @@ int		execute_commands(const t_table table, t_envp **list, const int n_exit);
 int		set_table(t_table *table, const t_command cmd, \
 					const int input, const int output);
 char	*get_argument(const t_simple cmd);
-int		set_redirection(t_table *table, const t_redirection *rd, \
-						const int input, const int output);
-int		set_input(const t_redirection *rd, const int indef);
-void	close_input(int input);
-void	close_output(int output);
-int		set_output(const t_redirection *rd, const int outdef);
+int		set_redirection(t_table *table, const t_redirection *rd);
+int		set_input(t_table *table, const t_redirection *rd);
+int		set_output(t_table *table, const t_redirection *rd);
+void	close_input(int input, int intdef);
+void	close_output(int output, int outdef);
 int		heredoc(const char *end);
-void	apply_redirection(const int input, const int output);
+void	apply_redirection(const t_table table);
 
 int		is_builtin(const char *cmd);
 int		builtin(const t_table table, t_envp **list, const int n_exit);
