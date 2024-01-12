@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 19:15:59 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 13:32:08 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,10 +35,8 @@ int	process_one_command(t_envp **list, const t_command cmd, const int n_exit)
 		ret = builtin(table, list, n_exit);
 	else
 		ret = execute_one_command(table, *list);
-	if (table.input != STDIN_FILENO)
-		close(table.input);
-	if (table.output != STDOUT_FILENO)
-		close(table.output);
+	close_input(table.input);
+	close_output(table.output);
 	return (ret);
 }
 

@@ -126,6 +126,7 @@ int		set_redirection(t_table *table, const t_redirection *rd, \
 						const int input, const int output);
 int		set_input(const t_redirection *rd, const int indef);
 void	close_input(int input);
+void	close_output(int output);
 int		set_output(const t_redirection *rd, const int outdef);
 int		heredoc(const char *end);
 void	apply_redirection(const int input, const int output);

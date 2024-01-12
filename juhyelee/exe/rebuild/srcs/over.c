@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 17:35:43 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 18:20:49 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 13:47:44 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,19 +15,13 @@
 void	process_commands(t_execution *exe)
 {
 	pipe_command(exe, *exe->tree->first, STDIN_FILENO);
-	exe->tree = exe->tree->next;
 	while (exe->tree->next)
 	{
-		pipe_command(exe, *exe->tree->first, exe->prev);
 		exe->tree = exe->tree->next;
-	}
-	if (!exe->tree->second)
-		last_command(exe, *exe->tree->first);
-	else
-	{
 		pipe_command(exe, *exe->tree->first, exe->prev);
-		last_command(exe, *exe->tree->second);
 	}
+	if (exe->tree->second)
+		last_command(exe, *exe->tree->second);
 }
 
 void	pipe_command(t_execution *exe, const t_command cmd, const int input)
@@ -40,9 +34,11 @@ void	pipe_command(t_execution *exe, const t_command cmd, const int input)
 	if (!set_table(&table, cmd, input, pipefd[WRITE]))
 		return ;
 	exe->exit_num = execute_commands(table, exe->list, exe->exit_num);
-	dup2(exe->prev, pipefd[READ]);
+	exe->prev = dup(pipefd[READ]);
 	close(pipefd[WRITE]);
 	close(pipefd[READ]);
+	close_input(table.input);
+	close_output(table.output);
 }
 
 void	last_command(t_execution *exe, const t_command cmd)
@@ -53,6 +49,8 @@ void	last_command(t_execution *exe, const t_command cmd)
 		return ;
 	exe->exit_num = execute_commands(table, exe->list, exe->exit_num);
 	close(exe->prev);
+	close_input(table.input);
+	close_output(table.output);
 }
 
 int	execute_commands(const t_table table, t_envp **list, const int n_exit)
