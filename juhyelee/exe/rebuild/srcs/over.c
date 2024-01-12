@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 17:35:43 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/12 20:52:16 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/13 08:55:47 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,9 +36,11 @@ void	pipe_command(t_execution *exe, const t_command cmd, const int input)
 	if (!set_table(&table, cmd, input, pipefd[WRITE]))
 		return ;
 	exe->exit_num = execute_commands(table, exe->list, exe->exit_num);
+	if (table.is_heredoc)
+		unlink("heredoc");
+	close_input(table.input, input);
+	close_output(table.output, pipefd[WRITE]);
 	exe->prev = dup(pipefd[READ]);
-	close_input(table.input, table.indef);
-	close_output(table.output, table.outdef);
 	close(pipefd[READ]);
 	close(pipefd[WRITE]);
 }
@@ -50,9 +52,11 @@ void	last_command(t_execution *exe, const t_command cmd)
 	if (!set_table(&table, cmd, exe->prev, STDOUT_FILENO))
 		return ;
 	exe->exit_num = execute_commands(table, exe->list, exe->exit_num);
+	if (table.is_heredoc)
+		unlink("heredoc");
+	close_input(table.input, exe->prev);
+	close_output(table.output, STDOUT_FILENO);
 	close(exe->prev);
-	close_input(table.input, table.indef);
-	close_output(table.output, table.outdef);
 }
 
 int	execute_commands(const t_table table, t_envp **list, const int n_exit)

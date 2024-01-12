@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/12 19:56:29 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/13 08:55:22 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@ int	process_one_command(t_envp **list, const t_command cmd, const int n_exit)
 		ret = builtin(table, list, n_exit);
 	else
 		ret = execute_one_command(table, *list);
+	if (table.is_heredoc)
+		unlink("heredoc");
 	close_input(table.input, table.indef);
 	close_output(table.output, table.outdef);
 	return (ret);
@@ -54,8 +56,6 @@ int	execute_one_command(const t_table table, t_envp *list)
 		execute_at_child(table, list);
 	}
 	waitpid(child, &status, WUNTRACED);
-	if (table.is_heredoc)
-		unlink("heredoc");
 	return (WEXITSTATUS(status));
 }
 
