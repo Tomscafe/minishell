@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/12 19:47:35 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 20:43:19 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	set_table(t_table *table, const t_command cmd, \
 	table->outdef = output;
 	table->command = cmd.simple_command->command;
 	table->argument = get_argument(*cmd.simple_command);
+	table->is_heredoc = 0;
 	if (!set_redirection(table, cmd.redirection))
 		return (0);
 	return (1);
@@ -62,7 +63,7 @@ int	set_input(t_table *table, const t_redirection *rd)
 		}
 		else if (rd->symbol[0] == '<')
 		{
-			close_input(table->input, table->outdef);
+			close_input(table->input, table->indef);
 			table->input = open(rd->file, O_RDONLY);
 			if (table->input < 0)
 			{

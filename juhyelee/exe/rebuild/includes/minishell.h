@@ -128,7 +128,7 @@ char	*get_argument(const t_simple cmd);
 int		set_redirection(t_table *table, const t_redirection *rd);
 int		set_input(t_table *table, const t_redirection *rd);
 int		set_output(t_table *table, const t_redirection *rd);
-void	close_input(int input, int intdef);
+void	close_input(int input, int indef);
 void	close_output(int output, int outdef);
 int		heredoc(const char *end);
 void	apply_redirection(const t_table table);

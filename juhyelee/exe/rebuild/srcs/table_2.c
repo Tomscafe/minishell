@@ -6,15 +6,15 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:17:48 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/12 19:25:20 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 20:41:40 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	close_input(int input, int intdef)
+void	close_input(int input, int indef)
 {
-	if (input != intdef)
+	if (input != indef)
 		close(input);
 }
 

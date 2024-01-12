@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 17:35:43 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/12 19:30:44 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/12 20:52:16 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,8 @@
 
 void	process_commands(t_execution *exe)
 {
+	/* 명령어 두개 있을 때 문제가 있음. -> 파일 형성이 제대로 되지 않음 */
+	/* 세개 부터는 잘 됨. -> pipe_command 쪽에 문제가 있음 */
 	pipe_command(exe, *exe->tree->first, STDIN_FILENO);
 	while (exe->tree->next)
 	{
