@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:16:48 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/12 13:06:49 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/13 13:50:43 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,6 @@ int	execute_pwd(const t_table table)
 		ft_putendl_fd(buffer, STDOUT_FILENO);
 		exit(EXIT_SUCCESS);
 	}
-	waitpid(child, &exit_num, WUNTRACED);
+	waitpid(child, &exit_num, 0);
 	return (WEXITSTATUS(exit_num));
 }

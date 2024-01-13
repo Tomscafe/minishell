@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:18:49 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/12 13:05:06 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/13 13:50:19 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,7 +63,7 @@ int	print_env_for_export(const t_table table, const t_envp *list)
 		}
 		exit(EXIT_SUCCESS);
 	}
-	waitpid(child, &exit_num, WUNTRACED);
+	waitpid(child, &exit_num, 0);
 	return (WEXITSTATUS(exit_num));
 }
 

@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/13 11:56:50 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/13 13:50:12 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	execute_one_command(const t_table table, t_envp *list)
 		apply_redirection(table);
 		execute_at_child(table, list);
 	}
-	waitpid(child, &status, WUNTRACED);
+	waitpid(child, &status, 0);
 	return (WEXITSTATUS(status));
 }
 
