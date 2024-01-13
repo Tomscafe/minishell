@@ -74,20 +74,24 @@ typedef struct	s_envp
 /*juhyelee : execute structures*/
 typedef struct s_table
 {
+	pid_t	pid;
+	size_t	index;
 	char	*command;
 	char	*argument;
 	int		input;
 	int		output;
-	int		indef;
-	int		outdef;
+	int		inputdef;
+	int		outputdef;
 	int		is_heredoc;
 }t_table;
 typedef struct s_execution
 {
 	t_pipe	*tree;
 	t_envp	**list;
-	int		prev;
-	int		exit_num;
+	size_t	tree_size;
+	int		pipe[2];
+	int		prev_pipe_fd;
+	int		st_prev_exit;
 }t_execution;
 
 //void	handler(int sig);
@@ -112,6 +116,10 @@ typedef struct s_execution
 
 /*juhyelee*/
 void	execute(t_pipe *tree, t_envp **list);
+void	run_execution(t_pipe *tree, t_envp **list);
+size_t	get_tree_size(const t_pipe *tree);
+t_table	*get_table_list(t_execution exe);
+
 
 int		process_one_command(t_envp **list, const t_command cmd, \
 							const int n_exit);

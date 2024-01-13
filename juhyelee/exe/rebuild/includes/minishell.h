@@ -82,6 +82,7 @@ typedef struct s_table
 	int		outdef;
 	int		is_heredoc;
 }t_table;
+
 typedef struct s_execution
 {
 	t_pipe	*tree;
