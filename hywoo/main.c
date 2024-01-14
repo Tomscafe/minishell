@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hywoo <hywoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/14 14:46:06 by hywoo             #+#    #+#             */
+/*   Updated: 2024/01/14 14:46:42 by hywoo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	ft_parsing(char *str, t_envp *env)
@@ -12,13 +24,21 @@ void	ft_parsing(char *str, t_envp *env)
 	tokenizer(token, str);
 	if (syntax_error(token))
 	{
-		all_free(token, pipe_tree);
+		all_free(token, NULL);
 		return ;
 	}
-	pipe_tree = make_pipe_tree(pipe_tree, token->next);
+	pipe_tree = make_pipe_tree(pipe_tree, pipe_tree, token->next, 0);
 	// test_token(token);
-	// test_pipe(pipe_tree);
+	test_pipe(pipe_tree);
 	all_free(token, pipe_tree);
+}
+
+void	input_sigterm(void)
+{
+	printf("\033[1A");
+	printf("\033[10C");
+	printf(" exit\n");
+	exit(-1);
 }
 
 void	ft_readline(t_envp *env)
@@ -41,12 +61,7 @@ void	ft_readline(t_envp *env)
 			str = NULL;
 		}
 		else if (!str)
-		{
-			printf("\033[1A");
-			printf("\033[10C");
-			printf(" exit\n");
-			exit(-1);
-		}
+			input_sigterm();
 		else if (*str == '\0')
 			free (str);
 	}

@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hywoo <hywoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/14 14:46:14 by hywoo             #+#    #+#             */
+/*   Updated: 2024/01/14 14:46:51 by hywoo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	handler(int sig)
@@ -11,7 +23,7 @@ void	handler(int sig)
 
 void	ft_signal(void)
 {
-	struct	termios	term;
+	struct termios	term;
 
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~(ECHOCTL);
@@ -24,7 +36,7 @@ char	*mini_strdup(char *s, int i, int j)
 {
 	char	*result;
 	int		k;
-	
+
 	k = 0;
 	result = malloc(sizeof(char) * (j - i + 1));
 	if (!result)

@@ -1,106 +1,99 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   dollor.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hywoo <hywoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/14 14:45:17 by hywoo             #+#    #+#             */
+/*   Updated: 2024/01/14 14:45:19 by hywoo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-int	dollor_len(char *str, int k, int j)
+int	dollor_len(char *str, int k, char *variable)
 {
 	int	len;
 
 	len = 0;
+	k++;
 	while (str[k + len])
 	{
+		if (str[k + len] != variable[len])
+			break ;
 		if (str[k + len] == ' ')
-			break;
-		else if (len && str[k + len] == '$')
-			break;
+			break ;
+		else if (str[k + len] == '$')
+			break ;
 		else if (str[k + len] == '\'')
-			break;
+			break ;
 		else if (str[k + len] == '\"')
-			break;
+			break ;
 		else if (str[k + len] == '=')
-			break;
+			break ;
 		len++;
 	}
-	if (k + len == j)
+	if (!str[k + len])
 		return (len);
-	len--;
 	return (len);
 }
 
-void	dollor_dup(char *new_str, char *value, int j)
+int	check_dollor_opt(char *str, int *i)
 {
-	int	i;
-
-	i = 0;
-	while (value[i])
-	{
-		new_str[j + i] = value[i];
-		i++;
-	}
+	if (str[*i + 1] == '?')
+		return (1);
+	return (0);
 }
 
-char	*change_dollor(t_envp *env, char *str, int k, int r)
+char	*convert_dollor(t_envp *needle, char *str, int *i)
 {
-	char	*new_str;
-	int		size;
-	int		i;
-	int		j;
-
-	i = 0;
-	j = 0;
-	size = ft_strlen(str) - r + ft_strlen(env->value) + 1;
-	new_str = malloc(sizeof(char) * size);
-	while (str[j])
-	{
-		if (j == k)
-		{
-			dollor_dup(new_str, env->value, j);
-			i += ft_strlen(env->value);
-			j += r;
-		}
-		new_str[i] = str[j];
-		i++;
-		j++;
-	}
-	new_str[i] = '\0';
-	return (new_str);
-}
-
-char	*check_dollor(t_token *token, char *str, int *k, int *j)
-{
-	t_envp	*env;
-	int		i;
+	char	*result;
+	char	*temp;
 	int		r;
 
-	env = token->env;
-	r = dollor_len(str, *k, *j);
-	while (env)
+	if (!needle)
 	{
-		i = 0;
-		while (env->variable[i] && (env->variable[i] == str[*k + i + 1]))
-			i++;
-		if (!env->variable[i] && (i == r - 1))
+		if (check_dollor_opt(str, i))
 		{
-			str = change_dollor(env, str, *k, r);
-			*j = *j - r + ft_strlen(env->value);
-			*k = *k + ft_strlen(env->value);
-			return (str);
+			result = ft_strdup(str);
+			free (str);
+			return (result);
 		}
-		env = env->next;
+		result = remove_str(str, *i, 0, 0);
+		*i = *i - 1;
+		free (str);
+		return (result);
 	}
-	return (str);
+	else
+		temp = needle->value;
+	r = dollor_len(str, *i, needle->variable);
+	result = remake_str(str, temp, r, i);
+	*i = *i - 1;
+	free (str);
+	return (result);
 }
 
-char	*find_dollor(t_token *token, char *str, int i, int *j)
+char	*check_dollor(t_envp *env, char *str, int i, int flag)
 {
-	int k;
+	char	*new_str;
+	t_envp	*needle;
 
-	k = i;
-	while (k < *j)
+	new_str = ft_strdup(str);
+	while (new_str[i])
 	{
-		if (str[k] == '\'')
-			k = ignore_quotes(str, k, '\'');
-		if (str[k] == '$')
-			str = check_dollor(token, str, &k, j);
-		k++;
+		if (flag && new_str[i] == '\"')
+			flag = 0;
+		else if (!flag && new_str[i] == '\"')
+			flag++;
+		if (!flag && new_str[i] == '\'')
+			i = ignore_quotes(new_str, i, '\'');
+		if (new_str[i] == '$')
+		{
+			needle = find_dollor(env, new_str, i);
+			new_str = convert_dollor(needle, new_str, &i);
+		}
+		i++;
 	}
-	return (str);
+	return (new_str);
 }
