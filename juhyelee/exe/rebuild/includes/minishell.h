@@ -91,8 +91,8 @@ typedef struct s_execution
 	int		exit_num;
 }t_execution;
 
-//void	handler(int sig);
-//void	ft_signal(void);
+void	handler(int sig);
+void	ft_signal(void);
 //char	*mini_strdup(char *s, int i, int j);
 
 //int	valid_quotes(char *str);
@@ -132,11 +132,12 @@ int		set_output(t_table *table, const t_redirection *rd);
 void	close_input(int input, int indef);
 void	close_output(int output, int outdef);
 int		heredoc(const char *end);
+void	run_heredoc(const char *end, const int hdfile);
 void	apply_redirection(const t_table table);
 
 void	set_pipe_table(t_table *table, const t_command cmd, \
 						const int input, const int *pipefd);
-int		set_inputdir(t_table *table, const t_redirection *rd, char *file);
+int		set_inputdir(t_table *table, const t_redirection *rd);
 
 int		is_builtin(const char *cmd);
 int		builtin(const t_table table, t_envp **list, const int n_exit);
@@ -147,7 +148,7 @@ int		get_echo_option(const char *arg);
 void	print_arg(const char *str, const int n_exit);
 
 int		execute_cd(const char *arg, t_envp **list);
-void	change_pwd(const char *path, t_envp **list);
+void	change_pwd(t_envp **list);
 void	change_oldpwd(t_envp **list);
 char	*get_first_arg(const char *arg);
 char	*get_home(const t_envp *list);

@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:53:01 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/11 20:14:37 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/15 22:03:42 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@ int	execute_cd(const char *arg, t_envp **list)
 	change_oldpwd(list);
 	if (arg[0] == '\0')
 	{
-		chdir("~");
-		change_pwd("~", list);
+		chdir(get_home((const t_envp *)(*list)));
+		change_pwd(list);
 		return (EXIT_SUCCESS);
 	}
 	first_arg = get_first_arg(arg);
@@ -29,11 +29,11 @@ int	execute_cd(const char *arg, t_envp **list)
 		exit(EXIT_FAILURE);
 	if (chdir(first_arg) < 0)
 		return (free(first_arg), EXIT_FAILURE);
-	change_pwd(first_arg, list);
+	change_pwd(list);
 	return (EXIT_SUCCESS);
 }
 
-void	change_pwd(const char *path, t_envp **list)
+void	change_pwd(t_envp **list)
 {
 	char	buffer[2024];
 	t_envp	*pwd;
@@ -46,14 +46,9 @@ void	change_pwd(const char *path, t_envp **list)
 		pwd = pwd->next;
 	}
 	free(pwd->value);
-	if (ft_strncmp(path, "~", ft_strlen(path)) == 0)
-		pwd->value = get_home((const t_envp *)(*list));
-	else
-	{
-		if (!getcwd(buffer, 2024))
-			return ;
-		pwd->value = ft_strdup(buffer);
-	}
+	if (!getcwd(buffer, 2024))
+		return ;
+	pwd->value = ft_strdup(buffer);
 	if (!pwd->value)
 		exit(EXIT_FAILURE);
 }
