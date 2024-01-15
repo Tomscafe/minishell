@@ -114,6 +114,15 @@ void	ft_signal(void);
 
 //void	ft_parsing(char *str);
 
+/*
+*  ls -al > outfile | cat < outfile 을 하게 되었을 때
+*  cat 에서 outfile을 찾을 수 없음.
+*  그 이유는 pipefd[WRITE]의 값과 outfile의 파일 디스크립터 값이 동일해서
+*  close 했을 때, pipefd가 닫히게 된다. 즉, outfile은 계속 열려있는 상태로 되는 것
+*  이를 해결하기 위해서, redirection 세팅 전에 pipefd와 겹치지 않는
+*  outfile 디스크립터를 생성할 수 있도록 해야 한다.
+*/
+
 /* juhyelee */
 /* execute */
 void	execute(t_pipe *tree, t_envp **list);
