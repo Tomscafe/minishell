@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 20:17:48 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/15 21:58:50 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 00:46:35 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,14 @@ int	set_inputdir(t_table *table, const t_redirection *rd)
 	{
 		if (ft_strncmp(rd->symbol, "<<", 2) == 0)
 		{
-			close_input(table->input, -1);
+			close_input(table->input);
 			table->input = heredoc(rd->file);
 			if (table->input >= 0)
 				table->is_heredoc = 1;
 		}
 		else if (rd->symbol[0] == '<')
 		{
-			close_input(table->input, -1);
+			close_input(table->input);
 			table->input = open(rd->file, O_RDONLY);
 			if (table->input < 0)
 				return (printf("minishell: %s: No such file or directory\n", \
@@ -51,14 +51,14 @@ int	set_inputdir(t_table *table, const t_redirection *rd)
 	return (table->input);
 }
 
-void	close_input(int input, int indef)
+void	close_input(int input)
 {
-	if (input != indef)
+	if (input != STDIN_FILENO)
 		close(input);
 }
 
-void	close_output(int output, int outdef)
+void	close_output(int output)
 {
-	if (output != outdef)
+	if (output != STDOUT_FILENO)
 		close(output);
 }

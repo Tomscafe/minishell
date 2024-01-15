@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 17:35:43 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/15 22:51:38 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 00:46:09 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,8 +53,8 @@ void	pipe_command(t_table *table, t_exe *exe, const int input)
 	exe->prev = dup(pipefd[READ]);
 	close(pipefd[READ]);
 	close(pipefd[WRITE]);
-	close_input(table->input, STDIN_FILENO);
-	close_output(table->output, STDOUT_FILENO);
+	close_input(table->input);
+	close_output(table->output);
 }
 
 void	last_command(t_table *table, t_exe *exe)
@@ -64,8 +64,8 @@ void	last_command(t_table *table, t_exe *exe)
 	execute_commands(table, exe, NULL);
 	if (table->is_heredoc)
 		unlink("heredoc");
-	close_input(table->input, exe->prev);
-	close_output(table->output, STDOUT_FILENO);
+	close_input(table->input);
+	close_output(table->output);
 	close(exe->prev);
 }
 

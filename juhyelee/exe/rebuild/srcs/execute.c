@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/15 22:47:54 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 00:45:50 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,34 +18,37 @@ void	execute(t_pipe *tree, t_envp **list)
 
 	exe.tree = tree;
 	exe.list = list;
-	exe.tree_size = 0;
-	while (tree)
+	exe.tree_size = 1;
+	while (tree->next)
 	{
-		exe.tree_size++;
 		tree = tree->next;
+		exe.tree_size++;
 	}
+	if (tree->second)
+		exe.tree_size++;
 	if (exe.tree_size == 1)
-		exe.exit_num = process_one_command(list, &exe);
+		process_one_command(&exe);
 	else
 		process_commands(&exe);
 }
 
-int	process_one_command(t_envp **list, t_exe *exe)
+void	process_one_command(t_exe *exe)
 {
 	t_table	table;
-	int		ret;
 
 	if (!set_table(&table, *exe->tree->first, STDIN_FILENO, STDOUT_FILENO))
-		return (EXIT_FAILURE);
+	{
+		exe->exit_num = EXIT_FAILURE;
+		return ;
+	}
 	if (is_builtin(table.command))
-		ret = builtin(table, list, exe->exit_num);
+		exe->exit_num = builtin(table, exe->list, exe->exit_num);
 	else
-		ret = execute_one_command(table, *list);
+		exe->exit_num = execute_one_command(table, *exe->list);
 	if (table.is_heredoc)
 		unlink("heredoc");
-	close_input(table.input, table.indef);
-	close_output(table.output, table.outdef);
-	return (ret);
+	close_input(table.input);
+	close_output(table.output);
 }
 
 int	execute_one_command(const t_table table, t_envp *list)

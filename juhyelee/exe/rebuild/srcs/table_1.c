@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/15 22:30:18 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 00:46:23 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,7 @@ int	set_input(t_table *table, const t_redirection *rd)
 	{
 		if (ft_strncmp(rd->symbol, "<<", 2) == 0)
 		{
-			close_input(table->input, table->indef);
+			close_input(table->input);
 			table->input = heredoc(rd->file);
 			if (table->input < 0)
 				return (-1);
@@ -63,7 +63,7 @@ int	set_input(t_table *table, const t_redirection *rd)
 		}
 		else if (rd->symbol[0] == '<')
 		{
-			close_input(table->input, table->indef);
+			close_input(table->input);
 			table->input = open(rd->file, O_RDONLY);
 			if (table->input < 0)
 			{
@@ -83,12 +83,12 @@ int	set_output(t_table *table, const t_redirection *rd)
 	{
 		if (ft_strncmp(rd->symbol, ">>", 2) == 0)
 		{
-			close_output(table->output, table->outdef);
+			close_output(table->output);
 			table->output = open(rd->file, O_WRONLY | O_APPEND | O_CREAT, 0644);
 		}
 		else if (rd->symbol[0] == '>')
 		{
-			close_output(table->output, table->outdef);
+			close_output(table->output);
 			table->output = open(rd->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 		}
 		if (table->output < 0)

@@ -113,10 +113,10 @@ void	ft_signal(void);
 
 //void	ft_parsing(char *str);
 
-/*juhyelee*/
+/* juhyelee */
 void	execute(t_pipe *tree, t_envp **list);
 
-int		process_one_command(t_envp **list, t_exe *exe);
+void	process_one_command(t_exe *exe);
 int		execute_one_command(const t_table table, t_envp *list);
 
 void	process_commands(t_exe *exe);
@@ -130,8 +130,8 @@ char	*get_argument(const t_simple cmd);
 int		set_redirection(t_table *table, const t_redirection *rd);
 int		set_input(t_table *table, const t_redirection *rd);
 int		set_output(t_table *table, const t_redirection *rd);
-void	close_input(int input, int indef);
-void	close_output(int output, int outdef);
+void	close_input(int input);
+void	close_output(int output);
 int		heredoc(const char *end);
 void	run_heredoc(const char *end, const int hdfile);
 void	apply_redirection(const t_table table, int *pipe);
