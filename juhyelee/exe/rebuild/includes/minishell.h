@@ -74,6 +74,7 @@ typedef struct	s_envp
 /*juhyelee : execute structures*/
 typedef struct s_table
 {
+	pid_t	pid;
 	char	*command;
 	char	*argument;
 	int		input;
@@ -83,13 +84,14 @@ typedef struct s_table
 	int		is_heredoc;
 }t_table;
 
-typedef struct s_execution
+typedef struct s_exe
 {
 	t_pipe	*tree;
 	t_envp	**list;
+	size_t	tree_size;
 	int		prev;
 	int		exit_num;
-}t_execution;
+}t_exe;
 
 void	handler(int sig);
 void	ft_signal(void);
@@ -114,14 +116,13 @@ void	ft_signal(void);
 /*juhyelee*/
 void	execute(t_pipe *tree, t_envp **list);
 
-int		process_one_command(t_envp **list, const t_command cmd, \
-							const int n_exit);
+int		process_one_command(t_envp **list, t_exe *exe);
 int		execute_one_command(const t_table table, t_envp *list);
 
-void	process_commands(t_execution *exe);
-void	pipe_command(t_execution *exe, const t_command cmd, const int input);
-void	last_command(t_execution *exe, const t_command cmd);
-int		execute_commands(const t_table table, t_envp **list, const int n_exit);
+void	process_commands(t_exe *exe);
+void	pipe_command(t_table *table, t_exe *exe, const int input);
+void	last_command(t_table *table, t_exe *exe);
+void	execute_commands(t_table *table, t_exe *exe, int *pipefd);
 
 int		set_table(t_table *table, const t_command cmd, \
 					const int input, const int output);
@@ -133,7 +134,7 @@ void	close_input(int input, int indef);
 void	close_output(int output, int outdef);
 int		heredoc(const char *end);
 void	run_heredoc(const char *end, const int hdfile);
-void	apply_redirection(const t_table table);
+void	apply_redirection(const t_table table, int *pipe);
 
 void	set_pipe_table(t_table *table, const t_command cmd, \
 						const int input, const int *pipefd);

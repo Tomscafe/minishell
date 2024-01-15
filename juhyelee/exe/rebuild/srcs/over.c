@@ -6,80 +6,88 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 17:35:43 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/13 13:50:39 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/15 22:51:38 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	process_commands(t_execution *exe)
+void	process_commands(t_exe *exe)
 {
-	/* 명령어 두개 있을 때 문제가 있음. -> 파일 형성이 제대로 되지 않음 */
-	/* 세개 부터는 잘 됨. -> pipe_command 쪽에 문제가 있음 */
-	pipe_command(exe, *exe->tree->first, STDIN_FILENO);
+	t_table	*tables;
+	size_t	index;
+
+	tables = (t_table *)malloc(sizeof(t_table) * exe->tree_size);
+	if (!tables)
+		exit(EXIT_FAILURE);
+	pipe_command(&tables[0], exe, STDIN_FILENO);
+	index = 1;
 	while (exe->tree->next)
 	{
 		exe->tree = exe->tree->next;
-		pipe_command(exe, *exe->tree->first, exe->prev);
+		pipe_command(&tables[index], exe, exe->prev);
+		index++;
 	}
 	if (exe->tree->second)
-		last_command(exe, *exe->tree->second);
+		last_command(&tables[index], exe);
+	index = 0;
+	while (index < exe->tree_size)
+	{
+		waitpid(tables[index].pid, &exe->exit_num, WUNTRACED);
+		index++;
+	}
+	free(tables);
 }
 
-void	pipe_command(t_execution *exe, const t_command cmd, const int input)
+void	pipe_command(t_table *table, t_exe *exe, const int input)
 {
-	t_table	table;
 	int		pipefd[2];
 
 	if (pipe(pipefd) < 0)
 		exit(EXIT_FAILURE);
-	if (!set_table(&table, cmd, input, pipefd[WRITE]))
+	if (!set_table(table, *exe->tree->first, input, pipefd[WRITE]))
 		return ;
-	//set_pipe_table(&table, cmd, input, pipefd);
-	exe->exit_num = execute_commands(table, exe->list, exe->exit_num);
-	if (table.is_heredoc)
+	execute_commands(table, exe, pipefd);
+	if (table->is_heredoc)
 		unlink("heredoc");
-	close_input(table.input, input);
-	close_output(table.output, pipefd[WRITE]);
 	exe->prev = dup(pipefd[READ]);
 	close(pipefd[READ]);
 	close(pipefd[WRITE]);
+	close_input(table->input, STDIN_FILENO);
+	close_output(table->output, STDOUT_FILENO);
 }
 
-void	last_command(t_execution *exe, const t_command cmd)
+void	last_command(t_table *table, t_exe *exe)
 {
-	t_table	table;
-
-	if (!set_table(&table, cmd, exe->prev, STDOUT_FILENO))
+	if (!set_table(table, *exe->tree->second, exe->prev, STDOUT_FILENO))
 		return ;
-	exe->exit_num = execute_commands(table, exe->list, exe->exit_num);
-	if (table.is_heredoc)
+	execute_commands(table, exe, NULL);
+	if (table->is_heredoc)
 		unlink("heredoc");
-	close_input(table.input, exe->prev);
-	close_output(table.output, STDOUT_FILENO);
+	close_input(table->input, exe->prev);
+	close_output(table->output, STDOUT_FILENO);
 	close(exe->prev);
 }
 
-int	execute_commands(const t_table table, t_envp **list, const int n_exit)
+void	execute_commands(t_table *table, t_exe *exe, int *pipefd)
 {
-	pid_t	child;
 	int		ret_exit;
-	int		st_exit;
 
 	ret_exit = 0;
-	child = fork();
-	if (child < 0)
+	signal(SIGINT, SIG_IGN);
+	table->pid = fork();
+	if (table->pid < 0)
 		exit(EXIT_FAILURE);
-	else if (child == 0)
+	else if (table->pid == 0)
 	{
-		apply_redirection(table);
-		if (is_builtin(table.command))
-			ret_exit = builtin(table, list, n_exit);
+		signal(SIGINT, SIG_DFL);
+		ret_exit = EXIT_SUCCESS;
+		apply_redirection(*table, pipefd);
+		if (is_builtin(table->command))
+			ret_exit = builtin(*table, exe->list, exe->exit_num);
 		else
-			execute_at_child(table, (const t_envp *)(*list));
+			execute_at_child(*table, (const t_envp *)(*exe->list));
 		exit(ret_exit);
 	}
-	waitpid(child, &st_exit, 0);
-	ret_exit = WEXITSTATUS(st_exit);
-	return (ret_exit);
+	signal(SIGINT, handler);
 }
