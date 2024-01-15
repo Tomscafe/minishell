@@ -6,27 +6,20 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 00:45:50 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 02:07:45 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	execute(t_pipe *tree, t_envp **list)
+void	execute(t_pipe *cmds, t_envp **env)
 {
 	static t_exe	exe;
 
-	exe.tree = tree;
-	exe.list = list;
-	exe.tree_size = 1;
-	while (tree->next)
-	{
-		tree = tree->next;
-		exe.tree_size++;
-	}
-	if (tree->second)
-		exe.tree_size++;
-	if (exe.tree_size == 1)
+	exe.cmds = cmds;
+	exe.env = env;
+	exe.n_cmd = get_num_cmd(cmds);
+	if (exe.n_cmd == 1)
 		process_one_command(&exe);
 	else
 		process_commands(&exe);
@@ -36,22 +29,64 @@ void	process_one_command(t_exe *exe)
 {
 	t_table	table;
 
-	if (!set_table(&table, *exe->tree->first, STDIN_FILENO, STDOUT_FILENO))
+	if (!set_table(&table, *exe->cmds->first, STDIN_FILENO, STDOUT_FILENO))
 	{
-		exe->exit_num = EXIT_FAILURE;
+		exe->st_exit = EXIT_FAILURE;
 		return ;
 	}
 	if (is_builtin(table.command))
-		exe->exit_num = builtin(table, exe->list, exe->exit_num);
+		builtin(table, exe);
 	else
-		exe->exit_num = execute_one_command(table, *exe->list);
+		execute_one_command(table, *exe->env);
 	if (table.is_heredoc)
 		unlink("heredoc");
-	close_input(table.input);
-	close_output(table.output);
+	close_input(table);
+	close_output(table);
 }
 
-int	execute_one_command(const t_table table, t_envp *list)
+void	process_commands(t_exe *exe)
+{
+	t_table	*tables;
+	size_t	index;
+
+	tables = (t_table *)malloc(sizeof(t_table) * exe->n_cmd);
+	if (!tables)
+		exit(EXIT_FAILURE);
+	pipe_command(&tables[0], exe, STDIN_FILENO);
+	index = 1;
+	while (exe->cmds->next)
+	{
+		exe->cmds = exe->cmds->next;
+		pipe_command(&tables[index], exe, exe->p_pipe);
+		index++;
+	}
+	if (exe->cmds->second)
+		last_command(&tables[index], exe);
+	index = 0;
+	while (index < exe->n_cmd)
+	{
+		waitpid(tables[index].pid, &exe->st_exit, WUNTRACED);
+		index++;
+	}
+	free(tables);
+}
+
+size_t	get_num_cmd(const t_pipe *cmds)
+{
+	size_t	n_cmd;
+
+	n_cmd = 1;
+	while (cmds->next)
+	{
+		cmds = cmds->next;
+		n_cmd++;
+	}
+	if (cmds->second)
+		n_cmd++;
+	return (n_cmd);
+}
+
+int	execute_one_command(const t_table table, t_envp *env)
 {
 	pid_t	child;
 	int		status;
@@ -62,7 +97,7 @@ int	execute_one_command(const t_table table, t_envp *list)
 	else if (child == 0)
 	{
 		apply_redirection(table, NULL);
-		execute_at_child(table, list);
+		execute_at_child(table, env);
 	}
 	waitpid(child, &status, 0);
 	return (WEXITSTATUS(status));

@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:12:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/12 13:06:36 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 02:08:09 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,23 +31,24 @@ int	is_builtin(const char *cmd)
 	return (0);
 }
 
-int	builtin(const t_table table, t_envp **list, const int n_exit)
+void	builtin(const t_table table, t_exe *exe)
 {
 	if (ft_strncmp(table.command, "echo", ft_strlen(table.command)) == 0)
-		return (execute_echo(table, n_exit));
-	if (ft_strncmp(table.command, "cd", ft_strlen(table.command)) == 0)
-		return (execute_cd(table.argument, list));
-	if (ft_strncmp(table.command, "pwd", ft_strlen(table.command)) == 0)
-		return (execute_pwd(table));
-	if (ft_strncmp(table.command, "export", ft_strlen(table.command)) == 0)
-		return (execute_export(table, list));
-	if (ft_strncmp(table.command, "unset", ft_strlen(table.command)) == 0)
-		return (execute_unset(table.argument, list));
-	if (ft_strncmp(table.command, "env", ft_strlen(table.command)) == 0)
-		return (execute_env(table, (const t_envp *)(*list)));
-	if (ft_strncmp(table.command, "exit", ft_strlen(table.command)) == 0)
-		return (execute_exit(table.argument));
-	return (EXIT_FAILURE);
+		exe->st_exit = execute_echo(table, exe->st_exit);
+	else if (ft_strncmp(table.command, "cd", ft_strlen(table.command)) == 0)
+		exe->st_exit = execute_cd(table.argument, exe->env);
+	else if (ft_strncmp(table.command, "pwd", ft_strlen(table.command)) == 0)
+		exe->st_exit = execute_pwd(table);
+	else if (ft_strncmp(table.command, "export", ft_strlen(table.command)) == 0)
+		exe->st_exit = execute_export(table, exe->env);
+	else if (ft_strncmp(table.command, "unset", ft_strlen(table.command)) == 0)
+		exe->st_exit = execute_unset(table.argument, exe->env);
+	else if (ft_strncmp(table.command, "env", ft_strlen(table.command)) == 0)
+		exe->st_exit = execute_env(table, (const t_envp *)(*exe->env));
+	else if (ft_strncmp(table.command, "exit", ft_strlen(table.command)) == 0)
+		exe->st_exit = execute_exit(table.argument);
+	else
+		exe->st_exit = EXIT_FAILURE;
 }
 
 void	builtin_output(int input, int output)

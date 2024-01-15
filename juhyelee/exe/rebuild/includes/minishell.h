@@ -82,15 +82,16 @@ typedef struct s_table
 	int		indef;
 	int		outdef;
 	int		is_heredoc;
+	int		pipefd[2];
 }t_table;
 
 typedef struct s_exe
 {
-	t_pipe	*tree;
-	t_envp	**list;
-	size_t	tree_size;
-	int		prev;
-	int		exit_num;
+	t_pipe	*cmds;
+	t_envp	**env;
+	size_t	n_cmd;
+	int		p_pipe;
+	int		st_exit;
 }t_exe;
 
 void	handler(int sig);
@@ -114,60 +115,60 @@ void	ft_signal(void);
 //void	ft_parsing(char *str);
 
 /* juhyelee */
+/* execute */
 void	execute(t_pipe *tree, t_envp **list);
-
+size_t	get_num_cmd(const t_pipe *tree);
 void	process_one_command(t_exe *exe);
-int		execute_one_command(const t_table table, t_envp *list);
-
 void	process_commands(t_exe *exe);
+/* one command */
+int		execute_one_command(const t_table table, t_envp *list);
+/* commands */
 void	pipe_command(t_table *table, t_exe *exe, const int input);
 void	last_command(t_table *table, t_exe *exe);
 void	execute_commands(t_table *table, t_exe *exe, int *pipefd);
-
+/* setting */
 int		set_table(t_table *table, const t_command cmd, \
 					const int input, const int output);
 char	*get_argument(const t_simple cmd);
 int		set_redirection(t_table *table, const t_redirection *rd);
 int		set_input(t_table *table, const t_redirection *rd);
 int		set_output(t_table *table, const t_redirection *rd);
-void	close_input(int input);
-void	close_output(int output);
+void	apply_redirection(const t_table table, int *pipe);
+/* close */
+void	close_input(t_table table);
+void	close_output(t_table table);
+/* heredoc */
 int		heredoc(const char *end);
 void	run_heredoc(const char *end, const int hdfile);
-void	apply_redirection(const t_table table, int *pipe);
-
-void	set_pipe_table(t_table *table, const t_command cmd, \
-						const int input, const int *pipefd);
-int		set_inputdir(t_table *table, const t_redirection *rd);
-
+/* builtin */
 int		is_builtin(const char *cmd);
-int		builtin(const t_table table, t_envp **list, const int n_exit);
+void	builtin(const t_table table, t_exe *exe);
 void	builtin_output(int input, int output);
-
+/* echo */
 int		execute_echo(t_table table, const int n_exit);
 int		get_echo_option(const char *arg);
 void	print_arg(const char *str, const int n_exit);
-
+/* cd */
 int		execute_cd(const char *arg, t_envp **list);
 void	change_pwd(t_envp **list);
 void	change_oldpwd(t_envp **list);
 char	*get_first_arg(const char *arg);
 char	*get_home(const t_envp *list);
-
+/* pwd */
 int		execute_pwd(const t_table table);
-
+/* export */
 int		execute_export(t_table table, t_envp **list);
 int		print_env_for_export(const t_table table, const t_envp *list);
 char	*get_variable(const char *env);
 char	*get_value(const char *env);
 int		change_value(t_envp **list, const char *var, const char *val);
 void	add_variable(t_envp **list, const char *var, const char *val);
-
+/* unset */
 int		execute_unset(const char *arg, t_envp **list);
 void	remove_env(t_envp **list, t_envp *to_del);
-
+/* env */
 int		execute_env(const t_table table, const t_envp *list);
-
+/* exit */
 int		execute_exit(const char *arg);
 
 void	execute_at_child(const t_table table, const t_envp *list);
