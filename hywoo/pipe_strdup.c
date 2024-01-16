@@ -18,7 +18,7 @@ int	rm_size_space(char *str, int i, int space, int cnt)
 	{
 		if (str[i] == '\'')
 			i = ignore_quotes(str, i, '\'');
-		if (str[i] == '\"')
+		else if (str[i] == '\"')
 			i = ignore_quotes(str, i, '\"');
 		if (str[i] == ' ')
 		{
@@ -39,18 +39,17 @@ void	quotes_strdup(char *result, char *str, int *i, int *j)
 	char	c;
 
 	c = str[*i];
+	*i += 1;
 	while (str[*i])
 	{
+		if (str[*i] == c)
+		{
+			*i += 1;
+			break ;
+		}
 		result[*j] = str[*i];
 		*i += 1;
 		*j += 1;
-		if (str[*i] == c)
-		{
-			result[*j] = str[*i];
-			*i += 1;
-			*j += 1;
-			break ;
-		}
 	}
 }
 
@@ -65,8 +64,7 @@ char	*rm_sp_strdup(char *str, int i, int j)
 	{
 		if (str[i] == '\'' || str[i] == '\"')
 			quotes_strdup(result, str, &i, &j);
-		result[j] = str[i];
-		if (str[i] == ' ')
+		else if (str[i] == ' ')
 		{
 			while (str[i] && str[i] == ' ')
 				i++;
@@ -74,8 +72,11 @@ char	*rm_sp_strdup(char *str, int i, int j)
 		else if (str[i] == '\0')
 			return (result);
 		else
+		{
+			result[j] = str[i];
 			i++;
-		j++;
+			j++;
+		}
 	}
 	result[j] = '\0';
 	return (result);

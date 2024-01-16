@@ -156,8 +156,4 @@ void			test_pipe(t_pipe *pipe);
 void			test_envp(t_envp *env);
 void			ft_parsing(char *str, t_envp *env);
 
-char			*pipe_strdup2(t_envp *env, char *str);
-char			*rm_sp_strdup2(char *str, int i, int j);
-void			quotes_strdup2(char *result, char *str, int *i, int *j);
-
 #endif
