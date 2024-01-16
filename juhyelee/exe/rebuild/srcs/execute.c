@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 21:20:53 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 22:16:56 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,13 @@ void	execute(t_pipe *cmds, t_envp **env)
 	exe.cmds = cmds;
 	exe.env = env;
 	exe.n_cmd = get_num_cmd(cmds);
+	open_all_files(&exe);
 	if (exe.n_cmd == 1)
 		process_one_command(&exe);
 	else
 		process_commands(&exe);
+	ft_lstclear(&(exe.files), clear_file);
+	unlink("heredoc");
 }
 
 void	process_one_command(t_exe *exe)
@@ -48,7 +51,6 @@ void	process_commands(t_exe *exe)
 	tables = (t_table *)malloc(sizeof(t_table) * exe->n_cmd);
 	if (!tables)
 		exit(EXIT_FAILURE);
-	open_all_files(exe);
 	pipe_command(&tables[0], exe, 0);
 	index = 1;
 	while (exe->cmds->next)
@@ -65,8 +67,6 @@ void	process_commands(t_exe *exe)
 		waitpid(tables[index].pid, &exe->st_exit, WUNTRACED);
 		index++;
 	}
-	ft_lstclear(&(exe->files), clear_file);
-	unlink("heredoc");
 	free(tables);
 }
 

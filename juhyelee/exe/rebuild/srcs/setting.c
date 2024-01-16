@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 21:56:49 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 22:09:46 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,13 +52,14 @@ int	set_redirection(t_table *table, const t_list *files, t_command cmd)
 {
 	while (cmd.redirection)
 	{
-		set_file(table, files, *cmd.redirection);
+		if (!set_file(table, files, *cmd.redirection))
+			return (0);
 		cmd.redirection = cmd.redirection->next;
 	}
 	return (1);
 }
 
-void	set_file(t_table *table, const t_list *files, const t_redirection rd)
+int	set_file(t_table *table, const t_list *files, const t_redirection rd)
 {
 	t_file	*content;
 
@@ -69,6 +70,8 @@ void	set_file(t_table *table, const t_list *files, const t_redirection rd)
 		{
 			table->is_heredoc = 1;
 			table->input = content->io[READ];
+			if (table->input <= 1)
+				return (0);
 		}
 		else if (ft_strncmp(rd.file, content->name, \
 							ft_strlen(content->name)) == 0 && \
@@ -78,6 +81,7 @@ void	set_file(t_table *table, const t_list *files, const t_redirection rd)
 			table->input = content->io[READ];
 		files = files->next;
 	}
+	return (1);
 }
 
 void	clear_file(void *to_del)

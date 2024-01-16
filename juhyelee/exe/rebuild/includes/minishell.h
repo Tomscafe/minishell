@@ -157,7 +157,7 @@ char	*other_builtin(const char *cmd, const char **env);
 /* setting */
 int		set_table(t_table *table, const t_exe *exe, const int index);
 int		set_redirection(t_table *table, const t_list *files, t_command cmd);
-void	set_file(t_table *table, const t_list *files, const t_redirection rd);
+int		set_file(t_table *table, const t_list *files, const t_redirection rd);
 char	*get_argument(const t_simple cmd);
 /* close */
 void	close_input(t_table table);

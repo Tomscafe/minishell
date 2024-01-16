@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 19:44:24 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 20:59:26 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 22:25:31 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,13 +33,9 @@ void	pipe_command(t_table *table, t_exe *exe, const size_t index)
 	if (!set_table(table, (const t_exe *)exe, index))
 		return ;
 	execute_commands(table, exe);
-	if (table->is_heredoc)
-		unlink("heredoc");
 	exe->p_pipe = dup(table->pipefd[READ]);
 	close(table->pipefd[READ]);
 	close(table->pipefd[WRITE]);
-	close_input(*table);
-	close_output(*table);
 }
 
 void	last_command(t_table *table, t_exe *exe)
@@ -49,8 +45,6 @@ void	last_command(t_table *table, t_exe *exe)
 	execute_commands(table, exe);
 	if (table->is_heredoc)
 		unlink("heredoc");
-	close_input(*table);
-	close_output(*table);
 	close(exe->p_pipe);
 }
 
