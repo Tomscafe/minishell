@@ -131,6 +131,7 @@ char			*remove_str(char *str, int i, int j, int t);
 int				rm_size_space(char *str, int i, int space, int cnt);
 void			quotes_strdup(char *result, char *str, int *i, int *j);
 char			*rm_sp_strdup(char *str, int i, int j);
+void			copy_result_idx(char *str, char *result, int *i, int *j);
 char			*pipe_strdup(t_envp *env, char *str);
 
 int				check_heredoc(char *str);
@@ -155,8 +156,5 @@ void			test_redirection(t_pipe *pipe, int i);
 void			test_pipe(t_pipe *pipe);
 void			test_envp(t_envp *env);
 void			ft_parsing(char *str, t_envp *env);
-
-char			*pipe_strdup2(t_envp *env, char *str);
-char			*rm_sp_strdup2(char *str, int i, int j);
 
 #endif

@@ -5,8 +5,7 @@ COMFILE	= -lreadline -L${HOME}/.brew/opt/readline/lib
 OBFLAGS	= -I{HOME}/.brew/opt/readline/include
 SRC		= main.c signal.c tokenizer.c tokenizer2.c tools.c pipe_tree.c \
 		pipe_strdup.c parsing_error.c init_struct.c get_simple.c get_command.c \
-		free_pipe.c envp.c dollor.c dollor2.c make_rd.c test_file/test.c \
-		pipe_strdup2.c
+		free_pipe.c envp.c dollor.c dollor2.c make_rd.c test_file/test.c
 LIBSRC	= libft/ft_split.c libft/ft_strdup.c libft/ft_strlen.c libft/ft_strjoin.c
 OBJS	= ${SRC:.c=.o}
 OBJS2	= ${LIBSRC:.c=.o}

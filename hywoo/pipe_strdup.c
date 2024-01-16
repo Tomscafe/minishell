@@ -18,7 +18,7 @@ int	rm_size_space(char *str, int i, int space, int cnt)
 	{
 		if (str[i] == '\'')
 			i = ignore_quotes(str, i, '\'');
-		if (str[i] == '\"')
+		else if (str[i] == '\"')
 			i = ignore_quotes(str, i, '\"');
 		if (str[i] == ' ')
 		{
@@ -39,19 +39,25 @@ void	quotes_strdup(char *result, char *str, int *i, int *j)
 	char	c;
 
 	c = str[*i];
+	*i += 1;
 	while (str[*i])
 	{
+		if (str[*i] == c)
+		{
+			*i += 1;
+			break ;
+		}
 		result[*j] = str[*i];
 		*i += 1;
 		*j += 1;
-		if (str[*i] == c)
-		{
-			result[*j] = str[*i];
-			*i += 1;
-			*j += 1;
-			break ;
-		}
 	}
+}
+
+void	copy_result_idx(char *str, char *result, int *i, int *j)
+{
+	result[*j] = str[*i];
+	*j += 1;
+	*i += 1;
 }
 
 char	*rm_sp_strdup(char *str, int i, int j)
@@ -65,17 +71,15 @@ char	*rm_sp_strdup(char *str, int i, int j)
 	{
 		if (str[i] == '\'' || str[i] == '\"')
 			quotes_strdup(result, str, &i, &j);
-		result[j] = str[i];
-		if (str[i] == ' ')
+		else if (str[i] == ' ')
 		{
+			if (i && str[i + 1])
+				copy_result_idx(str, result, &i, &j);
 			while (str[i] && str[i] == ' ')
 				i++;
 		}
-		else if (str[i] == '\0')
-			return (result);
 		else
-			i++;
-		j++;
+			copy_result_idx(str, result, &i, &j);
 	}
 	result[j] = '\0';
 	return (result);

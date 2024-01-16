@@ -24,7 +24,7 @@ t_simple	*make_simple_command(t_token *front, t_command *com)
 	simple->command = NULL;
 	simple->ward = NULL;
 	if (front->type == COMMAND || front->type == WARD)
-		simple->command = pipe_strdup2(front->env, front->str);
+		simple->command = pipe_strdup(front->env, front->str);
 	else
 		return (simple);
 	if (front->next)
@@ -40,13 +40,15 @@ void	get_add_back_ward(t_simple *simple, char *file, int i, int j)
 	char	*ward;
 	int		r;
 
-	ward = malloc(sizeof(char) * (ft_strlen(simple->ward) + j - i + 1));
+	ward = malloc(sizeof(char) * (ft_strlen(simple->ward) + j - i + 2));
 	r = 0;
 	while (simple->ward[r])
 	{
 		ward[r] = simple->ward[r];
 		r++;
 	}
+	ward[r] = ' ';
+	r++;
 	while (i + 1 < j)
 	{
 		ward[r] = file[i + 1];
