@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 17:35:43 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 02:05:26 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 15:36:11 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	pipe_command(t_table *table, t_exe *exe, const int input)
 		exit(EXIT_FAILURE);
 	if (!set_table(table, *exe->cmds->first, input, table->pipefd[WRITE]))
 		return ;
-	execute_commands(table, exe, table->pipefd);
+	execute_commands(table, exe);
 	if (table->is_heredoc)
 		unlink("heredoc");
 	exe->p_pipe = dup(table->pipefd[READ]);
@@ -32,7 +32,7 @@ void	last_command(t_table *table, t_exe *exe)
 {
 	if (!set_table(table, *exe->cmds->second, exe->p_pipe, STDOUT_FILENO))
 		return ;
-	execute_commands(table, exe, NULL);
+	execute_commands(table, exe);
 	if (table->is_heredoc)
 		unlink("heredoc");
 	close_input(*table);
@@ -40,7 +40,7 @@ void	last_command(t_table *table, t_exe *exe)
 	close(exe->p_pipe);
 }
 
-void	execute_commands(t_table *table, t_exe *exe, int *pipefd)
+void	execute_commands(t_table *table, t_exe *exe)
 {
 	signal(SIGINT, SIG_IGN);
 	table->pid = fork();
@@ -49,9 +49,11 @@ void	execute_commands(t_table *table, t_exe *exe, int *pipefd)
 	else if (table->pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
-		apply_redirection(*table, pipefd);
 		if (is_builtin(table->command))
+		{
+			apply_redirection(*table);
 			builtin(*table, exe);
+		}
 		else
 			execute_at_child(*table, (const t_envp *)(*exe->env));
 		exit(exe->st_exit);

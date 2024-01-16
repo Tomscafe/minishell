@@ -134,7 +134,7 @@ int		execute_one_command(const t_table table, t_envp *list);
 /* commands */
 void	pipe_command(t_table *table, t_exe *exe, const int input);
 void	last_command(t_table *table, t_exe *exe);
-void	execute_commands(t_table *table, t_exe *exe, int *pipefd);
+void	execute_commands(t_table *table, t_exe *exe);
 /* setting */
 int		set_table(t_table *table, const t_command cmd, \
 					const int input, const int output);
@@ -142,7 +142,7 @@ char	*get_argument(const t_simple cmd);
 int		set_redirection(t_table *table, const t_redirection *rd);
 int		set_input(t_table *table, const t_redirection *rd);
 int		set_output(t_table *table, const t_redirection *rd);
-void	apply_redirection(const t_table table, int *pipe);
+void	apply_redirection(t_table table);
 /* close */
 void	close_input(t_table table);
 void	close_output(t_table table);
@@ -180,7 +180,7 @@ int		execute_env(const t_table table, const t_envp *list);
 /* exit */
 int		execute_exit(const char *arg);
 
-void	execute_at_child(const t_table table, const t_envp *list);
+void	execute_at_child(t_table table, const t_envp *list);
 char	**convert_to_array(const t_envp *list);
 char	*is_executable(const char *cmd, const char **env);
 char	*user_command(const char *cmd);
@@ -190,5 +190,7 @@ char	*get_env_string(const t_envp *env);
 char	**get_paths(const char **env);
 char	*get_exe_path(const char *path, const char *cmd);
 void	clear_strs(char **strs);
+
+void	open_all_file(t_exe *exe);
 
 #endif
