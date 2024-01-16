@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 19:55:43 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 22:01:14 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,6 @@ int	execute_echo(t_table table, const int n_exit)
 		exit(EXIT_FAILURE);
 	else if (child == 0)
 	{
-		builtin_output(table.input, table.output);
 		table.argument += 5;
 		is_newline = get_echo_option(table.argument);
 		if (is_newline < 0)
@@ -32,9 +31,9 @@ int	execute_echo(t_table table, const int n_exit)
 			table.argument += 2;
 		if (table.argument[0] == ' ')
 			table.argument++;
-		print_arg(table.argument, n_exit);
+		print_arg(table.argument, table.output, n_exit);
 		if (is_newline)
-			write(STDOUT_FILENO, "\n", 1);
+			write(table.output, "\n", 1);
 		exit(EXIT_SUCCESS);
 	}
 	waitpid(child, &exit_num, WUNTRACED);
@@ -67,7 +66,7 @@ int	get_echo_option(const char *arg)
 	return (1);
 }
 
-void	print_arg(const char *str, const int n_exit)
+void	print_arg(const char *str, const int output, const int n_exit)
 {
 	size_t	index;
 
@@ -76,14 +75,14 @@ void	print_arg(const char *str, const int n_exit)
 	{
 		if (str[index] == '$' && str[index + 1] == '?')
 		{
-			ft_putnbr_fd(n_exit, STDOUT_FILENO);
+			ft_putnbr_fd(n_exit, output);
 			index += 2;
 			continue ;
 		}
-		ft_putchar_fd(str[index], STDOUT_FILENO);
+		ft_putchar_fd(str[index], output);
 		index++;
 	}
-	ft_putchar_fd(str[index], STDOUT_FILENO);
+	ft_putchar_fd(str[index], output);
 }
 
 int	execute_unset(const char *arg, t_envp **list)

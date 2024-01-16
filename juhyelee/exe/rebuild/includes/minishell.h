@@ -30,6 +30,7 @@
 # define PARENT 0
 # define WRITE 1
 # define READ 0
+# define ONE_CMD (-1)
 
 typedef struct	s_redirection
 {
@@ -79,16 +80,20 @@ typedef struct s_table
 	char	*argument;
 	int		input;
 	int		output;
-	int		indef;
-	int		outdef;
 	int		is_heredoc;
 	int		pipefd[2];
 }t_table;
-
+typedef struct s_file
+{
+	int		is_heredoc;
+	int		io[2];
+	char	*name;
+}t_file;
 typedef struct s_exe
 {
 	t_pipe	*cmds;
 	t_envp	**env;
+	t_list	*files;
 	size_t	n_cmd;
 	int		p_pipe;
 	int		st_exit;
@@ -131,11 +136,18 @@ void	process_one_command(t_exe *exe);
 void	process_commands(t_exe *exe);
 /* commands */
 int		execute_one_command(const t_table table, t_envp *list);
-void	pipe_command(t_table *table, t_exe *exe, const int input);
+void	pipe_command(t_table *table, t_exe *exe, const size_t index);
 void	last_command(t_table *table, t_exe *exe);
 void	execute_commands(t_table *table, t_exe *exe);
 /* file */
-void	open_all_file(t_exe *exe);
+void	open_all_files(t_exe *exe);
+void	open_files(t_exe *exe, const t_redirection *rd);
+void	open_heredoc(t_list **list, const char *file_name);
+void	open_exist_file(t_list **list, const char *file_name);
+void	create_new_file(t_list **list, const char *file_name, const int mode);
+void	clear_file(void *to_del);
+char	*get_infile(const t_redirection *rd, int *is_heredoc);
+char	*get_outfile(const t_redirection *rd, int *is_append);
 /* child */
 void	execute_at_child(t_table table, const t_envp *list);
 char	**convert_to_array(const t_envp *list);
@@ -143,13 +155,10 @@ char	*is_executable(const char *cmd, const char **env);
 char	*user_command(const char *cmd);
 char	*other_builtin(const char *cmd, const char **env);
 /* setting */
-int		set_table(t_table *table, const t_command cmd, \
-					const int input, const int output);
+int		set_table(t_table *table, const t_exe *exe, const int index);
+int		set_redirection(t_table *table, const t_list *files, t_command cmd);
+void	set_file(t_table *table, const t_list *files, const t_redirection rd);
 char	*get_argument(const t_simple cmd);
-int		set_redirection(t_table *table, const t_redirection *rd);
-int		set_input(t_table *table, const t_redirection *rd);
-int		set_output(t_table *table, const t_redirection *rd);
-void	apply_redirection(t_table table);
 /* close */
 void	close_input(t_table table);
 void	close_output(t_table table);
@@ -159,11 +168,10 @@ void	run_heredoc(const char *end, const int hdfile);
 /* builtin */
 int		is_builtin(const char *cmd);
 void	builtin(const t_table table, t_exe *exe);
-void	builtin_output(int input, int output);
 /* echo */
 int		execute_echo(t_table table, const int n_exit);
 int		get_echo_option(const char *arg);
-void	print_arg(const char *str, const int n_exit);
+void	print_arg(const char *str, const int output, const int n_exit);
 /* cd */
 int		execute_cd(const char *arg, t_envp **list);
 void	change_pwd(t_envp **list);

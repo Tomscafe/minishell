@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:12:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 19:54:01 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 22:01:02 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,17 +51,6 @@ void	builtin(const t_table table, t_exe *exe)
 		exe->st_exit = EXIT_FAILURE;
 }
 
-void	builtin_output(int input, int output)
-{
-	if (output != STDOUT_FILENO)
-	{
-		dup2(output, STDOUT_FILENO);
-		close(output);
-	}
-	close(STDIN_FILENO);
-	close(input);
-}
-
 int	execute_pwd(const t_table table)
 {
 	pid_t	child;
@@ -74,11 +63,10 @@ int	execute_pwd(const t_table table)
 		exit(EXIT_FAILURE);
 	else if (child == 0)
 	{
-		builtin_output(table.input, table.output);
 		ret = getcwd(buffer, 2024);
 		if (!ret)
 			return (EXIT_FAILURE);
-		ft_putendl_fd(buffer, STDIN_FILENO);
+		ft_putendl_fd(buffer, table.output);
 		exit(EXIT_SUCCESS);
 	}
 	waitpid(child, &exit_num, 0);
@@ -95,14 +83,13 @@ int	execute_env(const t_table table, const t_envp *list)
 		exit(EXIT_FAILURE);
 	else if (child == 0)
 	{
-		builtin_output(table.input, table.output);
 		while (list)
 		{
 			if (list->value && list->value[0])
 			{
-				ft_putstr_fd(list->variable, STDOUT_FILENO);
-				ft_putchar_fd('=', STDOUT_FILENO);
-				ft_putendl_fd(list->value, STDOUT_FILENO);
+				ft_putstr_fd(list->variable, table.output);
+				ft_putchar_fd('=', table.output);
+				ft_putendl_fd(list->value, table.output);
 			}
 			list = list->next;
 		}

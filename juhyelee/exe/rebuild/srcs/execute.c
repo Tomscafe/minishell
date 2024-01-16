@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 18:46:48 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 21:20:53 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	process_one_command(t_exe *exe)
 {
 	t_table	table;
 
-	if (!set_table(&table, *exe->cmds->first, STDIN_FILENO, STDOUT_FILENO))
+	if (!set_table(&table, exe, ONE_CMD))
 	{
 		exe->st_exit = EXIT_FAILURE;
 		return ;
@@ -38,10 +38,6 @@ void	process_one_command(t_exe *exe)
 		builtin(table, exe);
 	else
 		execute_one_command(table, *exe->env);
-	if (table.is_heredoc)
-		unlink("heredoc");
-	close_input(table);
-	close_output(table);
 }
 
 void	process_commands(t_exe *exe)
@@ -52,12 +48,13 @@ void	process_commands(t_exe *exe)
 	tables = (t_table *)malloc(sizeof(t_table) * exe->n_cmd);
 	if (!tables)
 		exit(EXIT_FAILURE);
-	pipe_command(&tables[0], exe, STDIN_FILENO);
+	open_all_files(exe);
+	pipe_command(&tables[0], exe, 0);
 	index = 1;
 	while (exe->cmds->next)
 	{
 		exe->cmds = exe->cmds->next;
-		pipe_command(&tables[index], exe, exe->p_pipe);
+		pipe_command(&tables[index], exe, index);
 		index++;
 	}
 	if (exe->cmds->second)
@@ -68,6 +65,8 @@ void	process_commands(t_exe *exe)
 		waitpid(tables[index].pid, &exe->st_exit, WUNTRACED);
 		index++;
 	}
+	ft_lstclear(&(exe->files), clear_file);
+	unlink("heredoc");
 	free(tables);
 }
 

@@ -6,7 +6,7 @@
 #    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/11 03:19:53 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/16 20:00:11 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/16 21:05:38 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,8 +16,8 @@ LIBFT		= ${LIBFTDIR}/libft.a
 INCS		= includes
 SRCS		= srcs/execute.c \
 			  srcs/command.c \
+			  srcs/file.c \
 			  srcs/child.c \
-			  srcs/over.c \
 			  srcs/setting.c \
 			  srcs/builtin.c \
 			  srcs/heredoc.c \
@@ -45,5 +45,6 @@ re : fclean all
 
 ${LIBFT} :
 	${MK}
+	${MK} bonus
 %.o : %.c
 	${CC} ${CFLAG} $< -o $@ -c

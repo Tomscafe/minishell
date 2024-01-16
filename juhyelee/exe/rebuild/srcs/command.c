@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 19:44:24 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 19:46:02 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 20:59:26 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,19 +21,16 @@ int	execute_one_command(const t_table table, t_envp *env)
 	if (child < 0)
 		exit(EXIT_FAILURE);
 	else if (child == 0)
-	{
-		apply_redirection(table);
 		execute_at_child(table, env);
-	}
 	waitpid(child, &status, 0);
 	return (WEXITSTATUS(status));
 }
 
-void	pipe_command(t_table *table, t_exe *exe, const int input)
+void	pipe_command(t_table *table, t_exe *exe, const size_t index)
 {
 	if (pipe(table->pipefd) < 0)
 		exit(EXIT_FAILURE);
-	if (!set_table(table, *exe->cmds->first, input, table->pipefd[WRITE]))
+	if (!set_table(table, (const t_exe *)exe, index))
 		return ;
 	execute_commands(table, exe);
 	if (table->is_heredoc)
@@ -47,7 +44,7 @@ void	pipe_command(t_table *table, t_exe *exe, const int input)
 
 void	last_command(t_table *table, t_exe *exe)
 {
-	if (!set_table(table, *exe->cmds->second, exe->p_pipe, STDOUT_FILENO))
+	if (!set_table(table, exe, exe->n_cmd - 1))
 		return ;
 	execute_commands(table, exe);
 	if (table->is_heredoc)
@@ -67,10 +64,7 @@ void	execute_commands(t_table *table, t_exe *exe)
 	{
 		signal(SIGINT, SIG_DFL);
 		if (is_builtin(table->command))
-		{
-			apply_redirection(*table);
 			builtin(*table, exe);
-		}
 		else
 			execute_at_child(*table, (const t_envp *)(*exe->env));
 		exit(exe->st_exit);
