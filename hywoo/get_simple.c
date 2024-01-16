@@ -24,7 +24,7 @@ t_simple	*make_simple_command(t_token *front, t_command *com)
 	simple->command = NULL;
 	simple->ward = NULL;
 	if (front->type == COMMAND || front->type == WARD)
-		simple->command = pipe_strdup(front->env, front->str);
+		simple->command = pipe_strdup2(front->env, front->str);
 	else
 		return (simple);
 	if (front->next)

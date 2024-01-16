@@ -1,3 +1,14 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   minishell.h                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: hywoo <hywoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
+/*   Updated: 2024/01/16 17:38:44 by hywoo            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
@@ -20,128 +31,132 @@
 # define SP 6
 # define DOLLOR 7
 
-typedef struct	s_envp
+typedef struct s_envp
 {
-	char		*variable;
-	char		*value;
+	char			*variable;
+	char			*value;
 	struct s_envp	*next;
 }	t_envp;
 
-typedef struct	s_redirection
+typedef struct s_redirection
 {
 	char					*symbol;
 	char					*file;
 	struct s_redirection	*next;
 }	t_redirection;
 
-typedef struct	s_simple
+typedef struct s_simple
 {
 	char	*command;
 	char	*ward;
 }	t_simple;
 
-typedef struct	s_command
+typedef struct s_command
 {
 	t_simple		*simple_command;
 	t_redirection	*redirection;
 }	t_command;
 
-typedef struct	s_pipe
+typedef struct s_pipe
 {
 	t_command		*first;
 	t_command		*second;
 	struct s_pipe	*next;
 }	t_pipe;
 
-typedef struct	s_token
+typedef struct s_token
 {
-	char		*str;
-	int			type;
-	t_envp		*env;
+	char			*str;
+	int				type;
+	t_envp			*env;
 	struct s_token	*next;
 }	t_token;
 
-void	handler(int sig);
-void	ft_signal(void);
-char	*mini_strdup(char *s, int i, int j);
+void			handler(int sig);
+void			ft_signal(void);
+char			*mini_strdup(char *s, int i, int j);
 
-int	valid_quotes(char *str);
-int	check_type(char c);
-t_token	*init_token(t_token *token);
-void	add_token_back(t_token *token, char *str, int type);
-int	ignore_space(char *str, int i, int type);
-int	ignore_quotes(char *str, int j, char c);
-int	token_command(t_token *token, char *str, int i, int type);
-int	end_of_ward(char c);
-int	token_ward(t_token *token, char *str, int i, int type);
-int	token_redirection(t_token *token, char *str, int i, int type);
-int	token_pipe(t_token *token, char *str, int i, int type);
-int	token_flag(t_token *token);
-void	tokenizer(t_token *token, char *str);
+int				valid_quotes(char *str);
+int				check_type(char c);
+t_token			*init_token(t_token *token);
+void			add_token_back(t_token *token, char *str, int type);
+int				ignore_space(char *str, int i, int type);
+int				ignore_quotes(char *str, int j, char c);
+int				token_command(t_token *token, char *str, int i, int type);
+int				end_of_ward(char c);
+int				token_ward(t_token *token, char *str, int i, int type);
+int				token_redirection(t_token *token, char *str, int i, int type);
+int				token_pipe(t_token *token, char *str, int i, int type);
+int				token_flag(t_token *token);
+void			tokenizer(t_token *token, char *str);
 
-t_pipe	*init_pipe(t_pipe *pipe);
-t_command	*init_com(t_command *com);
+t_pipe			*init_pipe(t_pipe *pipe);
+t_command		*init_com(t_command *com);
 t_redirection	*init_redirection(t_redirection *rd);
-t_token	*add_back_rd(t_token *curr, t_redirection *rd);
+t_token			*add_back_rd(t_token *curr, t_redirection *rd);
 t_redirection	*last_redirection(t_redirection *rd);
 t_redirection	*make_redirection(t_token *front, t_command *com);
 
-t_command	*make_command(t_token *front);
-t_token	*find_next_front(t_token *front);
-t_pipe	*last_pipe(t_pipe *pipe);
-t_pipe	*new_pipe(t_pipe *pipe, t_token *front);
-t_pipe	*make_pipe_tree(t_pipe *pipe, t_pipe *next_pipe, t_token *token, int cnt);
+t_command		*make_command(t_token *front);
+t_token			*find_next_front(t_token *front);
+t_pipe			*last_pipe(t_pipe *pipe);
+t_pipe			*new_pipe(t_pipe *pipe, t_token *front);
+t_pipe			*make_pipe_tree(t_pipe *pipe,
+					t_pipe *next_pipe, t_token *token, int cnt);
 
-int	valid_redirection(t_token *curr);
-int	valid_redirection2(t_token *curr);
-int	valid_redirection3(t_token *curr);
-int	valid_pipe(t_token *curr);
-int	syntax_error(t_token *token);
-void	free_simple(t_command *com);
-void	free_command(t_command *com);
-void	free_pipe(t_pipe *pipe, t_pipe *pipe_next);
-void	all_free(t_token *token, t_pipe *pipe);
+int				valid_redirection(t_token *curr);
+int				valid_redirection2(t_token *curr);
+int				valid_redirection3(t_token *curr);
+int				valid_pipe(t_token *curr);
+int				syntax_error(t_token *token);
+void			free_simple(t_command *com);
+void			free_command(t_command *com);
+void			free_pipe(t_pipe *pipe, t_pipe *pipe_next);
+void			all_free(t_token *token, t_pipe *pipe);
 
-char	*env_value(char *str);
-char	*env_variable(char *str);
-t_envp	*new_env(char *str);
-t_envp	*make_env(char **envp);
+char			*env_value(char *str);
+char			*env_variable(char *str);
+t_envp			*new_env(char *str);
+t_envp			*make_env(char **envp);
 
-int	dollor_len(char *str, int k, char *variable);
-int	check_dollor_opt(char *str, int *i);
-char	*convert_dollor(t_envp *needle, char *str, int *i);
-char	*check_dollor(t_envp *env, char *str, int i, int flag);
-t_envp	*find_dollor(t_envp *needle, char *str, int i);
-void	remake_str2(char *result, char *temp, int *k, int *t);
-char	*remake_str(char *str, char *temp, int r, int *i);
-char	*remove_str(char *str, int i, int j, int t);
+int				dollor_len(char *str, int k, char *variable);
+int				check_dollor_opt(char *str, int *i);
+char			*convert_dollor(t_envp *needle, char *str, int *i);
+char			*check_dollor(t_envp *env, char *str, int i, int flag);
+t_envp			*find_dollor(t_envp *needle, char *str, int i);
+void			remake_str2(char *result, char *temp, int *k, int *t);
+char			*remake_str(char *str, char *temp, int r, int *i);
+char			*remove_str(char *str, int i, int j, int t);
 
-int	rm_size_space(char *str, int i, int space, int cnt);
-void	quotes_strdup(char *result, char *str, int *i, int *j);
-char	*rm_sp_strdup(char *str, int i, int j);
-char	*pipe_strdup(t_envp *env, char *str);
+int				rm_size_space(char *str, int i, int space, int cnt);
+void			quotes_strdup(char *result, char *str, int *i, int *j);
+char			*rm_sp_strdup(char *str, int i, int j);
+char			*pipe_strdup(t_envp *env, char *str);
 
-int	check_heredoc(char *str);
-t_token	*add_back_rd(t_token *curr, t_redirection *rd);
+int				check_heredoc(char *str);
+t_token			*add_back_rd(t_token *curr, t_redirection *rd);
 t_redirection	*last_redirection(t_redirection *rd);
 t_redirection	*make_redirection(t_token *front, t_command *com);
 
-int	have_others(char *file);
-int	file_name_lenth(char *file, int i);
-void	cutting_filename(t_redirection *rd, char *file);
-void	get_command_ward(t_simple *simple, char *file, int j);
-void	get_command(t_simple *simple, char *file, int i, int j);
+int				have_others(char *file);
+int				file_name_lenth(char *file, int i);
+void			cutting_filename(t_redirection *rd, char *file);
+void			get_command_ward(t_simple *simple, char *file, int j);
+void			get_command(t_simple *simple, char *file, int i, int j);
 
-t_simple	*make_simple_command(t_token *front, t_command *com);
-void	get_add_back_ward(t_simple *simple, char *file, int i, int j);
-void	get_add_new_ward(t_simple *simple, char *file, int i, int j);
-void	get_ward(t_simple *simple, char *file);
-void	get_simple(t_simple *simple, t_redirection *rd);
+t_simple		*make_simple_command(t_token *front, t_command *com);
+void			get_add_back_ward(t_simple *simple, char *file, int i, int j);
+void			get_add_new_ward(t_simple *simple, char *file, int i, int j);
+void			get_ward(t_simple *simple, char *file);
+void			get_simple(t_simple *simple, t_redirection *rd);
 
-void	test_token(t_token *token);
-void	test_redirection(t_pipe *pipe, int i);
-void	test_pipe(t_pipe *pipe);
-void	test_envp(t_envp *env);
-void	ft_parsing(char *str, t_envp *env);
+void			test_token(t_token *token);
+void			test_redirection(t_pipe *pipe, int i);
+void			test_pipe(t_pipe *pipe);
+void			test_envp(t_envp *env);
+void			ft_parsing(char *str, t_envp *env);
+
+char			*pipe_strdup2(t_envp *env, char *str);
+char			*rm_sp_strdup2(char *str, int i, int j);
 
 #endif

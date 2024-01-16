@@ -1,4 +1,4 @@
-#include "minishell.h"
+#include "../minishell.h"
 // -lreadline -L/Users/hywoo/.brew/opt/readline/lib -I/Users/hywoo/.brew/opt/readline/include
 // -lreadline -L/goinfre/hywoo/.brew/opt/readline/lib -I/goinfre/hywoo/.brew/opt/readline/include
 
