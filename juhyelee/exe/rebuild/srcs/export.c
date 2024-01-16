@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   export_1.c                                         :+:      :+:    :+:   */
+/*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:18:49 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/13 13:50:19 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 19:57:20 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,4 +96,22 @@ char	*get_value(const char *env)
 		exit(EXIT_FAILURE);
 	ft_strlcpy(val, env, size + 1);
 	return (val);
+}
+
+int	change_value(t_envp **list, const char *var, const char *val)
+{
+	t_envp	*p;
+
+	p = *list;
+	while (p)
+	{
+		if (ft_strncmp(p->variable, var, ft_strlen(p->variable)) == 0)
+		{
+			free(p->value);
+			p->value = (char *)val;
+			return (1);
+		}
+		p = p->next;
+	}
+	return (0);
 }

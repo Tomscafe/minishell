@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 15:28:08 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 19:58:51 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,8 +40,8 @@ int	heredoc(const char *end)
 
 void	run_heredoc(const char *end, const int hdfile)
 {
-	char	*input_line;
-	struct	termios	term;
+	char			*input_line;
+	struct termios	term;
 
 	tcgetattr(STDIN_FILENO, &term);
 	term.c_lflag &= ~(ECHOCTL);
@@ -53,10 +53,35 @@ void	run_heredoc(const char *end, const int hdfile)
 		input_line = readline("> ");
 		if (input_line == NULL)
 			exit(0);
-		if (ft_strncmp(input_line, end, ft_strlen(input_line)) == 0)
+		if (ft_strncmp(input_line, end, ft_strlen(end)) == 0)
 			break ;
 		ft_putendl_fd(input_line, hdfile);
 		free(input_line);
 	}
 	exit(EXIT_SUCCESS);
+}
+
+void	close_input(t_table table)
+{
+	if (table.input != STDIN_FILENO && \
+		table.input != STDOUT_FILENO)
+		close(table.input);
+}
+
+void	close_output(t_table table)
+{
+	if (table.output != STDOUT_FILENO && \
+		table.output != STDIN_FILENO)
+		close(table.output);
+}
+
+int	execute_exit(const char *arg)
+{
+	int		exit_num;
+
+	arg += 5;
+	if (arg[0] == '\0')
+		exit(0);
+	exit_num = ft_atoi(arg) % 256;
+	exit(exit_num);
 }

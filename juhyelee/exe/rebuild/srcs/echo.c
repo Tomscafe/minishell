@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/12 14:13:17 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 19:55:43 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,4 +84,46 @@ void	print_arg(const char *str, const int n_exit)
 		index++;
 	}
 	ft_putchar_fd(str[index], STDOUT_FILENO);
+}
+
+int	execute_unset(const char *arg, t_envp **list)
+{
+	char	**envs;
+	size_t	index;
+	t_envp	*p;
+
+	arg += 6;
+	if (arg[0] == '\0')
+		return (EXIT_SUCCESS);
+	envs = ft_split(arg, ' ');
+	if (!envs)
+		exit(EXIT_FAILURE);
+	index = 0;
+	while (envs[index])
+	{
+		p = *list;
+		while (p)
+		{
+			if (ft_strncmp(p->variable, envs[index], \
+							ft_strlen(p->variable)) == 0)
+				remove_env(list, p);
+			p = p->next;
+		}
+		index++;
+	}
+	clear_strs(envs);
+	return (EXIT_SUCCESS);
+}
+
+void	remove_env(t_envp **list, t_envp *to_del)
+{
+	t_envp	*to_del_prev;
+
+	to_del_prev = *list;
+	while (to_del_prev->next != to_del)
+		to_del_prev = to_del_prev->next;
+	to_del_prev->next = to_del->next;
+	free(to_del->variable);
+	free(to_del->value);
+	free(to_del);
 }

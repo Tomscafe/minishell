@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:12:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 02:08:09 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 19:54:01 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,4 +60,54 @@ void	builtin_output(int input, int output)
 	}
 	close(STDIN_FILENO);
 	close(input);
+}
+
+int	execute_pwd(const t_table table)
+{
+	pid_t	child;
+	int		exit_num;
+	char	buffer[2024];
+	char	*ret;
+
+	child = fork();
+	if (child < 0)
+		exit(EXIT_FAILURE);
+	else if (child == 0)
+	{
+		builtin_output(table.input, table.output);
+		ret = getcwd(buffer, 2024);
+		if (!ret)
+			return (EXIT_FAILURE);
+		ft_putendl_fd(buffer, STDIN_FILENO);
+		exit(EXIT_SUCCESS);
+	}
+	waitpid(child, &exit_num, 0);
+	return (WEXITSTATUS(exit_num));
+}
+
+int	execute_env(const t_table table, const t_envp *list)
+{
+	pid_t	child;
+	int		exit_num;
+
+	child = fork();
+	if (child < 0)
+		exit(EXIT_FAILURE);
+	else if (child == 0)
+	{
+		builtin_output(table.input, table.output);
+		while (list)
+		{
+			if (list->value && list->value[0])
+			{
+				ft_putstr_fd(list->variable, STDOUT_FILENO);
+				ft_putchar_fd('=', STDOUT_FILENO);
+				ft_putendl_fd(list->value, STDOUT_FILENO);
+			}
+			list = list->next;
+		}
+		exit(EXIT_SUCCESS);
+	}
+	waitpid(child, &exit_num, 0);
+	return (WEXITSTATUS(exit_num));
 }

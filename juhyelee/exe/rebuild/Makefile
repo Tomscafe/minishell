@@ -6,7 +6,7 @@
 #    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/11 03:19:53 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/11 20:18:56 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/16 20:00:11 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,20 +15,16 @@ LIBFT		= ${LIBFTDIR}/libft.a
 
 INCS		= includes
 SRCS		= srcs/execute.c \
+			  srcs/command.c \
 			  srcs/child.c \
 			  srcs/over.c \
-			  srcs/table_1.c \
-			  srcs/table_2.c \
+			  srcs/setting.c \
 			  srcs/builtin.c \
 			  srcs/heredoc.c \
-			  srcs/env.c \
 			  srcs/echo.c \
+			  srcs/env.c \
 			  srcs/cd.c \
-			  srcs/pwd.c \
-			  srcs/export_1.c \
-			  srcs/export_2.c \
-			  srcs/unset.c \
-			  srcs/exit.c
+			  srcs/export.c
 OBJS		= ${SRCS:.c=.o}
 
 RM			= rm -rf

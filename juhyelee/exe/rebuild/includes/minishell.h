@@ -124,17 +124,24 @@ void	ft_signal(void);
 */
 
 /* juhyelee */
-/* execute */
+/* execute part */
 void	execute(t_pipe *tree, t_envp **list);
 size_t	get_num_cmd(const t_pipe *tree);
 void	process_one_command(t_exe *exe);
 void	process_commands(t_exe *exe);
-/* one command */
-int		execute_one_command(const t_table table, t_envp *list);
 /* commands */
+int		execute_one_command(const t_table table, t_envp *list);
 void	pipe_command(t_table *table, t_exe *exe, const int input);
 void	last_command(t_table *table, t_exe *exe);
 void	execute_commands(t_table *table, t_exe *exe);
+/* file */
+void	open_all_file(t_exe *exe);
+/* child */
+void	execute_at_child(t_table table, const t_envp *list);
+char	**convert_to_array(const t_envp *list);
+char	*is_executable(const char *cmd, const char **env);
+char	*user_command(const char *cmd);
+char	*other_builtin(const char *cmd, const char **env);
 /* setting */
 int		set_table(t_table *table, const t_command cmd, \
 					const int input, const int output);
@@ -179,18 +186,10 @@ void	remove_env(t_envp **list, t_envp *to_del);
 int		execute_env(const t_table table, const t_envp *list);
 /* exit */
 int		execute_exit(const char *arg);
-
-void	execute_at_child(t_table table, const t_envp *list);
-char	**convert_to_array(const t_envp *list);
-char	*is_executable(const char *cmd, const char **env);
-char	*user_command(const char *cmd);
-char	*other_builtin(const char *cmd, const char **env);
-
+/* envirment */
 char	*get_env_string(const t_envp *env);
 char	**get_paths(const char **env);
 char	*get_exe_path(const char *path, const char *cmd);
 void	clear_strs(char **strs);
-
-void	open_all_file(t_exe *exe);
 
 #endif
