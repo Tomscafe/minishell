@@ -53,6 +53,13 @@ void	quotes_strdup(char *result, char *str, int *i, int *j)
 	}
 }
 
+void	copy_result_idx(char *str, char *result, int *i, int *j)
+{
+	result[*j] = str[*i];
+	*j += 1;
+	*i += 1;
+}
+
 char	*rm_sp_strdup(char *str, int i, int j)
 {
 	char	*result;
@@ -66,15 +73,13 @@ char	*rm_sp_strdup(char *str, int i, int j)
 			quotes_strdup(result, str, &i, &j);
 		else if (str[i] == ' ')
 		{
+			if (i && str[i + 1])
+				copy_result_idx(str, result, &i, &j);
 			while (str[i] && str[i] == ' ')
 				i++;
 		}
 		else
-		{
-			result[j] = str[i];
-			i++;
-			j++;
-		}
+			copy_result_idx(str, result, &i, &j);
 	}
 	result[j] = '\0';
 	return (result);
