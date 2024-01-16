@@ -69,8 +69,6 @@ char	*rm_sp_strdup(char *str, int i, int j)
 			while (str[i] && str[i] == ' ')
 				i++;
 		}
-		else if (str[i] == '\0')
-			return (result);
 		else
 		{
 			result[j] = str[i];
