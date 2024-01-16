@@ -12,6 +12,30 @@
 
 #include "minishell.h"
 
+void	quotes_strdup2(char *result, char *str, int *i, int *j)
+{
+	char	c;
+	char	other;
+
+	c = str[*i];
+	if (str[*i] == '\'')
+		other = '\"';
+	else if (str[*i] == '\"')
+		other = '\"';
+	*i += 1;
+	while (str[*i])
+	{
+		if (str[*i] == c)
+		{
+			*i += 1;
+			break ;
+		}
+		result[*j] = str[*i];
+		*i += 1;
+		*j += 1;
+	}
+}
+
 char	*rm_sp_strdup2(char *str, int i, int j)
 {
 	char	*result;
@@ -21,12 +45,9 @@ char	*rm_sp_strdup2(char *str, int i, int j)
 	result = malloc(sizeof(char) * (ft_strlen(str) - space + 1));
 	while (str[i])
 	{
-		if (str[i] == '\'')
-			quotes_strdup(result, str, &i, &j);
-		if (str[i] == '\"')
-			i++;
-		result[j] = str[i];
-		if (str[i] == ' ')
+		if (str[i] == '\'' || str[i] == '\"')
+			quotes_strdup2(result, str, &i, &j);
+		else if (str[i] == ' ')
 		{
 			while (str[i] && str[i] == ' ')
 				i++;
@@ -34,8 +55,11 @@ char	*rm_sp_strdup2(char *str, int i, int j)
 		else if (str[i] == '\0')
 			return (result);
 		else
+		{
+			result[j] = str[i];
 			i++;
-		j++;
+			j++;
+		}
 	}
 	result[j] = '\0';
 	return (result);
