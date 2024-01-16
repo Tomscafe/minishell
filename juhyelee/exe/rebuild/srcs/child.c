@@ -6,13 +6,13 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/12 19:01:47 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 15:36:28 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	execute_at_child(const t_table table, const t_envp *list)
+void	execute_at_child(t_table table, const t_envp *list)
 {
 	const char	**env = (const char **)convert_to_array(list);
 	const char	**arg = (const char **)ft_split(table.argument, ' ');
@@ -24,6 +24,7 @@ void	execute_at_child(const t_table table, const t_envp *list)
 		printf("minishell: %s: Not found command\n", table.command);
 		exit(EXIT_FAILURE);
 	}
+	apply_redirection(table);
 	execve(path, (char *const *)arg, (char *const *)env);
 	clear_strs((char **)env);
 	clear_strs((char **)arg);
