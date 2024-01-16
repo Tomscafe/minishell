@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 20:02:45 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 22:17:55 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 22:50:42 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,7 +54,7 @@ void	open_heredoc(t_list **list, const char *file_name)
 		exit(EXIT_FAILURE);
 	file->is_heredoc = 1;
 	file->name = (char *)file_name;
-	file->io[WRITE] = 0;
+	file->io[WRITE] = NO_FD;
 	file->io[READ] = heredoc(file_name);
 	new_el = ft_lstnew(file);
 	if (!new_el)

@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 22:09:46 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 22:51:29 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,10 +89,16 @@ void	clear_file(void *to_del)
 	t_file	*file;
 
 	file = to_del;
-	if (file->io[READ] <= 1)
-		close(file->io[READ]);
-	if (file->io[WRITE] <= 1)
-		close(file->io[READ]);
+	if (file->io[READ] > 1)
+	{
+		if (close(file->io[READ]) == 0)
+			file->io[READ] = NO_FD;
+	}
+	if (file->io[WRITE] > 1)
+	{
+		if (close(file->io[WRITE]) == 0)
+			file->io[WRITE] = NO_FD;
+	}
 	free(file);
 }
 
