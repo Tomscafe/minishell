@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 15:52:57 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 18:46:48 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,6 @@ void	process_commands(t_exe *exe)
 	t_table	*tables;
 	size_t	index;
 
-	
 	tables = (t_table *)malloc(sizeof(t_table) * exe->n_cmd);
 	if (!tables)
 		exit(EXIT_FAILURE);
@@ -85,48 +84,4 @@ size_t	get_num_cmd(const t_pipe *cmds)
 	if (cmds->second)
 		n_cmd++;
 	return (n_cmd);
-}
-
-int	execute_one_command(const t_table table, t_envp *env)
-{
-	pid_t	child;
-	int		status;
-
-	child = fork();
-	if (child < 0)
-		exit(EXIT_FAILURE);
-	else if (child == 0)
-	{
-		apply_redirection(table);
-		execute_at_child(table, env);
-	}
-	waitpid(child, &status, 0);
-	return (WEXITSTATUS(status));
-}
-
-void	apply_redirection(t_table table)
-{
-	//if (table.input != STDIN_FILENO)
-	//{
-	//	dup2(table.input, STDIN_FILENO);
-	//	close(table.input);
-	//}
-	//if (table.output != STDOUT_FILENO)
-	//{
-	//	dup2(table.output, STDOUT_FILENO);
-	//	close(table.output);
-	//}
-	//if (pipefd)
-	//{
-	//	close(pipefd[0]);
-	//	close(pipefd[1]);
-	//}
-	dup2(table.input, STDIN_FILENO);
-	close_input(table);
-	dup2(table.output, STDOUT_FILENO);
-	close_output(table);
-	if (table.pipefd[0] != STDIN_FILENO && table.pipefd[0] != STDOUT_FILENO)
-		close(table.pipefd[0]);
-	if (table.pipefd[1] != STDIN_FILENO && table.pipefd[1] != STDOUT_FILENO)
-		close(table.pipefd[1]);
 }

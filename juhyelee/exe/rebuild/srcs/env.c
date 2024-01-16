@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:00:02 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/13 13:51:27 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 19:58:12 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,29 +82,22 @@ void	clear_strs(char **strs)
 	free(strs);
 }
 
-int	execute_env(const t_table table, const t_envp *list)
+void	add_variable(t_envp **list, const char *var, const char *val)
 {
-	pid_t	child;
-	int		exit_num;
+	t_envp	*last;
+	t_envp	*new_env;
 
-	child = fork();
-	if (child < 0)
+	last = *list;
+	while (last->next)
+		last = last->next;
+	new_env = (t_envp *)malloc(sizeof(t_envp));
+	if (!new_env)
 		exit(EXIT_FAILURE);
-	else if (child == 0)
-	{
-		builtin_output(table.input, table.output);
-		while (list)
-		{
-			if (list->value && list->value[0])
-			{
-				ft_putstr_fd(list->variable, STDOUT_FILENO);
-				ft_putchar_fd('=', STDOUT_FILENO);
-				ft_putendl_fd(list->value, STDOUT_FILENO);
-			}
-			list = list->next;
-		}
-		exit(EXIT_SUCCESS);
-	}
-	waitpid(child, &exit_num, 0);
-	return (WEXITSTATUS(exit_num));
+	new_env->variable = (char *)var;
+	new_env->value = (char *)val;
+	new_env->next = NULL;
+	if (!*list)
+		*list = new_env;
+	else
+		last->next = new_env;
 }

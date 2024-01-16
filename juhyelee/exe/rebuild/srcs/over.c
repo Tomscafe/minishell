@@ -6,57 +6,20 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 17:35:43 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 15:36:11 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/16 19:54:59 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	pipe_command(t_table *table, t_exe *exe, const int input)
+void	apply_redirection(t_table table)
 {
-	if (pipe(table->pipefd) < 0)
-		exit(EXIT_FAILURE);
-	if (!set_table(table, *exe->cmds->first, input, table->pipefd[WRITE]))
-		return ;
-	execute_commands(table, exe);
-	if (table->is_heredoc)
-		unlink("heredoc");
-	exe->p_pipe = dup(table->pipefd[READ]);
-	close(table->pipefd[READ]);
-	close(table->pipefd[WRITE]);
-	close_input(*table);
-	close_output(*table);
-}
-
-void	last_command(t_table *table, t_exe *exe)
-{
-	if (!set_table(table, *exe->cmds->second, exe->p_pipe, STDOUT_FILENO))
-		return ;
-	execute_commands(table, exe);
-	if (table->is_heredoc)
-		unlink("heredoc");
-	close_input(*table);
-	close_output(*table);
-	close(exe->p_pipe);
-}
-
-void	execute_commands(t_table *table, t_exe *exe)
-{
-	signal(SIGINT, SIG_IGN);
-	table->pid = fork();
-	if (table->pid < 0)
-		exit(EXIT_FAILURE);
-	else if (table->pid == 0)
-	{
-		signal(SIGINT, SIG_DFL);
-		if (is_builtin(table->command))
-		{
-			apply_redirection(*table);
-			builtin(*table, exe);
-		}
-		else
-			execute_at_child(*table, (const t_envp *)(*exe->env));
-		exit(exe->st_exit);
-	}
-	signal(SIGINT, handler);
+	dup2(table.input, STDIN_FILENO);
+	close_input(table);
+	dup2(table.output, STDOUT_FILENO);
+	close_output(table);
+	if (table.pipefd[0] != STDIN_FILENO && table.pipefd[0] != STDOUT_FILENO)
+		close(table.pipefd[0]);
+	if (table.pipefd[1] != STDIN_FILENO && table.pipefd[1] != STDOUT_FILENO)
+		close(table.pipefd[1]);
 }
