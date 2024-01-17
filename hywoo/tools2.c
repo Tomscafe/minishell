@@ -39,7 +39,7 @@ int	check_heredoc(char *str)
 	return (0);
 }
 
-void	add_split_char(char *str, char *result, int *i, int *j)
+void	add_split_char(char *result, int *i, int *j)
 {
 	result[*j] = -1;
 	*i += 1;

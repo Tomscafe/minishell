@@ -28,7 +28,7 @@ void	add_token_back(t_token *token, char *str, int type)
 {
 	t_token	*new;
 
-	new = init_token(new);
+	new = init_token(NULL);
 	new->str = str;
 	new->type = type;
 	new->env = token->env;

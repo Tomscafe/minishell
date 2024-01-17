@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-t_simple	*make_simple_command(t_token *front, t_command *com)
+t_simple	*make_simple_command(t_token *front)
 {
 	t_simple	*simple;
 
@@ -60,16 +60,13 @@ void	get_command_ward(t_envp *env, t_simple *simple, char *file, int j)
 	}
 }
 
-void	get_command(t_envp *env, t_simple *simple,
-						char *file, t_redirection *rd)
+void	get_command(t_envp *env, t_simple *simple, char *file)
 {
 	char	*com;
-	char	*result;
-	int		i;
 	int		j;
 	int		size;
 
-	i = 0;
+	j = 0;
 	j = ignore_space(file, j, SP);
 	j = file_name_length(file, 0);
 	j = ignore_space(file, j, SP);

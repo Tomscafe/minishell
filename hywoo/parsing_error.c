@@ -17,6 +17,11 @@ int	syntax_error(t_token *token)
 	t_token	*curr;
 
 	curr = token;
+	if (curr->next->type == PIPE)
+	{
+		printf("minishell: syntax error near unexpected token `|'\n");
+		return (1);
+	}
 	while (curr)
 	{
 		if (valid_redirection(curr))
@@ -95,13 +100,13 @@ int	valid_pipe(t_token *curr)
 	{
 		if (curr->next->type == PIPE)
 		{
-			printf("bash: syntax error near unexpected token `|'\n");
+			printf("minishell: syntax error near unexpected token `|'\n");
 			return (1);
 		}
 	}
 	else
 	{
-		printf("bash: syntax error: unexpected end of file\n");
+		printf("minishell: syntax error: unexpected end of file\n");
 		return (1);
 	}
 	return (0);

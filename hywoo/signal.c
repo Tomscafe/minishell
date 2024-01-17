@@ -14,6 +14,7 @@
 
 void	handler(int sig)
 {
+	(void)sig;
 	printf("minishell$ \n");
 	if (rl_on_new_line() == -1)
 		exit (1);
