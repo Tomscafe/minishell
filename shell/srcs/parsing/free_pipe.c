@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   free_pipe.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hywoo <hywoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:45:58 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/14 14:46:29 by hywoo            ###   ########.fr       */
+/*   Updated: 2024/01/17 22:55:26 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 void	free_simple(t_command *com)
 {

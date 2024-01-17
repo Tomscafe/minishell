@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   tools2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hywoo <hywoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/17 19:16:09 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/17 19:16:09 by hywoo            ###   ########.fr       */
+/*   Updated: 2024/01/17 22:56:00 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 void	get_copy_filename(char *str, char *file, int j, int size)
 {

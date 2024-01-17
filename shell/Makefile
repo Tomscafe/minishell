@@ -6,38 +6,78 @@
 #    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/17 20:33:57 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/17 20:33:58 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/17 23:12:08 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME	= minishell
-CC		= CC
-CFLAGS	= -Werror -Wall -Wextra
-COMFILE	= -lreadline -L${HOME}/.brew/opt/readline/lib
-OBFLAGS	= -I{HOME}/.brew/opt/readline/include
-SRC		= main.c signal.c tokenizer.c tokenizer2.c tools.c pipe_tree.c \
-		pipe_strdup.c parsing_error.c init_struct.c get_simple.c get_command.c \
-		free_pipe.c envp.c dollor.c dollor2.c make_rd.c tools2.c
-LIBSRC	= libft/ft_split.c libft/ft_strdup.c libft/ft_strlen.c libft/ft_strjoin.c
-OBJS	= ${SRC:.c=.o}
-OBJS2	= ${LIBSRC:.c=.o}
+LIBFT_DIR	= libft
+LIBFT		= ${LIBFT_DIR}/libft.a
+RDLINE_DIR	= /usr/local/Cellar/readline/8.2.7#${HOME}/.brew/opt/readline
 
-all : ${NAME}
+INCS		= includes
 
-${NAME} : ${OBJS} ${OBJS2}
-	${CC} ${CFLAGS} ${COMFILE} ${OBJS} ${OBJS2} -o ${NAME}
+PS_DIR		= srcs/parsing
+PS_SRCS		= ${PS_DIR}/main.c \
+			  ${PS_DIR}/signal.c \
+			  ${PS_DIR}/tokenizer.c \
+			  ${PS_DIR}/tokenizer2.c \
+			  ${PS_DIR}/tools.c \
+			  ${PS_DIR}/pipe_tree.c \
+			  ${PS_DIR}/pipe_strdup.c \
+			  ${PS_DIR}/parsing_error.c \
+			  ${PS_DIR}/init_struct.c \
+			  ${PS_DIR}/get_simple.c \
+			  ${PS_DIR}/get_command.c \
+			  ${PS_DIR}/free_pipe.c \
+			  ${PS_DIR}/envp.c \
+			  ${PS_DIR}/dollor.c \
+			  ${PS_DIR}/dollor2.c \
+			  ${PS_DIR}/make_rd.c \
+			  ${PS_DIR}/tools2.c
+PS_OBJS		= ${PS_SRCS:.c=.o}
 
-.c.o:
-	${CC} ${CFLAGS} ${OBFLAGS} -c $< -o $@
+EX_DIR		= srcs/execute
+EX_SRCS		= ${EX_DIR}/execute.c \
+			  ${EX_DIR}/file_1.c \
+			  ${EX_DIR}/file_2.c \
+			  ${EX_DIR}/command.c \
+			  ${EX_DIR}/child.c \
+			  ${EX_DIR}/setting.c \
+			  ${EX_DIR}/builtin.c \
+			  ${EX_DIR}/echo.c \
+			  ${EX_DIR}/cd.c \
+			  ${EX_DIR}/export.c \
+			  ${EX_DIR}/env.c
+EX_OBJS		= ${EX_SRCS:.c=.o}
 
-clean :
-	rm -rf ${OBJS} ${OBJS2}
+SRCS		= ${PS_SRCS} \
+			  ${EX_SRCS}
+OBJS		= ${PS_OBJS} \
+			  ${EX_OBJS}
 
-fclean : clean
-	rm -rf ${NAME}
+NAME		= minishell
 
-re :
-	make fclean
-	make all
+RM			= rm -rf
+MK			= make -C ${LIBFT_DIR}
+CC			= CC
+CFLAGS		= -Wall -Wextra -I${RDLINE_DIR}/include #${RDLINE_DIR}/include
+LFLAGS		= -lreadline -L${RDLINE_DIR}/lib -lft -L${LIBFT_DIR} #${RDLINE_DIR}/lib -lft -L${LIBFT_DIR}
 
 .PHONY : all clean fclean re
+
+all : ${NAME}
+clean :
+	${RM} ${OBJS}
+	${MK} clean
+fclean : clean
+	${RM} ${NAME}
+	${MK} fclean
+re : fclean all
+
+${NAME} : ${OBJS} ${LIBFT}
+	${CC} ${LFLAGS} ${OBJS} -o ${NAME}
+${LIBFT} :
+	${MK}
+	${MK} bonus
+%.o : %.c
+	${CC} ${CFLAGS} $< -o $@ -c

@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_strdup.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hywoo <hywoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:46:11 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/14 14:46:47 by hywoo            ###   ########.fr       */
+/*   Updated: 2024/01/17 22:55:45 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 int	rm_size_space(char *str, int i, int space, int cnt)
 {

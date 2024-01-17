@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   dollor2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hywoo <hywoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:45:24 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/14 14:45:28 by hywoo            ###   ########.fr       */
+/*   Updated: 2024/01/17 22:55:17 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 t_envp	*find_dollor(t_envp *needle, char *str, int i)
 {

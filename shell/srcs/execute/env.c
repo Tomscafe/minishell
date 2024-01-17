@@ -6,11 +6,11 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:00:02 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 14:48:15 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 22:54:38 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../includes/minishell.h"
+#include "../../includes/minishell.h"
 
 char	*get_env_string(const t_envp *env)
 {

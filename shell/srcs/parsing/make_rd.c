@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   make_rd.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hywoo <hywoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:46:08 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/14 14:46:44 by hywoo            ###   ########.fr       */
+/*   Updated: 2024/01/17 22:55:40 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 t_token	*add_back_rd(t_token *curr, t_redirection *rd)
 {

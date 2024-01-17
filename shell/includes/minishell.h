@@ -6,13 +6,14 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/17 22:32:20 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 22:57:56 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
+# include <fcntl.h>
 # include <stdio.h>
 # include <stdlib.h>
 # include <signal.h>
@@ -20,7 +21,7 @@
 # include <termios.h>
 # include <readline/readline.h>
 # include <readline/history.h>
-# include "libft/libft.h"
+# include "libft.h"
 
 # define WARD 0
 # define COMMAND 1
@@ -30,6 +31,9 @@
 # define PIPE 5
 # define SP 6
 # define DOLLOR 7
+# define ONE_CMD (-1)
+# define READ 0
+# define WRITE 1
 
 typedef struct s_envp
 {

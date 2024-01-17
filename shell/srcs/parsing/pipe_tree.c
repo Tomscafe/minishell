@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   pipe_tree.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: hywoo <hywoo@student.42seoul.kr>           +#+  +:+       +#+        */
+/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:46:13 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/14 14:46:49 by hywoo            ###   ########.fr       */
+/*   Updated: 2024/01/17 23:08:52 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 t_command	*make_command(t_token *front)
 {
