@@ -1,27 +1,37 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   table_1.c                                          :+:      :+:    :+:   */
+/*   setting.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 15:32:12 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 17:14:57 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	set_table(t_table *table, const t_command cmd, \
-				const int input, const int output)
+int	set_table(t_table *table, const t_exe *exe, const int index)
 {
-	table->indef = input;
-	table->outdef = output;
+	t_command	cmd;
+
+	table->input = exe->p_pipe;
+	if (index == 0 || index == ONE_CMD)
+		table->input = STDIN_FILENO;
+	table->output = table->pipefd[WRITE];
+	if (index + 1 == (int)exe->n_cmd || index == ONE_CMD)
+		table->output = STDOUT_FILENO;
+	cmd = *exe->cmds->first;
+	if (index + 1 == (int)exe->n_cmd)
+		cmd = *exe->cmds->second;
+	table->flag = 0;
+	if (!set_redirection(table, (const t_list *)exe->files, cmd))
+		return (0);
+	if (!cmd.simple_command->command)
+		return (0);
 	table->command = cmd.simple_command->command;
 	table->argument = get_argument(*cmd.simple_command);
-	table->is_heredoc = 0;
-	if (!set_redirection(table, cmd.redirection))
-		return (0);
 	return (1);
 }
 
@@ -41,59 +51,50 @@ char	*get_argument(const t_simple cmd)
 	return (ret);
 }
 
-int	set_redirection(t_table *table, const t_redirection *rd)
+int	set_redirection(t_table *table, const t_list *files, t_command cmd)
 {
-	table->input = set_input(table, rd);
-	table->output = set_output(table, rd);
-	return (table->input >= 0);
+	while (cmd.redirection)
+	{
+		set_file(table, files, *cmd.redirection);
+		if ((table->flag & e_sig) || (table->flag & e_no_file))
+			return (0);
+		cmd.redirection = cmd.redirection->next;
+	}
+	return (1);
 }
 
-int	set_input(t_table *table, const t_redirection *rd)
+void	set_file(t_table *table, const t_list *files, const t_redirection rd)
 {
-	table->input = table->indef;
-	while (rd)
+	t_file	*content;
+
+	while (files)
 	{
-		if (ft_strncmp(rd->symbol, "<<", 2) == 0)
+		table->flag |= content->flag;
+		content = files->content;
+		if (content->flag & e_hd)
+			table->input = content->io[READ];
+		else if (ft_strncmp(rd.file, content->name, \
+							ft_strlen(rd.file) + 1) == 0 &&rd.symbol[0] == '>')
+			table->output = content->io[WRITE];
+		else if (rd.symbol[0] == '<' && rd.symbol[1] == '\0')
 		{
-			close_input(*table);
-			table->input = heredoc(rd->file);
-			if (table->input < 0)
-				return (-1);
-			table->is_heredoc = 1;
+			table->input = content->io[READ];
+			if (table->input < 0 && !(table->flag & e_sig))
+				printf("minishell: %s: no such file or directory\n", \
+						content->name);
 		}
-		else if (rd->symbol[0] == '<')
-		{
-			close_input(*table);
-			table->input = open(rd->file, O_RDONLY);
-			if (table->input < 0)
-			{
-				printf("minishell: %s: No such file or directory\n", rd->file);
-				return (-1);
-			}
-		}
-		rd = rd->next;
+		files = files->next;
 	}
-	return (table->input);
 }
 
-int	set_output(t_table *table, const t_redirection *rd)
+void	clear_file(void *to_del)
 {
-	table->output = table->outdef;
-	while (rd)
-	{
-		if (ft_strncmp(rd->symbol, ">>", 2) == 0)
-		{
-			close_output(*table);
-			table->output = open(rd->file, O_WRONLY | O_APPEND | O_CREAT, 0644);
-		}
-		else if (rd->symbol[0] == '>')
-		{
-			close_output(*table);
-			table->output = open(rd->file, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-		}
-		if (table->output < 0)
-			exit(EXIT_FAILURE);
-		rd = rd->next;
-	}
-	return (table->output);
+	t_file	*file;
+
+	file = to_del;
+	if (file->io[READ] > 1)
+		close(file->io[READ]);
+	if (file->io[WRITE] > 1)
+		close(file->io[WRITE]);
+	free(file);
 }

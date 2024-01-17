@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 18:46:48 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 17:10:28 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,45 +19,46 @@ void	execute(t_pipe *cmds, t_envp **env)
 	exe.cmds = cmds;
 	exe.env = env;
 	exe.n_cmd = get_num_cmd(cmds);
+	open_all_files(&exe);
 	if (exe.n_cmd == 1)
 		process_one_command(&exe);
 	else
 		process_commands(&exe);
+	signal(SIGINT, handler);
+	ft_lstclear(&(exe.files), clear_file);
+	unlink("heredoc");
 }
 
 void	process_one_command(t_exe *exe)
 {
 	t_table	table;
 
-	if (!set_table(&table, *exe->cmds->first, STDIN_FILENO, STDOUT_FILENO))
+	if (!set_table(&table, exe, ONE_CMD))
 	{
 		exe->st_exit = EXIT_FAILURE;
 		return ;
 	}
-	if (is_builtin(table.command))
+	if (is_builtin(table.command) && !(table.flag & e_sig))
 		builtin(table, exe);
-	else
-		execute_one_command(table, *exe->env);
-	if (table.is_heredoc)
-		unlink("heredoc");
-	close_input(table);
-	close_output(table);
+	else if (!(table.flag & e_sig))
+		exe->st_exit = execute_one_command(table, *exe->env);
 }
 
 void	process_commands(t_exe *exe)
 {
 	t_table	*tables;
 	size_t	index;
+	int		st_ret;
 
 	tables = (t_table *)malloc(sizeof(t_table) * exe->n_cmd);
 	if (!tables)
 		exit(EXIT_FAILURE);
-	pipe_command(&tables[0], exe, STDIN_FILENO);
+	pipe_command(&tables[0], exe, 0);
 	index = 1;
 	while (exe->cmds->next)
 	{
 		exe->cmds = exe->cmds->next;
-		pipe_command(&tables[index], exe, exe->p_pipe);
+		pipe_command(&tables[index], exe, index);
 		index++;
 	}
 	if (exe->cmds->second)
@@ -65,9 +66,10 @@ void	process_commands(t_exe *exe)
 	index = 0;
 	while (index < exe->n_cmd)
 	{
-		waitpid(tables[index].pid, &exe->st_exit, WUNTRACED);
+		waitpid(tables[index].pid, &st_ret, WUNTRACED);
 		index++;
 	}
+	exe->st_exit = WEXITSTATUS(st_ret);
 	free(tables);
 }
 

@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 19:58:51 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 16:16:06 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	heredoc(const char *end)
 	if (WIFSIGNALED(st_exit) != 0)
 	{
 		printf("\n");
-		return (unlink("heredoc"), -1);
+		return (unlink("heredoc"), HD_SIG);
 	}
 	close(heredocfd);
 	return (open("heredoc", O_RDONLY));
@@ -40,20 +40,15 @@ int	heredoc(const char *end)
 
 void	run_heredoc(const char *end, const int hdfile)
 {
-	char			*input_line;
-	struct termios	term;
+	char	*input_line;
 
-	tcgetattr(STDIN_FILENO, &term);
-	term.c_lflag &= ~(ECHOCTL);
-	tcsetattr(STDIN_FILENO, TCSANOW, &term);
 	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		input_line = readline("> ");
 		if (input_line == NULL)
 			exit(0);
-		if (ft_strncmp(input_line, end, ft_strlen(end)) == 0)
+		if (ft_strncmp(input_line, end, ft_strlen(input_line)) == 0)
 			break ;
 		ft_putendl_fd(input_line, hdfile);
 		free(input_line);

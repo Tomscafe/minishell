@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:18:49 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 19:57:20 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 15:03:47 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,17 +48,16 @@ int	print_env_for_export(const t_table table, const t_envp *list)
 		exit(EXIT_FAILURE);
 	else if (child == 0)
 	{
-		builtin_output(table.input, table.output);
 		while (list)
 		{
-			ft_putstr_fd("declare -x ", STDOUT_FILENO);
-			ft_putstr_fd(list->variable, STDOUT_FILENO);
+			ft_putstr_fd("declare -x ", table.output);
+			ft_putstr_fd(list->variable, table.output);
 			if (list->value)
 			{
-				ft_putchar_fd('=', STDOUT_FILENO);
-				ft_putstr_fd(list->value, STDOUT_FILENO);
+				ft_putchar_fd('=', table.output);
+				ft_putstr_fd(list->value, table.output);
 			}
-			ft_putchar_fd('\n', STDOUT_FILENO);
+			ft_putchar_fd('\n', table.output);
 			list = list->next;
 		}
 		exit(EXIT_SUCCESS);
@@ -105,7 +104,7 @@ int	change_value(t_envp **list, const char *var, const char *val)
 	p = *list;
 	while (p)
 	{
-		if (ft_strncmp(p->variable, var, ft_strlen(p->variable)) == 0)
+		if (ft_strncmp(p->variable, var, ft_strlen(p->variable) + 1) == 0)
 		{
 			free(p->value);
 			p->value = (char *)val;
