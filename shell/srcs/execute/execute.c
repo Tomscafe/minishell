@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 00:46:56 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 01:16:44 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	process_one_command(t_exe *exe)
 	if (is_builtin(proc.cmd))
 		builtin(proc, exe);
 	else
-		exe->st_exit = execute_one_command(proc, *exe->env);
+		exe->st_exit = execute_one_command(proc, exe);
 }
 
 void	process_commands(t_exe *exe)

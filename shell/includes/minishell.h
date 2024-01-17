@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/18 00:40:56 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 01:15:54 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,10 +211,10 @@ char	*get_file_name(char *file_name);
 int		heredoc(const char *end);
 void	run_heredoc(const char *end, const int hdfile);
 /* execute commands */
-int		execute_one_command(const t_proc table, t_envp *list);
+int		execute_one_command(const t_proc table, t_exe *exe);
 void	pipe_command(t_proc *table, t_exe *exe, const size_t index);
 void	last_command(t_proc *table, t_exe *exe);
-void	execute_commands(t_proc *table, t_exe *exe);
+void	execute_commands(t_proc *table, t_exe *exe, int *pipefd);
 void	cmd_signal(int sig);
 /* setting */
 int		set_proc(t_proc *proc, const t_setting setting);
@@ -225,7 +225,7 @@ char	*get_argument(const t_simple cmd);
 int		is_builtin(const char *cmd);
 void	builtin(const t_proc table, t_exe *exe);
 /* child */
-void	execute_at_child(t_proc table, const t_envp *list);
+void	execute_at_child(t_proc table, t_exe *exe, int *pipefd);
 char	**convert_to_array(const t_envp *list);
 char	*is_executable(const char *cmd, const char **env);
 char	*user_command(const char *cmd);

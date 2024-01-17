@@ -6,15 +6,15 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 22:54:23 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 01:16:27 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	execute_at_child(t_proc proc, const t_envp *list)
+void	execute_at_child(t_proc proc, t_exe *exe, int *pipefd)
 {
-	const char	**env = (const char **)convert_to_array(list);
+	const char	**env = (const char **)convert_to_array(*exe->env);
 	const char	**arg = (const char **)ft_split(proc.arg, ' ');
 	char		*path;
 
@@ -35,6 +35,12 @@ void	execute_at_child(t_proc proc, const t_envp *list)
 		dup2(proc.output, STDOUT_FILENO);
 		close(proc.output);
 	}
+	if (pipefd)
+	{
+		close(pipefd[0]);
+		close(pipefd[1]);
+	}
+	ft_lstclear(&exe->files, clear_file);
 	execve(path, (char *const *)arg, (char *const *)env);
 	clear_strs((char **)env);
 	clear_strs((char **)arg);

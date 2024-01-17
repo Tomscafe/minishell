@@ -6,13 +6,13 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 19:44:24 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 00:50:26 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 01:16:20 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	execute_one_command(const t_proc proc, t_envp *env)
+int	execute_one_command(const t_proc proc, t_exe *exe)
 {
 	pid_t	child;
 	int		status;
@@ -22,7 +22,7 @@ int	execute_one_command(const t_proc proc, t_envp *env)
 	if (child < 0)
 		exit(EXIT_FAILURE);
 	else if (child == 0)
-		execute_at_child(proc, env);
+		execute_at_child(proc, exe, NULL);
 	waitpid(child, &status, 0);
 	signal(SIGINT, handler);
 	return (WEXITSTATUS(status));
@@ -35,7 +35,6 @@ void	pipe_command(t_proc *proc, t_exe *exe, const size_t index)
 
 	if (pipe(pipefd) < 0)
 		exit(EXIT_FAILURE);
-	printf("pipe read : %d | pipe write : %d\n", pipefd[0], pipefd[1]);
 	setting.files = exe->files;
 	setting.cmd = *exe->cmds->first;
 	setting.input = exe->p_pipe;
@@ -44,9 +43,8 @@ void	pipe_command(t_proc *proc, t_exe *exe, const size_t index)
 		setting.input = STDIN_FILENO;
 	if (!set_proc(proc, setting))
 		return ;
-	execute_commands(proc, exe);
+	execute_commands(proc, exe, pipefd);
 	exe->p_pipe = dup(pipefd[READ]);
-	printf("prev : %d\n", exe->p_pipe);
 	close(pipefd[READ]);
 	close(pipefd[WRITE]);
 }
@@ -61,11 +59,11 @@ void	last_command(t_proc *proc, t_exe *exe)
 	setting.output = STDOUT_FILENO;
 	if (!set_proc(proc, setting))
 		return ;
-	execute_commands(proc, exe);
+	execute_commands(proc, exe, NULL);
 	close(exe->p_pipe);
 }
 
-void	execute_commands(t_proc *proc, t_exe *exe)
+void	execute_commands(t_proc *proc, t_exe *exe, int *pipefd)
 {
 	signal(SIGINT, SIG_IGN);
 	proc->pid = fork();
@@ -77,7 +75,7 @@ void	execute_commands(t_proc *proc, t_exe *exe)
 		if (is_builtin(proc->cmd))
 			builtin(*proc, exe);
 		else
-			execute_at_child(*proc, (const t_envp *)(*exe->env));
+			execute_at_child(*proc, exe, pipefd);
 		exit(exe->st_exit);
 	}
 	signal(SIGINT, cmd_signal);
