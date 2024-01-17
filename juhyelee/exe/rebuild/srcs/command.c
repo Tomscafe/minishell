@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 19:44:24 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 19:45:20 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 20:07:22 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,16 +44,6 @@ void	last_command(t_proc *proc, t_exe *exe)
 	execute_commands(proc, exe);
 }
 
-void	cmd_signal(int sig)
-{
-	if (sig == SIGINT)
-	{
-		if (rl_on_new_line() == -1)
-			exit (1);
-		rl_replace_line("", 1);
-	}
-}
-
 void	execute_commands(t_proc *proc, t_exe *exe)
 {
 	signal(SIGINT, SIG_IGN);
@@ -62,7 +52,7 @@ void	execute_commands(t_proc *proc, t_exe *exe)
 		exit(EXIT_FAILURE);
 	else if (proc->pid == 0)
 	{
-		signal(SIGINT, SIG_DFL);
+		signal(SIGINT, cmd_signal);
 		if (is_builtin(proc->cmd))
 			builtin(*proc, exe);
 		else
@@ -70,4 +60,14 @@ void	execute_commands(t_proc *proc, t_exe *exe)
 		exit(exe->st_exit);
 	}
 	signal(SIGINT, cmd_signal);
+}
+
+void	cmd_signal(int sig)
+{
+	if (sig == SIGINT)
+	{
+		if (rl_on_new_line() == -1)
+			exit (1);
+		rl_replace_line("", 1);
+	}
 }

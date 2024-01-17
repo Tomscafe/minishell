@@ -141,6 +141,7 @@ int		execute_one_command(const t_proc table, t_envp *list);
 void	pipe_command(t_proc *table, t_exe *exe, const size_t index);
 void	last_command(t_proc *table, t_exe *exe);
 void	execute_commands(t_proc *table, t_exe *exe);
+void	cmd_signal(int sig);
 /* setting */
 int		set_proc(t_proc *proc, const t_exe *exe, const int index);
 int		set_redirection(t_proc *proc, const t_list *files, t_command cmd);

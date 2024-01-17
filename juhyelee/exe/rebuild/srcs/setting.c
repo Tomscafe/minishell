@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 19:32:53 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 20:06:12 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,5 +86,16 @@ char	*get_argument(const t_simple cmd)
 	ft_strlcat(ret, " ", size);
 	ft_strlcat(ret, cmd.ward, size);
 	return (ret);
+}
+
+int	execute_exit(const char *arg)
+{
+	int	exit_num;
+
+	arg += 5;
+	if (arg[0] == '\0')
+		exit(0);
+	exit_num = ft_atoi(arg) % 256;
+	exit(exit_num);
 }
 

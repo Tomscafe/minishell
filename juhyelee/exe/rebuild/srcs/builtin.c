@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:12:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 18:26:50 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 19:48:34 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,4 +97,19 @@ int	execute_env(const t_proc proc, const t_envp *list)
 	}
 	waitpid(child, &exit_num, 0);
 	return (WEXITSTATUS(exit_num));
+}
+
+int	is_exist(const t_list *files, const char *file_name)
+{
+	t_file	*content;
+
+	while (files)
+	{
+		content = files->content;
+		if (ft_strncmp(content->name, file_name, \
+					ft_strlen(content->name) + 1) == 0)
+			return (1);
+		files = files->next;
+	}
+	return (0);
 }

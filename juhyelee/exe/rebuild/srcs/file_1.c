@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 20:02:45 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 19:39:34 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 19:48:24 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,21 +68,6 @@ int	add_heredoc(t_list **files, const char *end)
 		exit(EXIT_FAILURE);
 	ft_lstadd_back(files, new_el);
 	return (1);
-}
-
-int	is_exist(const t_list *files, const char *file_name)
-{
-	t_file	*content;
-
-	while (files)
-	{
-		content = files->content;
-		if (ft_strncmp(content->name, file_name, \
-					ft_strlen(content->name) + 1) == 0)
-			return (1);
-		files = files->next;
-	}
-	return (0);
 }
 
 void	clear_when_signal(void *to_del)

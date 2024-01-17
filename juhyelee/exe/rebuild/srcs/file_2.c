@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 19:33:50 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 20:05:05 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,29 +112,4 @@ void	run_heredoc(const char *end, const int hdfile)
 		free(input_line);
 	}
 	exit(EXIT_SUCCESS);
-}
-
-//void	close_input(t_table table)
-//{
-//	if (table.input != STDIN_FILENO && \
-//		table.input != STDOUT_FILENO)
-//		close(table.input);
-//}
-
-//void	close_output(t_table table)
-//{
-//	if (table.output != STDOUT_FILENO && \
-//		table.output != STDIN_FILENO)
-//		close(table.output);
-//}
-
-int	execute_exit(const char *arg)
-{
-	int	exit_num;
-
-	arg += 5;
-	if (arg[0] == '\0')
-		exit(0);
-	exit_num = ft_atoi(arg) % 256;
-	exit(exit_num);
 }

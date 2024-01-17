@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 19:44:31 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 20:06:28 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,3 +92,4 @@ size_t	get_num_cmd(const t_pipe *cmds)
 		n_cmd++;
 	return (n_cmd);
 }
+
