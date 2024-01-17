@@ -32,6 +32,7 @@
 # define READ 0
 # define ONE_CMD (-1)
 # define NO_FD (-1)
+# define HD_SIG (-2)
 
 typedef struct	s_redirection
 {
@@ -82,11 +83,13 @@ typedef struct s_table
 	int		input;
 	int		output;
 	int		is_heredoc;
+	int		is_signal;
 	int		pipefd[2];
 }t_table;
 typedef struct s_file
 {
 	int		is_heredoc;
+	int		is_signal;
 	int		io[2];
 	char	*name;
 }t_file;

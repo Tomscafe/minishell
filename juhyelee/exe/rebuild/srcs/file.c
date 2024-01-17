@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 20:02:45 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 22:50:42 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 12:15:07 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,6 +56,8 @@ void	open_heredoc(t_list **list, const char *file_name)
 	file->name = (char *)file_name;
 	file->io[WRITE] = NO_FD;
 	file->io[READ] = heredoc(file_name);
+	if (file->io[READ] == HD_SIG)
+		file->is_signal = 1;
 	new_el = ft_lstnew(file);
 	if (!new_el)
 		exit(EXIT_FAILURE);
@@ -70,7 +72,8 @@ void	open_exist_file(t_list **list, const char *file_name)
 	file = (t_file *)malloc(sizeof(t_file));
 	if (!file)
 		exit(EXIT_FAILURE);
-		file->is_heredoc = 0;
+	file->is_heredoc = 0;
+	file->is_signal = 0;
 	file->name = (char *)file_name;
 	file->io[WRITE] = 0;
 	file->io[READ] = open(file_name, O_RDONLY);
@@ -94,6 +97,7 @@ void	create_new_file(t_list **list, const char *file_name, const int mode)
 	if (!file)
 		exit(EXIT_FAILURE);
 	file->is_heredoc = 0;
+	file->is_signal = 0;
 	file->name = (char *)file_name;
 	if (mode)
 		file->io[WRITE] = open(file_name, O_WRONLY | O_APPEND | O_CREAT, 0644);

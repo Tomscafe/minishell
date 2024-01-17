@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 19:58:51 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 12:10:16 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ int	heredoc(const char *end)
 	if (WIFSIGNALED(st_exit) != 0)
 	{
 		printf("\n");
-		return (unlink("heredoc"), -1);
+		return (unlink("heredoc"), HD_SIG);
 	}
 	close(heredocfd);
 	return (open("heredoc", O_RDONLY));

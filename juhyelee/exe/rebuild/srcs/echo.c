@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 22:01:14 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 12:00:37 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ int	execute_echo(t_table table, const int n_exit)
 		exit(EXIT_SUCCESS);
 	}
 	waitpid(child, &exit_num, WUNTRACED);
-	return (WEXITSTATUS(exit));
+	return (WEXITSTATUS(exit_num));
 }
 
 int	get_echo_option(const char *arg)

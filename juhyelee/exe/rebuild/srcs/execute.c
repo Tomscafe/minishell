@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 22:50:31 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 12:20:16 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,16 +37,17 @@ void	process_one_command(t_exe *exe)
 		exe->st_exit = EXIT_FAILURE;
 		return ;
 	}
-	if (is_builtin(table.command))
+	if (is_builtin(table.command) && !table.is_signal)
 		builtin(table, exe);
-	else
-		execute_one_command(table, *exe->env);
+	else if (!table.is_signal)
+		exe->st_exit = execute_one_command(table, *exe->env);
 }
 
 void	process_commands(t_exe *exe)
 {
 	t_table	*tables;
 	size_t	index;
+	int		st_ret;
 
 	tables = (t_table *)malloc(sizeof(t_table) * exe->n_cmd);
 	if (!tables)
@@ -64,9 +65,10 @@ void	process_commands(t_exe *exe)
 	index = 0;
 	while (index < exe->n_cmd)
 	{
-		waitpid(tables[index].pid, &exe->st_exit, WUNTRACED);
+		waitpid(tables[index].pid, &st_ret, WUNTRACED);
 		index++;
 	}
+	exe->st_exit = WEXITSTATUS(st_ret);
 	free(tables);
 }
 

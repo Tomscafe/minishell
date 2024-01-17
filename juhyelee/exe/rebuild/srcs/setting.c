@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 22:51:29 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 12:20:44 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ int	set_table(t_table *table, const t_exe *exe, const int index)
 		cmd = *exe->cmds->second;
 	table->command = cmd.simple_command->command;
 	table->argument = get_argument(*cmd.simple_command);
+	table->is_signal = 0;
 	if (!set_redirection(table, (const t_list *)exe->files, cmd))
 		return (0);
 	return (1);
@@ -53,7 +54,10 @@ int	set_redirection(t_table *table, const t_list *files, t_command cmd)
 	while (cmd.redirection)
 	{
 		if (!set_file(table, files, *cmd.redirection))
+		{
+			printf("minishell: %s: no such file or directory\n", cmd.redirection->file);
 			return (0);
+		}
 		cmd.redirection = cmd.redirection->next;
 	}
 	return (1);
@@ -62,26 +66,34 @@ int	set_redirection(t_table *table, const t_list *files, t_command cmd)
 int	set_file(t_table *table, const t_list *files, const t_redirection rd)
 {
 	t_file	*content;
+	int		flag;
 
+	flag = 0;
 	while (files)
 	{
 		content = files->content;
+		table->is_signal = content->is_signal;
 		if (content->is_heredoc)
 		{
 			table->is_heredoc = 1;
 			table->input = content->io[READ];
-			if (table->input <= 1)
-				return (0);
+			flag = 1;
 		}
 		else if (ft_strncmp(rd.file, content->name, \
 							ft_strlen(content->name)) == 0 && \
 				rd.symbol[0] == '>')
+		{
 			table->output = content->io[WRITE];
+			flag = 1;
+		}
 		else if (rd.symbol[0] == '<' && rd.symbol[1] == '\0')
+		{
 			table->input = content->io[READ];
+			flag = 1;
+		}	
 		files = files->next;
 	}
-	return (1);
+	return (flag);
 }
 
 void	clear_file(void *to_del)
@@ -90,15 +102,9 @@ void	clear_file(void *to_del)
 
 	file = to_del;
 	if (file->io[READ] > 1)
-	{
-		if (close(file->io[READ]) == 0)
-			file->io[READ] = NO_FD;
-	}
+		close(file->io[READ]);
 	if (file->io[WRITE] > 1)
-	{
-		if (close(file->io[WRITE]) == 0)
-			file->io[WRITE] = NO_FD;
-	}
+		close(file->io[WRITE]);
 	free(file);
 }
 
