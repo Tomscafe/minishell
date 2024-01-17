@@ -19,7 +19,7 @@ void	ft_parsing(char *str, t_envp *env)
 
 	if (valid_quotes(str))
 		return ;
-	token = init_token(token);
+	token = init_token(NULL);
 	token->env = env;
 	tokenizer(token, str);
 	if (syntax_error(token))
@@ -27,9 +27,7 @@ void	ft_parsing(char *str, t_envp *env)
 		all_free(token, NULL);
 		return ;
 	}
-	pipe_tree = make_pipe_tree(pipe_tree, pipe_tree, token->next, 0);
-	// test_token(token);
-	test_pipe(pipe_tree);
+	pipe_tree = make_pipe_tree(NULL, NULL, token->next, 0);
 	all_free(token, pipe_tree);
 }
 
@@ -72,7 +70,7 @@ int	main(int ac, char **av, char *envp[])
 	t_envp	*env;
 
 	env = make_env(envp);
-	// test_envp(env);
+	(void)av;
 	if (ac != 1)
 	{
 		printf("error\n");

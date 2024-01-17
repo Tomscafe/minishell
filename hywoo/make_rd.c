@@ -16,7 +16,7 @@ t_token	*add_back_rd(t_token *curr, t_redirection *rd)
 {
 	t_redirection	*new_rd;
 
-	new_rd = init_redirection(new_rd);
+	new_rd = init_redirection(NULL);
 	new_rd->symbol = ft_strdup(curr->str);
 	new_rd->file = ft_strdup(curr->next->str);
 	rd->next = new_rd;
@@ -35,14 +35,14 @@ t_redirection	*last_redirection(t_redirection *rd)
 	return (last);
 }
 
-t_redirection	*make_redirection(t_token *front, t_command *com)
+t_redirection	*make_redirection(t_token *front)
 {
 	t_redirection	*rd;
 	t_redirection	*head;
 	t_token			*curr;
 
 	curr = front;
-	rd = init_redirection(rd);
+	rd = init_redirection(NULL);
 	head = rd;
 	while (curr)
 	{

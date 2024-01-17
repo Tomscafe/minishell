@@ -15,12 +15,12 @@
 t_command	*make_command(t_token *front)
 {
 	t_command		*com;
-	t_redirection	*last;
 
-	com = init_com(com);
-	com->simple_command = make_simple_command(front, com);
-	com->redirection = make_redirection(front, com);
-	get_simple(front->env, com->simple_command, com->redirection);
+	com = init_com(NULL);
+	com->simple_command = make_simple_command(front);
+	com->redirection = make_redirection(front);
+	if (front)
+		get_simple(front->env, com->simple_command, com->redirection);
 	return (com);
 }
 

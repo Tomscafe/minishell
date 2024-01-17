@@ -95,7 +95,6 @@ t_command		*init_com(t_command *com);
 t_redirection	*init_redirection(t_redirection *rd);
 t_token			*add_back_rd(t_token *curr, t_redirection *rd);
 t_redirection	*last_redirection(t_redirection *rd);
-t_redirection	*make_redirection(t_token *front, t_command *com);
 
 t_command		*make_command(t_token *front);
 t_token			*find_next_front(t_token *front);
@@ -137,27 +136,22 @@ char			*pipe_strdup(t_envp *env, char *str);
 int				check_heredoc(char *str);
 t_token			*add_back_rd(t_token *curr, t_redirection *rd);
 t_redirection	*last_redirection(t_redirection *rd);
-t_redirection	*make_redirection(t_token *front, t_command *com);
-t_simple		*make_simple_command(t_token *front, t_command *com);
+t_redirection	*make_redirection(t_token *front);
+t_simple		*make_simple_command(t_token *front);
 
 void			get_simple_ward(t_envp *env, t_simple *simple, char *ward);
 void			get_command_ward(t_envp *env,
 					t_simple *simple, char *file, int j);
-void			get_command(t_envp *env, t_simple *simple,
-					char *file, t_redirection *rd);
+void			get_command(t_envp *env, t_simple *simple, char *file);
 void			get_ward(t_envp *env, t_simple *simple, char *file);
 void			get_simple(t_envp *env, t_simple *simple, t_redirection *rd);
 
 void			get_copy_filename(char *str, char *file, int j, int size);
 void			cutting_filename(t_envp *env, t_redirection *rd, char *file);
-void			add_split_char(char *str, char *result, int *i, int *j);
+void			add_split_char(char *result, int *i, int *j);
 int				have_others(char *file);
 int				file_name_length(char *file, int j);
 
-void			test_token(t_token *token);
-void			test_redirection(t_pipe *pipe, int i);
-void			test_pipe(t_pipe *pipe);
-void			test_envp(t_envp *env);
 void			ft_parsing(char *str, t_envp *env);
 
 #endif

@@ -20,9 +20,9 @@ void	cutting_filename(t_envp *env, t_redirection *rd, char *file)
 	int		j;
 
 	j = 0;
-	org_name = malloc(sizeof(char) * (size + 1));
 	j = ignore_space(file, 0, SP);
 	size = file_name_length(file, 0);
+	org_name = malloc(sizeof(char) * (size + 1));
 	get_copy_filename(org_name, file, j, size);
 	if (!check_heredoc(rd->symbol))
 	{
@@ -86,7 +86,7 @@ void	get_simple(t_envp *env, t_simple *simple, t_redirection *rd)
 		if (!flag_com && have_others(rd->file))
 		{
 			flag_com++;
-			get_command(env, simple, rd->file, rd);
+			get_command(env, simple, rd->file);
 			cutting_filename(env, rd, rd->file);
 		}
 		else if (flag_com && have_others(rd->file))
