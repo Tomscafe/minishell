@@ -12,94 +12,75 @@
 
 #include "minishell.h"
 
-int	have_others(char *file)
+t_simple	*make_simple_command(t_token *front, t_command *com)
 {
-	int	i;
+	t_simple	*simple;
 
-	i = 0;
-	while (file[i])
+	simple = malloc(sizeof(t_simple));
+	if (!simple)
+		exit (-1);
+	if (!front)
+		return (simple);
+	simple->command = NULL;
+	simple->ward = NULL;
+	if (front->type == COMMAND || front->type == WARD)
+		simple->command = pipe_strdup(front->env, front->str);
+	else
+		return (simple);
+	if (front->next)
 	{
-		i = ignore_quotes(file, i, '\'');
-		i = ignore_quotes(file, i, '\"');
-		if (file[i] == ' ')
-		{
-			i = ignore_space(file, i, SP);
-			if (file[i])
-				return (1);
-		}
-		i++;
+		if (front->next->type == WARD)
+			simple->ward = pipe_strdup(front->env, front->next->str);
 	}
-	return (0);
+	return (simple);
 }
 
-int	file_name_lenth(char *file, int i)
-{
-	while (file[i] && file[i] != ' ')
-	{
-		i = ignore_quotes(file, i, '\'');
-		i = ignore_quotes(file, i, '\"');
-		i++;
-	}
-	return (i);
-}
-
-void	cutting_filename(t_redirection *rd, char *file)
-{
-	char	*first_file;
-	int		size;
-	int		i;
-
-	i = 0;
-	size = file_name_lenth(file, 0);
-	first_file = malloc(sizeof(char) * (size + 1));
-	while (i < size)
-	{
-		first_file[i] = file[i];
-		i++;
-	}
-	first_file[i] = '\0';
-	free (file);
-	rd->file = first_file;
-}
-
-void	get_command_ward(t_simple *simple, char *file, int j)
+void	get_command_ward(t_envp *env, t_simple *simple, char *file, int j)
 {
 	char	*ward;
-	int		r;
+	int		i;
 	int		size;
 
-	r = 0;
-	size = ft_strlen(file);
-	ward = malloc(sizeof(char) * (size - j + 1));
-	while (j < size)
+	i = 0;
+	ward = NULL;
+	while (file[j])
 	{
-		ward[r] = file[j];
-		j++;
-		r++;
+		j = ignore_space(file, j, SP);
+		if (ward)
+		{
+			i = ft_strlen(ward);
+			free (ward);
+		}
+		size = file_name_length(file, j);
+		ward = malloc(sizeof(char) * (size + 1));
+		get_copy_filename(ward, file, j, size);
+		get_simple_ward(env, simple, ward);
+		j += size;
+		j = ignore_space(file, j, SP);
 	}
-	ward[r] = '\0';
-	simple->ward = ward;
 }
 
-void	get_command(t_simple *simple, char *file, int i, int j)
+void	get_command(t_envp *env, t_simple *simple,
+						char *file, t_redirection *rd)
 {
 	char	*com;
-	int		r;
+	char	*result;
+	int		i;
+	int		j;
+	int		size;
 
-	i = file_name_lenth(file, 0);
-	j = file_name_lenth(file, i + 1);
-	com = malloc(sizeof(char) * (j - i + 1));
-	r = 0;
-	while (i + 1 < j)
-	{
-		com[r] = file[i + 1];
-		i++;
-		r++;
-	}
-	com[r] = '\0';
-	simple->command = com;
+	i = 0;
+	j = ignore_space(file, j, SP);
+	j = file_name_length(file, 0);
+	j = ignore_space(file, j, SP);
+	size = file_name_length(file, j);
+	com = malloc(sizeof(char) * (size + 1));
+	get_copy_filename(com, file, j, size);
+	simple->command = pipe_strdup(env, com);
+	free (com);
+	j += size;
 	if (file[j] == ' ')
-		j++;
-	if (ft_strlen(file) > j)
-		get_command_ward(simple, file, j);
+		j = ignore_space(file, j, SP);
+	if (file[j])
+		get_command_ward(env, simple, file, j);
 }
