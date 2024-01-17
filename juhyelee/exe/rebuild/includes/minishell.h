@@ -32,7 +32,7 @@
 # define READ 0
 # define ONE_CMD (-1)
 # define NO_FD (-1)
-# define HD_SIG (-2)
+# define HD_SIG (-1)
 
 typedef struct	s_redirection
 {
@@ -137,12 +137,11 @@ void	execute_commands(t_table *table, t_exe *exe);
 /* file */
 void	open_all_files(t_exe *exe);
 void	open_files(t_exe *exe, const t_redirection *rd);
-void	open_heredoc(t_list **list, const char *file_name);
-void	open_exist_file(t_list **list, const char *file_name);
-void	create_new_file(t_list **list, const char *file_name, const int mode);
+void	add_heredoc(t_list **files, const char *end);
+void	add_input(t_list **files, const char *file_name);
+void	add_output(t_list **files, char *file_name, const int mode);
 void	clear_file(void *to_del);
-char	*get_infile(const t_redirection *rd, int *is_heredoc);
-char	*get_outfile(const t_redirection *rd, int *is_append);
+char	*get_file_name(char *file_name);
 /* child */
 void	execute_at_child(t_table table, const t_envp *list);
 char	**convert_to_array(const t_envp *list);

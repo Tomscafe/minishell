@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:12:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 22:01:02 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 15:05:51 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,38 +14,38 @@
 
 int	is_builtin(const char *cmd)
 {
-	if (ft_strncmp(cmd, "echo", ft_strlen(cmd)) == 0)
+	if (ft_strncmp(cmd, "echo", 5) == 0)
 		return (1);
-	if (ft_strncmp(cmd, "cd", ft_strlen(cmd)) == 0)
+	if (ft_strncmp(cmd, "cd", 3) == 0)
 		return (1);
-	if (ft_strncmp(cmd, "pwd", ft_strlen(cmd)) == 0)
+	if (ft_strncmp(cmd, "pwd", 4) == 0)
 		return (1);
-	if (ft_strncmp(cmd, "export", ft_strlen(cmd)) == 0)
+	if (ft_strncmp(cmd, "export", 7) == 0)
 		return (1);
-	if (ft_strncmp(cmd, "unset", ft_strlen(cmd)) == 0)
+	if (ft_strncmp(cmd, "unset", 6) == 0)
 		return (1);
-	if (ft_strncmp(cmd, "env", ft_strlen(cmd)) == 0)
+	if (ft_strncmp(cmd, "env", 3) == 0)
 		return (1);
-	if (ft_strncmp(cmd, "exit", ft_strlen(cmd)) == 0)
+	if (ft_strncmp(cmd, "exit", 5) == 0)
 		return (1);
 	return (0);
 }
 
 void	builtin(const t_table table, t_exe *exe)
 {
-	if (ft_strncmp(table.command, "echo", ft_strlen(table.command)) == 0)
+	if (ft_strncmp(table.command, "echo", 5) == 0)
 		exe->st_exit = execute_echo(table, exe->st_exit);
-	else if (ft_strncmp(table.command, "cd", ft_strlen(table.command)) == 0)
+	else if (ft_strncmp(table.command, "cd", 3) == 0)
 		exe->st_exit = execute_cd(table.argument, exe->env);
-	else if (ft_strncmp(table.command, "pwd", ft_strlen(table.command)) == 0)
+	else if (ft_strncmp(table.command, "pwd", 4) == 0)
 		exe->st_exit = execute_pwd(table);
-	else if (ft_strncmp(table.command, "export", ft_strlen(table.command)) == 0)
+	else if (ft_strncmp(table.command, "export", 7) == 0)
 		exe->st_exit = execute_export(table, exe->env);
-	else if (ft_strncmp(table.command, "unset", ft_strlen(table.command)) == 0)
+	else if (ft_strncmp(table.command, "unset", 6) == 0)
 		exe->st_exit = execute_unset(table.argument, exe->env);
-	else if (ft_strncmp(table.command, "env", ft_strlen(table.command)) == 0)
+	else if (ft_strncmp(table.command, "env", 4) == 0)
 		exe->st_exit = execute_env(table, (const t_envp *)(*exe->env));
-	else if (ft_strncmp(table.command, "exit", ft_strlen(table.command)) == 0)
+	else if (ft_strncmp(table.command, "exit", 5) == 0)
 		exe->st_exit = execute_exit(table.argument);
 	else
 		exe->st_exit = EXIT_FAILURE;

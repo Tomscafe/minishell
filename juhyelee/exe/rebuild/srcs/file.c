@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 20:02:45 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 13:21:35 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 16:24:46 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,83 +29,95 @@ void	open_all_files(t_exe *exe)
 
 void	open_files(t_exe *exe, const t_redirection *rd)
 {
-	char	*infile;
-	char	*outfile;
-	int		is_append;
-	int		is_heredoc;
-
-	infile = get_infile(rd, &is_heredoc);
-	outfile = get_outfile(rd, &is_append);
-	if (outfile)
-		create_new_file(&(exe->files), outfile, is_append);
-	if (infile && is_heredoc)
-		open_heredoc(&(exe->files), infile);
-	else if (infile)
-		open_exist_file(&(exe->files), infile);
+	while (rd)
+	{
+		if (ft_strncmp(rd->symbol, ">>", 2) == 0)
+			add_output((t_list **)&(exe->files), rd->file, 1);
+		else if (rd->symbol[0] == '>')
+			add_output((t_list **)&(exe->files), rd->file, 0);
+		if (ft_strncmp(rd->symbol, "<<", 2) == 0)
+			add_heredoc((t_list **)&(exe->files), rd->file);
+		else if (rd->symbol[0] == '<')
+			add_input((t_list **)&(exe->files), rd->file);
+		rd = rd->next;
+	}
 }
 
-void	open_heredoc(t_list **list, const char *file_name)
+void	add_heredoc(t_list **files, const char *end)
 {
-	t_file	*file;
+	t_file	*hd;
 	t_list	*new_el;
 
-	file = (t_file *)malloc(sizeof(t_file));
-	if (!file)
+	hd = (t_file *)malloc(sizeof(t_file));
+	if (!hd)
 		exit(EXIT_FAILURE);
-	file->is_heredoc = 1;
-	file->name = (char *)file_name;
-	file->io[WRITE] = NO_FD;
-	file->io[READ] = heredoc(file_name);
-	if (file->io[READ] == HD_SIG)
-		file->is_signal = 1;
-	new_el = ft_lstnew(file);
+	hd->is_heredoc = 1;
+	hd->is_signal = 0;
+	hd->name = (char *)end;
+	hd->io[WRITE] = 0;
+	hd->io[READ] = heredoc(end);
+	if (hd->io[READ] == HD_SIG)
+		hd->is_signal = 1;
+	new_el = ft_lstnew(hd);
 	if (!new_el)
 		exit(EXIT_FAILURE);
-	ft_lstadd_back(list, new_el);
+	ft_lstadd_back(files, new_el);
 }
 
-void	open_exist_file(t_list **list, const char *file_name)
+void	add_input(t_list **files, const char *file_name)
 {
-	t_file	*file;
+	t_file	*infile;
 	t_list	*new_el;
 
-	file = (t_file *)malloc(sizeof(t_file));
-	if (!file)
+	infile = (t_file *)malloc(sizeof(t_file));
+	if (!infile)
 		exit(EXIT_FAILURE);
-	file->is_heredoc = 0;
-	file->is_signal = 0;
-	file->name = (char *)file_name;
-	file->io[WRITE] = 0;
-	file->io[READ] = open(file_name, O_RDONLY);
-	if (file->io[READ] < 0)
+	infile->is_heredoc = 0;
+	infile->is_signal = 0;
+	infile->name = (char *)file_name;
+	infile->io[WRITE] = 0;
+	infile->io[READ] = open(file_name, O_RDONLY);
+	if (infile->io[READ] < 0)
 	{
-		free(file);
+		free(infile);
 		return ;
 	}
-	new_el = ft_lstnew(file);
+	new_el = ft_lstnew(infile);
 	if (!new_el)
 		exit(EXIT_FAILURE);
-	ft_lstadd_back(list, new_el);
+	ft_lstadd_back(files, new_el);
 }
 
-void	create_new_file(t_list **list, const char *file_name, const int mode)
+void	add_output(t_list **files, char *file_name, const int mode)
 {
-	t_file	*file;
+	t_file	*outfile;
 	t_list	*new_el;
 
-	file = (t_file *)malloc(sizeof(t_file));
-	if (!file)
+	outfile = (t_file *)malloc(sizeof(t_file));
+	if (!outfile)
 		exit(EXIT_FAILURE);
-	file->is_heredoc = 0;
-	file->is_signal = 0;
-	file->name = (char *)file_name;
+	outfile->is_heredoc = 0;
+	outfile->is_signal = 0;
+	outfile->name = get_file_name(file_name);
 	if (mode)
-		file->io[WRITE] = open(file_name, O_WRONLY | O_APPEND | O_CREAT, 0644);
+		outfile->io[WRITE] = \
+			open(file_name, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	else
-		file->io[WRITE] = open(file_name, O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	file->io[READ] = open(file_name, O_RDONLY);
-	new_el = ft_lstnew(file);
+		outfile->io[WRITE] = \
+			open(file_name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	outfile->io[READ] = open(file_name, O_RDONLY);
+	new_el = ft_lstnew(outfile);
 	if (!new_el)
 		exit(EXIT_FAILURE);
-	ft_lstadd_back(list, new_el);
+	ft_lstadd_back(files, new_el);
+}
+
+char	*get_file_name(char *file_name)
+{
+	size_t	len;
+
+	len = ft_strlen(file_name);
+	if (file_name[len - 1] == ' ')
+		file_name[len - 1] = '\0';
+	return (file_name);
 }

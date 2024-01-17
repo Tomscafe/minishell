@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:53:01 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/15 22:03:42 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 15:02:43 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -93,7 +93,7 @@ char	*get_home(const t_envp *list)
 {
 	while (list)
 	{
-		if (ft_strncmp(list->variable, "HOME", 4) == 0)
+		if (ft_strncmp(list->variable, "HOME", ft_strlen(list->variable)) == 0)
 			break ;
 		list = list->next;
 	}

@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 12:00:37 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 15:03:55 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	execute_unset(const char *arg, t_envp **list)
 		while (p)
 		{
 			if (ft_strncmp(p->variable, envs[index], \
-							ft_strlen(p->variable)) == 0)
+							ft_strlen(p->variable) + 1) == 0)
 				remove_env(list, p);
 			p = p->next;
 		}

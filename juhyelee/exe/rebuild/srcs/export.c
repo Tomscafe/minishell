@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:18:49 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 22:01:20 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 15:03:47 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,7 @@ int	change_value(t_envp **list, const char *var, const char *val)
 	p = *list;
 	while (p)
 	{
-		if (ft_strncmp(p->variable, var, ft_strlen(p->variable)) == 0)
+		if (ft_strncmp(p->variable, var, ft_strlen(p->variable) + 1) == 0)
 		{
 			free(p->value);
 			p->value = (char *)val;

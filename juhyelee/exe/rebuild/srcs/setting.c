@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 13:32:53 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 15:57:19 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,8 +83,7 @@ int	set_file(t_table *table, const t_list *files, const t_redirection rd)
 			flag = 1;
 		}
 		else if (ft_strncmp(rd.file, content->name, \
-							ft_strlen(content->name)) == 0 && \
-				rd.symbol[0] == '>')
+							ft_strlen(rd.file) + 1) == 0 &&rd.symbol[0] == '>')
 		{
 			table->output = content->io[WRITE];
 			flag = 1;
@@ -109,52 +108,4 @@ void	clear_file(void *to_del)
 	if (file->io[WRITE] > 1)
 		close(file->io[WRITE]);
 	free(file);
-}
-
-char	*get_infile(const t_redirection *rd, int *is_heredoc)
-{
-	char	*infile;
-
-	infile = NULL;
-	*is_heredoc = 0;
-	while (rd)
-	{
-		if (ft_strncmp(rd->symbol, "<<", 2) == 0)
-		{
-			infile = rd->file;
-			*is_heredoc = 1;
-		}
-		else if (rd->symbol[0] == '<')
-		{
-			infile = rd->file;
-			*is_heredoc = 0;
-		}
-		rd = rd->next;
-	}
-	return (infile);
-}
-
-char	*get_outfile(const t_redirection *rd, int *is_append)
-{
-	char	*outfile;
-
-	outfile = NULL;
-	*is_append = 0;
-	while (rd)
-	{
-		if (ft_strncmp(rd->symbol, ">>", 2) == 0)
-		{
-			outfile = rd->file;
-			*is_append = 1;
-		}
-		else if (rd->symbol[0] == '>')
-		{
-			outfile = rd->file;
-			*is_append = 0;
-		}
-		rd = rd->next;
-	}
-	if (outfile && outfile[ft_strlen(outfile) - 1] == ' ')
-		outfile[ft_strlen(outfile) - 1] = '\0';
-	return (outfile);
 }
