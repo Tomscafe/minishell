@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:46:06 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/17 22:55:38 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 23:15:43 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,7 @@ void	ft_parsing(char *str, t_envp *env)
 		return ;
 	}
 	pipe_tree = make_pipe_tree(NULL, NULL, token->next, 0);
+	execute(pipe_tree, &env);
 	all_free(token, pipe_tree);
 }
 

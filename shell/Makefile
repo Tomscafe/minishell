@@ -6,7 +6,7 @@
 #    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/17 20:33:57 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/17 23:12:08 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/17 23:37:57 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -60,8 +60,9 @@ NAME		= minishell
 RM			= rm -rf
 MK			= make -C ${LIBFT_DIR}
 CC			= CC
-CFLAGS		= -Wall -Wextra -I${RDLINE_DIR}/include #${RDLINE_DIR}/include
-LFLAGS		= -lreadline -L${RDLINE_DIR}/lib -lft -L${LIBFT_DIR} #${RDLINE_DIR}/lib -lft -L${LIBFT_DIR}
+IFLAG		= -I${RDLINE_DIR}/include -I${INCS}
+LFLAG		= -lreadline -L${RDLINE_DIR}/lib -lft -L${LIBFT_DIR}
+CFLAG		= -Wall -Wextra -g3
 
 .PHONY : all clean fclean re
 
@@ -75,9 +76,9 @@ fclean : clean
 re : fclean all
 
 ${NAME} : ${OBJS} ${LIBFT}
-	${CC} ${LFLAGS} ${OBJS} -o ${NAME}
+	${CC} ${LFLAG} ${OBJS} -o ${NAME}
 ${LIBFT} :
 	${MK}
 	${MK} bonus
 %.o : %.c
-	${CC} ${CFLAGS} $< -o $@ -c
+	${CC} ${CFLAG} $< -o $@ -c ${IFLAG}
