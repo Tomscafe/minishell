@@ -1,35 +1,48 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juhyelee <griiim134@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/17 19:31:24 by juhyelee          #+#    #+#             */
-/*   Updated: 2023/03/20 16:48:48 by juhyelee         ###   ########.fr       */
+/*   Created: 2023/03/17 09:43:30 by juhyelee          #+#    #+#             */
+/*   Updated: 2023/03/20 16:50:29 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(const char *str)
-{
-	char	*mem;
-	size_t	len;
-	size_t	idx;
+static int	get_result(const char *str);
 
-	len = ft_strlen(str) + 1;
-	mem = (char *)malloc(sizeof(char) * len);
-	if (!mem)
+int	ft_atoi(const char *str)
+{
+	int		sign;
+
+	while ((*str >= 9 && *str <= 13) || *str == 32)
 	{
-		return (NULL);
+		str++;
 	}
-	idx = 0;
-	while (str[idx])
+	sign = 1;
+	if (*str == '-' || *str == '+')
 	{
-		mem[idx] = str[idx];
-		idx++;
+		if (*str == '-')
+		{
+			sign *= -1;
+		}
+		str++;
 	}
-	mem[idx] = '\0';
-	return (mem);
+	return (sign * get_result(str));
+}
+
+static int	get_result(const char *str)
+{
+	int		result;
+
+	result = 0;
+	while (ft_isdigit(*str))
+	{
+		result = (*str - '0') + (result * 10);
+		str++;
+	}
+	return (result);
 }

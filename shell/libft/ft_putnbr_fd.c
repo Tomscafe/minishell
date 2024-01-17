@@ -1,35 +1,40 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juhyelee <griiim134@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/17 19:31:24 by juhyelee          #+#    #+#             */
-/*   Updated: 2023/03/20 16:48:48 by juhyelee         ###   ########.fr       */
+/*   Created: 2023/03/19 21:18:36 by juhyelee          #+#    #+#             */
+/*   Updated: 2023/03/20 16:48:57 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(const char *str)
-{
-	char	*mem;
-	size_t	len;
-	size_t	idx;
+static void	put_to_file(long long n, int fd);
 
-	len = ft_strlen(str) + 1;
-	mem = (char *)malloc(sizeof(char) * len);
-	if (!mem)
+void	ft_putnbr_fd(int n, int fd)
+{
+	long long	buff;
+
+	buff = n;
+	if (buff < 0)
 	{
-		return (NULL);
+		write(fd, "-", 1);
+		buff *= -1;
 	}
-	idx = 0;
-	while (str[idx])
+	put_to_file(buff, fd);
+}
+
+static void	put_to_file(long long n, int fd)
+{
+	if (n < 10)
 	{
-		mem[idx] = str[idx];
-		idx++;
+		n += '0';
+		write(fd, &n, 1);
+		return ;
 	}
-	mem[idx] = '\0';
-	return (mem);
+	put_to_file(n / 10, fd);
+	put_to_file(n % 10, fd);
 }

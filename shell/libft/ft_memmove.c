@@ -1,35 +1,49 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juhyelee <griiim134@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/17 19:31:24 by juhyelee          #+#    #+#             */
-/*   Updated: 2023/03/20 16:48:48 by juhyelee         ###   ########.fr       */
+/*   Created: 2023/03/16 10:04:16 by juhyelee          #+#    #+#             */
+/*   Updated: 2023/03/20 16:49:18 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(const char *str)
-{
-	char	*mem;
-	size_t	len;
-	size_t	idx;
+static void	move(char *dst, const char *src, int len);
 
-	len = ft_strlen(str) + 1;
-	mem = (char *)malloc(sizeof(char) * len);
-	if (!mem)
+void	*ft_memmove(void *dst, const void *src, size_t len)
+{
+	if (!dst && !src)
 	{
 		return (NULL);
 	}
-	idx = 0;
-	while (str[idx])
+	move(dst, src, len);
+	return (dst);
+}
+
+static void	move(char *dst, const char *src, int len)
+{
+	int	idx;
+
+	if (src < dst)
 	{
-		mem[idx] = str[idx];
-		idx++;
+		idx = len - 1;
+		while (idx >= 0)
+		{
+			dst[idx] = src[idx];
+			idx--;
+		}
 	}
-	mem[idx] = '\0';
-	return (mem);
+	else
+	{
+		idx = 0;
+		while (idx < len)
+		{
+			dst[idx] = src[idx];
+			idx++;
+		}
+	}
 }

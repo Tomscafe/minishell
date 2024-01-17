@@ -1,35 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juhyelee <griiim134@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/17 19:31:24 by juhyelee          #+#    #+#             */
-/*   Updated: 2023/03/20 16:48:48 by juhyelee         ###   ########.fr       */
+/*   Created: 2023/03/16 11:07:22 by juhyelee          #+#    #+#             */
+/*   Updated: 2023/03/20 16:48:51 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(const char *str)
+char	*ft_strchr(const char *str, int ch)
 {
-	char	*mem;
-	size_t	len;
-	size_t	idx;
+	unsigned char	buff;
+	size_t			idx;
 
-	len = ft_strlen(str) + 1;
-	mem = (char *)malloc(sizeof(char) * len);
-	if (!mem)
-	{
-		return (NULL);
-	}
 	idx = 0;
+	buff = ch;
 	while (str[idx])
 	{
-		mem[idx] = str[idx];
+		if (str[idx] == buff)
+		{
+			return ((char *)(str + idx));
+		}
 		idx++;
 	}
-	mem[idx] = '\0';
-	return (mem);
+	if (buff == '\0')
+	{
+		return ((char *)(str + idx));
+	}
+	return (NULL);
 }

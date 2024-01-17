@@ -1,35 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strrchr.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juhyelee <griiim134@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/17 19:31:24 by juhyelee          #+#    #+#             */
-/*   Updated: 2023/03/20 16:48:48 by juhyelee         ###   ########.fr       */
+/*   Created: 2023/03/16 11:16:59 by juhyelee          #+#    #+#             */
+/*   Updated: 2023/03/20 16:48:16 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(const char *str)
+char	*ft_strrchr(const char *str, int ch)
 {
-	char	*mem;
-	size_t	len;
-	size_t	idx;
+	unsigned char	to_find;
+	int				idx;
 
-	len = ft_strlen(str) + 1;
-	mem = (char *)malloc(sizeof(char) * len);
-	if (!mem)
+	to_find = ch;
+	idx = ft_strlen(str);
+	if (to_find == '\0')
 	{
-		return (NULL);
+		return ((char *)(str + idx));
 	}
-	idx = 0;
-	while (str[idx])
+	while (idx >= 0)
 	{
-		mem[idx] = str[idx];
-		idx++;
+		if (str[idx] == to_find)
+		{
+			return ((char *)(str + idx));
+		}
+		idx--;
 	}
-	mem[idx] = '\0';
-	return (mem);
+	return (NULL);
 }

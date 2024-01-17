@@ -1,35 +1,38 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   ft_strlcat.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juhyelee <griiim134@gmail.com>             +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/17 19:31:24 by juhyelee          #+#    #+#             */
-/*   Updated: 2023/03/20 16:48:48 by juhyelee         ###   ########.fr       */
+/*   Created: 2023/03/16 10:32:33 by juhyelee          #+#    #+#             */
+/*   Updated: 2023/03/20 16:48:42 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strdup(const char *str)
+size_t	ft_strlcat(char *dst, const char *src, size_t d_size)
 {
-	char	*mem;
-	size_t	len;
-	size_t	idx;
+	size_t	d_len;
+	size_t	s_len;
+	size_t	d_idx;
+	size_t	s_idx;
 
-	len = ft_strlen(str) + 1;
-	mem = (char *)malloc(sizeof(char) * len);
-	if (!mem)
+	d_len = ft_strlen(dst);
+	s_len = ft_strlen(src);
+	if (d_size <= d_len)
 	{
-		return (NULL);
+		return (s_len + d_size);
 	}
-	idx = 0;
-	while (str[idx])
+	d_idx = d_len;
+	s_idx = 0;
+	while (d_idx + 1 < d_size && src[s_idx])
 	{
-		mem[idx] = str[idx];
-		idx++;
+		dst[d_idx] = src[s_idx];
+		d_idx++;
+		s_idx++;
 	}
-	mem[idx] = '\0';
-	return (mem);
+	dst[d_idx] = '\0';
+	return (s_len + d_len);
 }
