@@ -6,36 +6,23 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 23:20:27 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 00:49:06 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	set_proc(t_proc *proc, const t_exe *exe, const int index)
+int	set_proc(t_proc *proc, const t_setting setting)
 {
-	t_command	cmd;
-
-	if (index == 0 || index == ONE_CMD)
-		proc->input = STDIN_FILENO;
-	else
-		proc->input = exe->p_pipe;
-	if (index + 1 == (int)exe->n_cmd || index == ONE_CMD)
-		proc->output = STDOUT_FILENO;
-	else
-		proc->output = proc->pipefd[WRITE];
-	if (index + 1 == (int)exe->n_cmd)
-		cmd = *exe->cmds->second;
-	else
-		cmd = *exe->cmds->first;
-	if (!set_redirection(proc, (const t_list *)exe->files, cmd))
+	proc->input = setting.input;
+	proc->output = setting.output;
+	if (!set_redirection(proc, (const t_list *)setting.files, setting.cmd))
 		return (0);
-	if (!cmd.simple_command->command)
+	if (!setting.cmd.simple_command->command)
 		return (0);
-	proc->cmd = cmd.simple_command->command;
-	proc->arg = get_argument(*cmd.simple_command);
-	printf("command : %s | input : %d | outpue : %d\n", proc->cmd, proc->input, proc->output);
-	printf("pipe 0 : %d | pipe 1 : %d | prev : %d\n\n", proc->pipefd[0], proc->pipefd[1], exe->p_pipe);
+	proc->cmd = setting.cmd.simple_command->command;
+	proc->arg = get_argument(*setting.cmd.simple_command);
+	printf("command : %s | input : %d | output : %d\n", proc->cmd, proc->input, proc->output);
 	return (1);
 }
 

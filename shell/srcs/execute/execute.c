@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 23:16:42 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 00:46:56 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,15 +29,21 @@ void	execute(t_pipe *cmds, t_envp **env)
 		process_one_command(&exe);
 	else
 		process_commands(&exe);
+	ft_signal();
 	ft_lstclear(&(exe.files), clear_file);
 	unlink("heredoc");
 }
 
 void	process_one_command(t_exe *exe)
 {
-	t_proc	proc;
+	t_proc		proc;
+	t_setting	setting;
 
-	if (!set_proc(&proc, exe, ONE_CMD))
+	setting.files = exe->files;
+	setting.cmd = *exe->cmds->first;
+	setting.input = STDIN_FILENO;
+	setting.output = STDOUT_FILENO;
+	if (!set_proc(&proc, setting))
 	{
 		exe->st_exit = EXIT_FAILURE;
 		return ;

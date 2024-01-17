@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/17 22:57:56 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 00:40:56 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,7 @@ typedef struct s_proc
 	char	*arg;
 	int		input;
 	int		output;
-	int		pipefd[2];
+	//int		pipefd[2];
 }t_proc;
 
 typedef struct s_file
@@ -101,6 +101,14 @@ typedef struct s_exe
 	int		p_pipe;
 	int		st_exit;
 }t_exe;
+
+typedef struct s_setting
+{
+	t_list		*files;
+	t_command	cmd;
+	int			input;
+	int			output;
+}t_setting;
 
 void			handler(int sig);
 void			ft_signal(void);
@@ -209,7 +217,7 @@ void	last_command(t_proc *table, t_exe *exe);
 void	execute_commands(t_proc *table, t_exe *exe);
 void	cmd_signal(int sig);
 /* setting */
-int		set_proc(t_proc *proc, const t_exe *exe, const int index);
+int		set_proc(t_proc *proc, const t_setting setting);
 int		set_redirection(t_proc *proc, const t_list *files, t_command cmd);
 int		set_file(t_proc *table, const t_list *files, const t_redirection rd);
 char	*get_argument(const t_simple cmd);
