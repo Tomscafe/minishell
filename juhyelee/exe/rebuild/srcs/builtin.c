@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:12:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 15:05:51 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 18:26:50 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,27 +31,27 @@ int	is_builtin(const char *cmd)
 	return (0);
 }
 
-void	builtin(const t_table table, t_exe *exe)
+void	builtin(const t_proc proc, t_exe *exe)
 {
-	if (ft_strncmp(table.command, "echo", 5) == 0)
-		exe->st_exit = execute_echo(table, exe->st_exit);
-	else if (ft_strncmp(table.command, "cd", 3) == 0)
-		exe->st_exit = execute_cd(table.argument, exe->env);
-	else if (ft_strncmp(table.command, "pwd", 4) == 0)
-		exe->st_exit = execute_pwd(table);
-	else if (ft_strncmp(table.command, "export", 7) == 0)
-		exe->st_exit = execute_export(table, exe->env);
-	else if (ft_strncmp(table.command, "unset", 6) == 0)
-		exe->st_exit = execute_unset(table.argument, exe->env);
-	else if (ft_strncmp(table.command, "env", 4) == 0)
-		exe->st_exit = execute_env(table, (const t_envp *)(*exe->env));
-	else if (ft_strncmp(table.command, "exit", 5) == 0)
-		exe->st_exit = execute_exit(table.argument);
+	if (ft_strncmp(proc.cmd, "echo", 5) == 0)
+		exe->st_exit = execute_echo(proc, exe->st_exit);
+	else if (ft_strncmp(proc.cmd, "cd", 3) == 0)
+		exe->st_exit = execute_cd(proc.arg, exe->env);
+	else if (ft_strncmp(proc.cmd, "pwd", 4) == 0)
+		exe->st_exit = execute_pwd(proc);
+	else if (ft_strncmp(proc.cmd, "export", 7) == 0)
+		exe->st_exit = execute_export(proc, exe->env);
+	else if (ft_strncmp(proc.cmd, "unset", 6) == 0)
+		exe->st_exit = execute_unset(proc.arg, exe->env);
+	else if (ft_strncmp(proc.cmd, "env", 4) == 0)
+		exe->st_exit = execute_env(proc, (const t_envp *)(*exe->env));
+	else if (ft_strncmp(proc.cmd, "exit", 5) == 0)
+		exe->st_exit = execute_exit(proc.arg);
 	else
 		exe->st_exit = EXIT_FAILURE;
 }
 
-int	execute_pwd(const t_table table)
+int	execute_pwd(const t_proc proc)
 {
 	pid_t	child;
 	int		exit_num;
@@ -66,14 +66,14 @@ int	execute_pwd(const t_table table)
 		ret = getcwd(buffer, 2024);
 		if (!ret)
 			return (EXIT_FAILURE);
-		ft_putendl_fd(buffer, table.output);
+		ft_putendl_fd(buffer, proc.output);
 		exit(EXIT_SUCCESS);
 	}
 	waitpid(child, &exit_num, 0);
 	return (WEXITSTATUS(exit_num));
 }
 
-int	execute_env(const t_table table, const t_envp *list)
+int	execute_env(const t_proc proc, const t_envp *list)
 {
 	pid_t	child;
 	int		exit_num;
@@ -87,9 +87,9 @@ int	execute_env(const t_table table, const t_envp *list)
 		{
 			if (list->value && list->value[0])
 			{
-				ft_putstr_fd(list->variable, table.output);
-				ft_putchar_fd('=', table.output);
-				ft_putendl_fd(list->value, table.output);
+				ft_putstr_fd(list->variable, proc.output);
+				ft_putchar_fd('=', proc.output);
+				ft_putendl_fd(list->value, proc.output);
 			}
 			list = list->next;
 		}

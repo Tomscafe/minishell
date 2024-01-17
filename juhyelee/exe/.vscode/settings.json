@@ -4,6 +4,7 @@
 		"minishell.h": "c",
 		"stat.h": "c",
 		"memory": "c",
-		"utility": "c"
+		"utility": "c",
+		"chrono": "c"
 	}
 }

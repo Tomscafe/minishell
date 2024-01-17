@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 20:02:45 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 17:57:00 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 19:39:34 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ int	add_heredoc(t_list **files, const char *end)
 	hd->name = (char *)end;
 	hd->io[WRITE] = 0;
 	hd->io[READ] = heredoc(end);
-	if (hd->io[READ] == HD_SIG)
+	if (hd->io[READ] < 0)
 		return (0);
 	new_el = ft_lstnew(hd);
 	if (!new_el)
@@ -83,6 +83,24 @@ int	is_exist(const t_list *files, const char *file_name)
 		files = files->next;
 	}
 	return (0);
+}
+
+void	clear_when_signal(void *to_del)
+{
+	t_file	*file;
+
+	file = to_del;
+	if (file->io[READ > 1])
+	{
+		unlink(file->name);
+		close(file->io[READ]);
+	}
+	if (file->io[WRITE] > 1)
+	{
+		unlink(file->name);
+		close(file->io[WRITE]);
+	}
+	free(file);
 }
 
 void	clear_file(void *to_del)

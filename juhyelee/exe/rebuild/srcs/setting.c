@@ -6,32 +6,69 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 17:48:55 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 19:32:53 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	set_table(t_table *table, const t_exe *exe, const int index)
+int	set_proc(t_proc *proc, const t_exe *exe, const int index)
 {
 	t_command	cmd;
 
-	table->input = exe->p_pipe;
 	if (index == 0 || index == ONE_CMD)
-		table->input = STDIN_FILENO;
-	table->output = table->pipefd[WRITE];
+		proc->input = STDIN_FILENO;
+	else
+		proc->input = exe->p_pipe;
 	if (index + 1 == (int)exe->n_cmd || index == ONE_CMD)
-		table->output = STDOUT_FILENO;
-	cmd = *exe->cmds->first;
+		proc->output = STDOUT_FILENO;
+	else
+		proc->output = proc->pipefd[WRITE];
 	if (index + 1 == (int)exe->n_cmd)
 		cmd = *exe->cmds->second;
-	table->flag = 0;
-	if (!set_redirection(table, (const t_list *)exe->files, cmd))
+	else
+		cmd = *exe->cmds->first;
+	if (!set_redirection(proc, (const t_list *)exe->files, cmd))
 		return (0);
 	if (!cmd.simple_command->command)
 		return (0);
-	table->command = cmd.simple_command->command;
-	table->argument = get_argument(*cmd.simple_command);
+	proc->cmd = cmd.simple_command->command;
+	proc->arg = get_argument(*cmd.simple_command);
+	return (1);
+}
+
+int	set_redirection(t_proc *proc, const t_list *files, t_command cmd)
+{
+	while (cmd.redirection)
+	{
+		if (!set_file(proc, files, *cmd.redirection))
+			return (0);
+		cmd.redirection = cmd.redirection->next;
+	}
+	return (1);
+}
+
+int	set_file(t_proc *table, const t_list *files, const t_redirection rd)
+{
+	t_file	*content;
+
+	while (files)
+	{
+		content = files->content;
+		if (rd.symbol[0] == '<')
+			table->input = content->io[READ];
+		else
+		{
+			table->output = content->io[WRITE];
+			if (table->output < 0)
+			{
+				printf("minishell: %s: no such file or directory\n", \
+						content->name);
+				return (0);
+			}
+		}
+		files = files->next;
+	}
 	return (1);
 }
 
@@ -51,39 +88,3 @@ char	*get_argument(const t_simple cmd)
 	return (ret);
 }
 
-int	set_redirection(t_table *table, const t_list *files, t_command cmd)
-{
-	while (cmd.redirection)
-	{
-		set_file(table, files, *cmd.redirection);
-		if ((table->flag & e_sig) || (table->flag & e_no_file))
-			return (0);
-		cmd.redirection = cmd.redirection->next;
-	}
-	return (1);
-}
-
-void	set_file(t_table *table, const t_list *files, const t_redirection rd)
-{
-	t_file	*content;
-
-	while (files)
-	{
-		content = files->content;
-		table->flag |= content->flag;
-		content = files->content;
-		if (content->flag & e_hd)
-			table->input = content->io[READ];
-		else if (ft_strncmp(rd.file, content->name, \
-							ft_strlen(rd.file) + 1) == 0 &&rd.symbol[0] == '>')
-			table->output = content->io[WRITE];
-		else if (rd.symbol[0] == '<' && rd.symbol[1] == '\0')
-		{
-			table->input = content->io[READ];
-			if (table->input < 0 && !(table->flag & e_sig))
-				printf("minishell: %s: no such file or directory\n", \
-						content->name);
-		}
-		files = files->next;
-	}
-}

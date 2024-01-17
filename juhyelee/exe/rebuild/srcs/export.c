@@ -6,23 +6,23 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:18:49 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 15:03:47 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 19:13:01 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	execute_export(t_table table, t_envp **list)
+int	execute_export(t_proc proc, t_envp **list)
 {
 	size_t	index;
 	char	**envs;
 	char	*var;
 	char	*val;
 
-	table.argument += 7;
-	if (table.argument[0] == '\0')
-		return (print_env_for_export(table, (const t_envp *)(*list)));
-	envs = ft_split(table.argument, ' ');
+	proc.arg += 7;
+	if (proc.arg[0] == '\0')
+		return (print_env_for_export(proc, (const t_envp *)(*list)));
+	envs = ft_split(proc.arg, ' ');
 	if (!envs)
 		exit(EXIT_FAILURE);
 	index = 0;
@@ -38,7 +38,7 @@ int	execute_export(t_table table, t_envp **list)
 	return (EXIT_SUCCESS);
 }
 
-int	print_env_for_export(const t_table table, const t_envp *list)
+int	print_env_for_export(const t_proc proc, const t_envp *list)
 {
 	pid_t	child;
 	int		exit_num;
@@ -50,14 +50,14 @@ int	print_env_for_export(const t_table table, const t_envp *list)
 	{
 		while (list)
 		{
-			ft_putstr_fd("declare -x ", table.output);
-			ft_putstr_fd(list->variable, table.output);
+			ft_putstr_fd("declare -x ", proc.output);
+			ft_putstr_fd(list->variable, proc.output);
 			if (list->value)
 			{
-				ft_putchar_fd('=', table.output);
-				ft_putstr_fd(list->value, table.output);
+				ft_putchar_fd('=', proc.output);
+				ft_putstr_fd(list->value, proc.output);
 			}
-			ft_putchar_fd('\n', table.output);
+			ft_putchar_fd('\n', proc.output);
 			list = list->next;
 		}
 		exit(EXIT_SUCCESS);

@@ -31,8 +31,6 @@
 # define WRITE 1
 # define READ 0
 # define ONE_CMD (-1)
-# define NO_FD (-1)
-# define HD_SIG (-1)
 
 typedef struct	s_redirection
 {
@@ -75,18 +73,11 @@ typedef struct	s_envp
 }	t_envp;
 
 /*juhyelee : execute structures*/
-typedef enum e_flag
-{
-	e_hd = 0x1,
-	e_sig = 0x2,
-	e_no_file = 0x4,
-	e_bitflag = 0xff
-}t_flag;
 typedef struct s_proc
 {
 	pid_t	pid;
-	char	*command;
-	char	*argument;
+	char	*cmd;
+	char	*arg;
 	int		input;
 	int		output;
 	int		pipefd[2];
@@ -132,40 +123,38 @@ void	execute(t_pipe *tree, t_envp **list);
 size_t	get_num_cmd(const t_pipe *tree);
 void	process_one_command(t_exe *exe);
 void	process_commands(t_exe *exe);
-/* file */
+/* file module for redirections */
 int		open_all_files(t_exe *exe);
 int		open_files(t_exe *exe, const t_redirection *rd);
 int		add_heredoc(t_list **files, const char *end);
 int		is_exist(const t_list *files, const char *file_name);
 void	add_input(t_list **files, const char *file_name);
 void	add_output(t_list **files, char *file_name, const int mode);
+void	clear_when_signal(void *to_del);
 void	clear_file(void *to_del);
 char	*get_file_name(char *file_name);
-/* commands */
+/* heredoc */
+int		heredoc(const char *end);
+void	run_heredoc(const char *end, const int hdfile);
+/* execute commands */
 int		execute_one_command(const t_proc table, t_envp *list);
 void	pipe_command(t_proc *table, t_exe *exe, const size_t index);
 void	last_command(t_proc *table, t_exe *exe);
 void	execute_commands(t_proc *table, t_exe *exe);
+/* setting */
+int		set_proc(t_proc *proc, const t_exe *exe, const int index);
+int		set_redirection(t_proc *proc, const t_list *files, t_command cmd);
+int		set_file(t_proc *table, const t_list *files, const t_redirection rd);
+char	*get_argument(const t_simple cmd);
+/* builtin */
+int		is_builtin(const char *cmd);
+void	builtin(const t_proc table, t_exe *exe);
 /* child */
 void	execute_at_child(t_proc table, const t_envp *list);
 char	**convert_to_array(const t_envp *list);
 char	*is_executable(const char *cmd, const char **env);
 char	*user_command(const char *cmd);
 char	*other_builtin(const char *cmd, const char **env);
-/* setting */
-int		set_proc(t_proc *table, const t_exe *exe, const int index);
-int		set_redirection(t_proc *table, const t_list *files, t_command cmd);
-void	set_file(t_proc *table, const t_list *files, const t_redirection rd);
-char	*get_argument(const t_simple cmd);
-/* close */
-void	close_input(t_proc table);
-void	close_output(t_proc table);
-/* heredoc */
-int		heredoc(const char *end);
-void	run_heredoc(const char *end, const int hdfile);
-/* builtin */
-int		is_builtin(const char *cmd);
-void	builtin(const t_proc table, t_exe *exe);
 /* echo */
 int		execute_echo(t_proc table, const int n_exit);
 int		get_echo_option(const char *arg);

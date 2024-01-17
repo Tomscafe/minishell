@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 18:07:07 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 19:33:50 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	heredoc(const char *end)
 	if (WIFSIGNALED(st_exit) != 0)
 	{
 		printf("\n");
-		return (unlink("heredoc"), HD_SIG);
+		return (unlink("heredoc"), -1);
 	}
 	close(heredocfd);
 	return (open("heredoc", O_RDONLY));
@@ -128,13 +128,13 @@ void	run_heredoc(const char *end, const int hdfile)
 //		close(table.output);
 //}
 
-//int	execute_exit(const char *arg)
-//{
-//	int		exit_num;
+int	execute_exit(const char *arg)
+{
+	int	exit_num;
 
-//	arg += 5;
-//	if (arg[0] == '\0')
-//		exit(0);
-//	exit_num = ft_atoi(arg) % 256;
-//	exit(exit_num);
-//}
+	arg += 5;
+	if (arg[0] == '\0')
+		exit(0);
+	exit_num = ft_atoi(arg) % 256;
+	exit(exit_num);
+}

@@ -6,13 +6,13 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 15:03:55 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 19:12:26 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-int	execute_echo(t_table table, const int n_exit)
+int	execute_echo(t_proc proc, const int n_exit)
 {
 	pid_t	child;
 	int		is_newline;
@@ -23,17 +23,17 @@ int	execute_echo(t_table table, const int n_exit)
 		exit(EXIT_FAILURE);
 	else if (child == 0)
 	{
-		table.argument += 5;
-		is_newline = get_echo_option(table.argument);
+		proc.arg += 5;
+		is_newline = get_echo_option(proc.arg);
 		if (is_newline < 0)
 			exit(EXIT_FAILURE);
 		else if (!is_newline)
-			table.argument += 2;
-		if (table.argument[0] == ' ')
-			table.argument++;
-		print_arg(table.argument, table.output, n_exit);
+			proc.arg += 2;
+		if (proc.arg[0] == ' ')
+			proc.arg++;
+		print_arg(proc.arg, proc.output, n_exit);
 		if (is_newline)
-			write(table.output, "\n", 1);
+			write(proc.output, "\n", 1);
 		exit(EXIT_SUCCESS);
 	}
 	waitpid(child, &exit_num, WUNTRACED);

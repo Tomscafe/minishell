@@ -6,34 +6,34 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 14:47:03 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 19:42:49 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
 
-void	execute_at_child(t_table table, const t_envp *list)
+void	execute_at_child(t_proc proc, const t_envp *list)
 {
 	const char	**env = (const char **)convert_to_array(list);
-	const char	**arg = (const char **)ft_split(table.argument, ' ');
+	const char	**arg = (const char **)ft_split(proc.arg, ' ');
 	char		*path;
 
 	signal(SIGINT, SIG_DFL);
-	path = is_executable(table.command, env);
+	path = is_executable(proc.cmd, env);
 	if (!path)
 	{
-		printf("minishell: %s: Not found command\n", table.command);
+		printf("minishell: %s: Not found command\n", proc.cmd);
 		exit(EXIT_FAILURE);
 	}
-	if (table.input != STDIN_FILENO)
+	if (proc.input != STDIN_FILENO)
 	{
-		dup2(table.input, STDIN_FILENO);
-		close(table.input);
+		dup2(proc.input, STDIN_FILENO);
+		close(proc.input);
 	}
-	if (table.output != STDOUT_FILENO)
+	if (proc.output != STDOUT_FILENO)
 	{
-		dup2(table.output, STDOUT_FILENO);
-		close(table.output);
+		dup2(proc.output, STDOUT_FILENO);
+		close(proc.output);
 	}
 	execve(path, (char *const *)arg, (char *const *)env);
 	clear_strs((char **)env);
