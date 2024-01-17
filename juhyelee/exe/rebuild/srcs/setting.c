@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 12:20:44 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 12:29:32 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,8 @@ int	set_redirection(t_table *table, const t_list *files, t_command cmd)
 	{
 		if (!set_file(table, files, *cmd.redirection))
 		{
-			printf("minishell: %s: no such file or directory\n", cmd.redirection->file);
+			printf("minishell: %s: no such file or directory\n", \
+					cmd.redirection->file);
 			return (0);
 		}
 		cmd.redirection = cmd.redirection->next;

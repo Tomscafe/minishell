@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/16 20:59:11 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 12:47:14 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	execute_at_child(t_table table, const t_envp *list)
 	const char	**arg = (const char **)ft_split(table.argument, ' ');
 	char		*path;
 
+	signal(SIGINT, SIG_DFL);
 	path = is_executable(table.command, env);
 	if (!path)
 	{

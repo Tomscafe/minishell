@@ -123,11 +123,6 @@ void	ft_signal(void);
 
 //void	ft_parsing(char *str);
 
-/*
-*  ls -al > outfile | cat < outfile 을 하고 나서, cat < outfile을 했을 때, outfile을 찾을 수 없음.
-*  cat < "없는 파일"을 했을 때, 없는 파일이라고 뜨지 않고, 그냥 cat이 실행됨.
-*/
-
 /* juhyelee */
 /* execute part */
 void	execute(t_pipe *tree, t_envp **list);
