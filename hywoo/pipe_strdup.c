@@ -74,7 +74,7 @@ char	*rm_sp_strdup(char *str, int i, int j)
 		else if (str[i] == ' ')
 		{
 			if (i && str[i + 1])
-				copy_result_idx(str, result, &i, &j);
+				add_split_char(str, result, &i, &j);
 			while (str[i] && str[i] == ' ')
 				i++;
 		}

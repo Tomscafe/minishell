@@ -20,7 +20,7 @@ t_command	*make_command(t_token *front)
 	com = init_com(com);
 	com->simple_command = make_simple_command(front, com);
 	com->redirection = make_redirection(front, com);
-	get_simple(com->simple_command, com->redirection);
+	get_simple(front->env, com->simple_command, com->redirection);
 	return (com);
 }
 

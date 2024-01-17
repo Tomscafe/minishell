@@ -12,106 +12,90 @@
 
 #include "minishell.h"
 
-t_simple	*make_simple_command(t_token *front, t_command *com)
+void	cutting_filename(t_envp *env, t_redirection *rd, char *file)
 {
-	t_simple	*simple;
-
-	simple = malloc(sizeof(t_simple));
-	if (!simple)
-		exit (-1);
-	if (!front)
-		return (simple);
-	simple->command = NULL;
-	simple->ward = NULL;
-	if (front->type == COMMAND || front->type == WARD)
-		simple->command = pipe_strdup(front->env, front->str);
-	else
-		return (simple);
-	if (front->next)
-	{
-		if (front->next->type == WARD)
-			simple->ward = pipe_strdup(front->env, front->next->str);
-	}
-	return (simple);
-}
-
-void	get_add_back_ward(t_simple *simple, char *file, int i, int j)
-{
-	char	*ward;
-	int		r;
-
-	ward = malloc(sizeof(char) * (ft_strlen(simple->ward) + j - i + 2));
-	r = 0;
-	while (simple->ward[r])
-	{
-		ward[r] = simple->ward[r];
-		r++;
-	}
-	ward[r] = ' ';
-	r++;
-	while (i + 1 < j)
-	{
-		ward[r] = file[i + 1];
-		r++;
-		i++;
-	}
-	ward[r] = '\0';
-	free (simple->ward);
-	simple->ward = ward;
-}
-
-void	get_add_new_ward(t_simple *simple, char *file, int i, int j)
-{
-	char	*ward;
-	int		r;
-
-	ward = malloc(sizeof(char) * (j - i + 1));
-	r = 0;
-	while (i + 1 < j)
-	{
-		ward[r] = file[i + 1];
-		i++;
-		r++;
-	}
-	ward[r] = '\0';
-	simple->ward = ward;
-}
-
-void	get_ward(t_simple *simple, char *file)
-{
-	char	*ward;
-	int		i;
+	char	*org_name;
+	char	*edt_name;
+	int		size;
 	int		j;
 
-	i = file_name_lenth(file, 0);
-	j = ft_strlen(file);
-	if (simple->ward)
-		get_add_back_ward(simple, file, i, j);
+	j = 0;
+	org_name = malloc(sizeof(char) * (size + 1));
+	j = ignore_space(file, 0, SP);
+	size = file_name_length(file, 0);
+	get_copy_filename(org_name, file, j, size);
+	if (!check_heredoc(rd->symbol))
+	{
+		edt_name = pipe_strdup(env, org_name);
+		free (org_name);
+		free (file);
+		rd->file = edt_name;
+	}
 	else
-		get_add_new_ward(simple, file, i, j);
+	{
+		free (file);
+		rd->file = org_name;
+	}
 }
 
-void	get_simple(t_simple *simple, t_redirection *rd)
+void	get_simple_ward(t_envp *env, t_simple *simple, char *ward)
 {
-	int	flag;
+	char	*tmp;
+	char	*tmp2;
+	char	*result;
+	char	split_char[2];
+
+	tmp = pipe_strdup(env, ward);
+	split_char[0] = -1;
+	split_char[1] = 0;
+	if (!*tmp)
+		free (tmp);
+	else if (!simple->ward)
+		simple->ward = tmp;
+	else
+	{
+		tmp2 = ft_strjoin(split_char, tmp);
+		result = ft_strjoin(simple->ward, tmp2);
+		free (simple->ward);
+		free (tmp);
+		free (tmp2);
+		simple->ward = result;
+	}
+}
+
+void	get_ward(t_envp *env, t_simple *simple, char *file)
+{
+	int	i;
+
+	i = ignore_space(file, 0, SP);
+	i += file_name_length(file, i);
+	i = ignore_space(file, i, SP);
+	get_command_ward(env, simple, file, i);
+}
+
+void	get_simple(t_envp *env, t_simple *simple, t_redirection *rd)
+{
+	int	flag_com;
 
 	if (!simple->command)
-		flag = 0;
+		flag_com = 0;
 	else
-		flag = 1;
+		flag_com = 1;
 	while (rd)
 	{
-		if (!flag && have_others(rd->file))
+		if (!flag_com && have_others(rd->file))
 		{
-			flag++;
-			get_command(simple, rd->file, 0, 0);
-			cutting_filename(rd, rd->file);
+			flag_com++;
+			get_command(env, simple, rd->file, rd);
+			cutting_filename(env, rd, rd->file);
 		}
-		else if (flag && have_others(rd->file))
+		else if (flag_com && have_others(rd->file))
 		{
-			get_ward(simple, rd->file);
-			cutting_filename(rd, rd->file);
+			get_ward(env, simple, rd->file);
+			cutting_filename(env, rd, rd->file);
 		}
+		else if (!have_others(rd->file))
+			cutting_filename(env, rd, rd->file);
 		rd = rd->next;
 	}
 }
