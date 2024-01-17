@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 13:17:01 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 13:32:53 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,5 +154,7 @@ char	*get_outfile(const t_redirection *rd, int *is_append)
 		}
 		rd = rd->next;
 	}
+	if (outfile && outfile[ft_strlen(outfile) - 1] == ' ')
+		outfile[ft_strlen(outfile) - 1] = '\0';
 	return (outfile);
 }

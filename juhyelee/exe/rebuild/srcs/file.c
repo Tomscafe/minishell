@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 20:02:45 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 12:15:07 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 13:21:35 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,12 +36,12 @@ void	open_files(t_exe *exe, const t_redirection *rd)
 
 	infile = get_infile(rd, &is_heredoc);
 	outfile = get_outfile(rd, &is_append);
+	if (outfile)
+		create_new_file(&(exe->files), outfile, is_append);
 	if (infile && is_heredoc)
 		open_heredoc(&(exe->files), infile);
 	else if (infile)
 		open_exist_file(&(exe->files), infile);
-	if (outfile)
-		create_new_file(&(exe->files), outfile, is_append);
 }
 
 void	open_heredoc(t_list **list, const char *file_name)
