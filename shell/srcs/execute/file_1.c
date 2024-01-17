@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 20:02:45 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 22:54:51 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 02:20:51 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	add_heredoc(t_list **files, const char *end)
 	if (!hd)
 		exit(EXIT_FAILURE);
 	hd->name = (char *)end;
-	hd->io[WRITE] = 0;
+	hd->io[WRITE] = NO_FILE;
 	hd->io[READ] = heredoc(end);
 	if (hd->io[READ] < 0)
 		return (0);
@@ -93,9 +93,7 @@ void	clear_file(void *to_del)
 	t_file	*file;
 
 	file = to_del;
-	if (file->io[READ] > 1)
-		close(file->io[READ]);
-	if (file->io[WRITE] > 1)
-		close(file->io[WRITE]);
+	close_file(file->io[READ]);
+	close_file(file->io[WRITE]);
 	free(file);
 }

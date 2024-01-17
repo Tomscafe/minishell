@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 00:49:06 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 01:45:36 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@ int	set_proc(t_proc *proc, const t_setting setting)
 		return (0);
 	proc->cmd = setting.cmd.simple_command->command;
 	proc->arg = get_argument(*setting.cmd.simple_command);
-	printf("command : %s | input : %d | output : %d\n", proc->cmd, proc->input, proc->output);
 	return (1);
 }
 

@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 01:16:27 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 02:29:21 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,15 @@ void	execute_at_child(t_proc proc, t_exe *exe, int *pipefd)
 		printf("minishell: %s: Not found command\n", proc.cmd);
 		exit(EXIT_FAILURE);
 	}
+	apply_redir(proc, pipefd, exe->p_pipe);
+	execve(path, (char *const *)arg, (char *const *)env);
+	clear_strs((char **)env);
+	clear_strs((char **)arg);
+	free(path);
+}
+
+void	apply_redir(t_proc proc, int *pipefd, int prev)
+{
 	if (proc.input != STDIN_FILENO)
 	{
 		dup2(proc.input, STDIN_FILENO);
@@ -40,11 +49,14 @@ void	execute_at_child(t_proc proc, t_exe *exe, int *pipefd)
 		close(pipefd[0]);
 		close(pipefd[1]);
 	}
-	ft_lstclear(&exe->files, clear_file);
-	execve(path, (char *const *)arg, (char *const *)env);
-	clear_strs((char **)env);
-	clear_strs((char **)arg);
-	free(path);
+	close(prev);
+}
+
+void	close_file(int fd)
+{
+	if (fd == STDIN_FILENO || fd == STDOUT_FILENO)
+		return ;
+	close(fd);
 }
 
 char	**convert_to_array(const t_envp *list)

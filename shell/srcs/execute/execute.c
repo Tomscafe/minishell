@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 01:16:44 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 02:33:03 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	execute(t_pipe *cmds, t_envp **env)
 	exe.cmds = cmds;
 	exe.env = env;
 	exe.n_cmd = get_num_cmd(cmds);
+	exe.p_pipe = NO_FILE;
 	if (!open_all_files(&exe))
 	{
 		ft_lstclear(&(exe.files), clear_when_signal);
@@ -76,7 +77,7 @@ void	process_commands(t_exe *exe)
 	index = 0;
 	while (index < exe->n_cmd)
 	{
-		waitpid(procs[index].pid, &st_ret, WUNTRACED);
+		waitpid(procs[index].pid, &st_ret, 0);
 		index++;
 	}
 	exe->st_exit = WEXITSTATUS(st_ret);

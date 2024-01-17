@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 22:54:55 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 02:21:14 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ void	add_input(t_list **files, const char *file_name)
 	if (is_exist((const t_list *)(*files), file_name))
 		return ;
 	infile->name = (char *)file_name;
-	infile->io[WRITE] = 0;
+	infile->io[WRITE] = NO_FILE;
 	infile->io[READ] = open(file_name, O_RDONLY);
 	if (infile->io[READ] < 0)
 	{
