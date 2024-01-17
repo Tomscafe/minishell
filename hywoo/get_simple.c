@@ -86,7 +86,7 @@ void	get_simple(t_envp *env, t_simple *simple, t_redirection *rd)
 		if (!flag_com && have_others(rd->file))
 		{
 			flag_com++;
-			get_command(env, simple, rd->file, rd);
+			get_command(env, simple, rd->file);
 			cutting_filename(env, rd, rd->file);
 		}
 		else if (flag_com && have_others(rd->file))
