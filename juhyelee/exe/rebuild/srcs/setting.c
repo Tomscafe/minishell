@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 12:29:32 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 13:17:01 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,13 @@ int	set_table(t_table *table, const t_exe *exe, const int index)
 	cmd = *exe->cmds->first;
 	if (index + 1 == (int)exe->n_cmd)
 		cmd = *exe->cmds->second;
+	if (!set_redirection(table, (const t_list *)exe->files, cmd))
+		return (0);
+	if (!cmd.simple_command->command)
+		return (0);
 	table->command = cmd.simple_command->command;
 	table->argument = get_argument(*cmd.simple_command);
 	table->is_signal = 0;
-	if (!set_redirection(table, (const t_list *)exe->files, cmd))
-		return (0);
 	return (1);
 }
 
