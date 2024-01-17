@@ -82,23 +82,17 @@ typedef enum e_flag
 	e_no_file = 0x4,
 	e_bitflag = 0xff
 }t_flag;
-typedef struct s_table
+typedef struct s_proc
 {
 	pid_t	pid;
 	char	*command;
 	char	*argument;
 	int		input;
 	int		output;
-	//int		is_heredoc;
-	//int		is_signal;
-	int		flag;
 	int		pipefd[2];
-}t_table;
+}t_proc;
 typedef struct s_file
 {
-	//int		is_heredoc;
-	//int		is_signal;
-	int		flag;
 	int		io[2];
 	char	*name;
 }t_file;
@@ -138,41 +132,42 @@ void	execute(t_pipe *tree, t_envp **list);
 size_t	get_num_cmd(const t_pipe *tree);
 void	process_one_command(t_exe *exe);
 void	process_commands(t_exe *exe);
-/* commands */
-int		execute_one_command(const t_table table, t_envp *list);
-void	pipe_command(t_table *table, t_exe *exe, const size_t index);
-void	last_command(t_table *table, t_exe *exe);
-void	execute_commands(t_table *table, t_exe *exe);
 /* file */
-void	open_all_files(t_exe *exe);
-void	open_files(t_exe *exe, const t_redirection *rd);
-void	add_heredoc(t_list **files, const char *end);
+int		open_all_files(t_exe *exe);
+int		open_files(t_exe *exe, const t_redirection *rd);
+int		add_heredoc(t_list **files, const char *end);
+int		is_exist(const t_list *files, const char *file_name);
 void	add_input(t_list **files, const char *file_name);
 void	add_output(t_list **files, char *file_name, const int mode);
 void	clear_file(void *to_del);
 char	*get_file_name(char *file_name);
+/* commands */
+int		execute_one_command(const t_proc table, t_envp *list);
+void	pipe_command(t_proc *table, t_exe *exe, const size_t index);
+void	last_command(t_proc *table, t_exe *exe);
+void	execute_commands(t_proc *table, t_exe *exe);
 /* child */
-void	execute_at_child(t_table table, const t_envp *list);
+void	execute_at_child(t_proc table, const t_envp *list);
 char	**convert_to_array(const t_envp *list);
 char	*is_executable(const char *cmd, const char **env);
 char	*user_command(const char *cmd);
 char	*other_builtin(const char *cmd, const char **env);
 /* setting */
-int		set_table(t_table *table, const t_exe *exe, const int index);
-int		set_redirection(t_table *table, const t_list *files, t_command cmd);
-void	set_file(t_table *table, const t_list *files, const t_redirection rd);
+int		set_proc(t_proc *table, const t_exe *exe, const int index);
+int		set_redirection(t_proc *table, const t_list *files, t_command cmd);
+void	set_file(t_proc *table, const t_list *files, const t_redirection rd);
 char	*get_argument(const t_simple cmd);
 /* close */
-void	close_input(t_table table);
-void	close_output(t_table table);
+void	close_input(t_proc table);
+void	close_output(t_proc table);
 /* heredoc */
 int		heredoc(const char *end);
 void	run_heredoc(const char *end, const int hdfile);
 /* builtin */
 int		is_builtin(const char *cmd);
-void	builtin(const t_table table, t_exe *exe);
+void	builtin(const t_proc table, t_exe *exe);
 /* echo */
-int		execute_echo(t_table table, const int n_exit);
+int		execute_echo(t_proc table, const int n_exit);
 int		get_echo_option(const char *arg);
 void	print_arg(const char *str, const int output, const int n_exit);
 /* cd */
@@ -182,10 +177,10 @@ void	change_oldpwd(t_envp **list);
 char	*get_first_arg(const char *arg);
 char	*get_home(const t_envp *list);
 /* pwd */
-int		execute_pwd(const t_table table);
+int		execute_pwd(const t_proc table);
 /* export */
-int		execute_export(t_table table, t_envp **list);
-int		print_env_for_export(const t_table table, const t_envp *list);
+int		execute_export(t_proc table, t_envp **list);
+int		print_env_for_export(const t_proc table, const t_envp *list);
 char	*get_variable(const char *env);
 char	*get_value(const char *env);
 int		change_value(t_envp **list, const char *var, const char *val);
@@ -194,7 +189,7 @@ void	add_variable(t_envp **list, const char *var, const char *val);
 int		execute_unset(const char *arg, t_envp **list);
 void	remove_env(t_envp **list, t_envp *to_del);
 /* env */
-int		execute_env(const t_table table, const t_envp *list);
+int		execute_env(const t_proc table, const t_envp *list);
 /* exit */
 int		execute_exit(const char *arg);
 /* envirment */

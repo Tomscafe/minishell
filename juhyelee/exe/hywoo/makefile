@@ -11,16 +11,8 @@ OBJS2	= ${LIBSRC:.c=.o}
 JU_DIR = ../rebuild
 EXE_DIR = ${JU_DIR}/srcs
 EXE_SRCS = ${EXE_DIR}/execute.c \
-		   ${EXE_DIR}/command.c \
-		   ${EXE_DIR}/file.c \
-		   ${EXE_DIR}/child.c \
-		   ${EXE_DIR}/setting.c \
-		   ${EXE_DIR}/builtin.c \
-		   ${EXE_DIR}/heredoc.c \
-		   ${EXE_DIR}/echo.c \
-		   ${EXE_DIR}/env.c \
-		   ${EXE_DIR}/cd.c \
-		   ${EXE_DIR}/export.c
+		   ${EXE_DIR}/file_1.c \
+		   ${EXE_DIR}/file_2.c
 EXE_OBJS = ${EXE_SRCS:.c=.o}
 LIBFT_DIR = ${JU_DIR}/libft
 LIBFT = ${LIBFT_DIR}/libft.a

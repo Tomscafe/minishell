@@ -1,67 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   file.c                                             :+:      :+:    :+:   */
+/*   file_2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/01/16 20:02:45 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 17:08:56 by juhyelee         ###   ########.fr       */
+/*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
+/*   Updated: 2024/01/17 18:07:07 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../includes/minishell.h"
-
-void	open_all_files(t_exe *exe)
-{
-	const t_pipe	*p = exe->cmds;
-
-	exe->files = NULL;
-	open_files(exe, p->first->redirection);
-	while (p->next)
-	{
-		p = p->next;
-		open_files(exe, p->first->redirection);
-	}
-	if (p->second)
-		open_files(exe, p->second->redirection);
-}
-
-void	open_files(t_exe *exe, const t_redirection *rd)
-{
-	while (rd)
-	{
-		if (ft_strncmp(rd->symbol, ">>", 2) == 0)
-			add_output((t_list **)&(exe->files), rd->file, 1);
-		else if (rd->symbol[0] == '>')
-			add_output((t_list **)&(exe->files), rd->file, 0);
-		if (ft_strncmp(rd->symbol, "<<", 2) == 0)
-			add_heredoc((t_list **)&(exe->files), rd->file);
-		else if (rd->symbol[0] == '<')
-			add_input((t_list **)&(exe->files), rd->file);
-		rd = rd->next;
-	}
-}
-
-void	add_heredoc(t_list **files, const char *end)
-{
-	t_file	*hd;
-	t_list	*new_el;
-
-	hd = (t_file *)malloc(sizeof(t_file));
-	if (!hd)
-		exit(EXIT_FAILURE);
-	hd->flag = e_hd;
-	hd->name = (char *)end;
-	hd->io[WRITE] = 0;
-	hd->io[READ] = heredoc(end);
-	if (hd->io[READ] == HD_SIG)
-		hd->flag |= e_sig;
-	new_el = ft_lstnew(hd);
-	if (!new_el)
-		exit(EXIT_FAILURE);
-	ft_lstadd_back(files, new_el);
-}
 
 void	add_input(t_list **files, const char *file_name)
 {
@@ -71,12 +20,16 @@ void	add_input(t_list **files, const char *file_name)
 	infile = (t_file *)malloc(sizeof(t_file));
 	if (!infile)
 		exit(EXIT_FAILURE);
-	infile->flag = 0;
+	if (is_exist((const t_list *)(*files), file_name))
+		return ;
 	infile->name = (char *)file_name;
 	infile->io[WRITE] = 0;
 	infile->io[READ] = open(file_name, O_RDONLY);
 	if (infile->io[READ] < 0)
-		infile->flag |= e_no_file;
+	{
+		free(infile);
+		return ;
+	}
 	new_el = ft_lstnew(infile);
 	if (!new_el)
 		exit(EXIT_FAILURE);
@@ -91,7 +44,8 @@ void	add_output(t_list **files, char *file_name, const int mode)
 	outfile = (t_file *)malloc(sizeof(t_file));
 	if (!outfile)
 		exit(EXIT_FAILURE);
-	outfile->flag = 0;
+	if (is_exist((const t_list *)(*files), file_name))
+		return ;
 	outfile->name = get_file_name(file_name);
 	if (mode)
 		outfile->io[WRITE] = \
@@ -115,3 +69,72 @@ char	*get_file_name(char *file_name)
 		file_name[len - 1] = '\0';
 	return (file_name);
 }
+
+int	heredoc(const char *end)
+{
+	pid_t	hd;
+	int		heredocfd;
+	int		st_exit;
+
+	heredocfd = open("heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	if (!heredocfd)
+		exit(EXIT_FAILURE);
+	signal(SIGINT, SIG_IGN);
+	hd = fork();
+	if (hd < 0)
+		exit(EXIT_FAILURE);
+	else if (hd == 0)
+		run_heredoc(end, heredocfd);
+	waitpid(hd, &st_exit, WUNTRACED);
+	ft_signal();
+	if (WIFSIGNALED(st_exit) != 0)
+	{
+		printf("\n");
+		return (unlink("heredoc"), HD_SIG);
+	}
+	close(heredocfd);
+	return (open("heredoc", O_RDONLY));
+}
+
+void	run_heredoc(const char *end, const int hdfile)
+{
+	char	*input_line;
+
+	signal(SIGINT, SIG_DFL);
+	while (1)
+	{
+		input_line = readline("> ");
+		if (input_line == NULL)
+			exit(0);
+		if (ft_strncmp(input_line, end, ft_strlen(input_line)) == 0)
+			break ;
+		ft_putendl_fd(input_line, hdfile);
+		free(input_line);
+	}
+	exit(EXIT_SUCCESS);
+}
+
+//void	close_input(t_table table)
+//{
+//	if (table.input != STDIN_FILENO && \
+//		table.input != STDOUT_FILENO)
+//		close(table.input);
+//}
+
+//void	close_output(t_table table)
+//{
+//	if (table.output != STDOUT_FILENO && \
+//		table.output != STDIN_FILENO)
+//		close(table.output);
+//}
+
+//int	execute_exit(const char *arg)
+//{
+//	int		exit_num;
+
+//	arg += 5;
+//	if (arg[0] == '\0')
+//		exit(0);
+//	exit_num = ft_atoi(arg) % 256;
+//	exit(exit_num);
+//}

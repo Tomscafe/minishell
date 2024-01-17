@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 17:14:57 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 17:48:55 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,6 +69,7 @@ void	set_file(t_table *table, const t_list *files, const t_redirection rd)
 
 	while (files)
 	{
+		content = files->content;
 		table->flag |= content->flag;
 		content = files->content;
 		if (content->flag & e_hd)
@@ -85,16 +86,4 @@ void	set_file(t_table *table, const t_list *files, const t_redirection rd)
 		}
 		files = files->next;
 	}
-}
-
-void	clear_file(void *to_del)
-{
-	t_file	*file;
-
-	file = to_del;
-	if (file->io[READ] > 1)
-		close(file->io[READ]);
-	if (file->io[WRITE] > 1)
-		close(file->io[WRITE]);
-	free(file);
 }
