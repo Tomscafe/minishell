@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 12:53:21 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 17:10:28 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,9 +38,9 @@ void	process_one_command(t_exe *exe)
 		exe->st_exit = EXIT_FAILURE;
 		return ;
 	}
-	if (is_builtin(table.command) && !table.is_signal)
+	if (is_builtin(table.command) && !(table.flag & e_sig))
 		builtin(table, exe);
-	else if (!table.is_signal)
+	else if (!(table.flag & e_sig))
 		exe->st_exit = execute_one_command(table, *exe->env);
 }
 

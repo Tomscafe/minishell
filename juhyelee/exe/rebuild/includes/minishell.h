@@ -75,6 +75,13 @@ typedef struct	s_envp
 }	t_envp;
 
 /*juhyelee : execute structures*/
+typedef enum e_flag
+{
+	e_hd = 0x1,
+	e_sig = 0x2,
+	e_no_file = 0x4,
+	e_bitflag = 0xff
+}t_flag;
 typedef struct s_table
 {
 	pid_t	pid;
@@ -82,14 +89,16 @@ typedef struct s_table
 	char	*argument;
 	int		input;
 	int		output;
-	int		is_heredoc;
-	int		is_signal;
+	//int		is_heredoc;
+	//int		is_signal;
+	int		flag;
 	int		pipefd[2];
 }t_table;
 typedef struct s_file
 {
-	int		is_heredoc;
-	int		is_signal;
+	//int		is_heredoc;
+	//int		is_signal;
+	int		flag;
 	int		io[2];
 	char	*name;
 }t_file;
@@ -151,7 +160,7 @@ char	*other_builtin(const char *cmd, const char **env);
 /* setting */
 int		set_table(t_table *table, const t_exe *exe, const int index);
 int		set_redirection(t_table *table, const t_list *files, t_command cmd);
-int		set_file(t_table *table, const t_list *files, const t_redirection rd);
+void	set_file(t_table *table, const t_list *files, const t_redirection rd);
 char	*get_argument(const t_simple cmd);
 /* close */
 void	close_input(t_table table);

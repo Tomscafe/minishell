@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 19:44:24 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 12:53:05 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 17:08:04 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	last_command(t_table *table, t_exe *exe)
 	if (!set_table(table, exe, exe->n_cmd - 1))
 		return ;
 	execute_commands(table, exe);
-	if (table->is_heredoc)
+	if (table->flag & e_hd)
 		unlink("heredoc");
 	close(exe->p_pipe);
 }

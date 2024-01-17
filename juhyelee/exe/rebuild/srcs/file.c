@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 20:02:45 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 16:24:46 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 17:08:56 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,13 +51,12 @@ void	add_heredoc(t_list **files, const char *end)
 	hd = (t_file *)malloc(sizeof(t_file));
 	if (!hd)
 		exit(EXIT_FAILURE);
-	hd->is_heredoc = 1;
-	hd->is_signal = 0;
+	hd->flag = e_hd;
 	hd->name = (char *)end;
 	hd->io[WRITE] = 0;
 	hd->io[READ] = heredoc(end);
 	if (hd->io[READ] == HD_SIG)
-		hd->is_signal = 1;
+		hd->flag |= e_sig;
 	new_el = ft_lstnew(hd);
 	if (!new_el)
 		exit(EXIT_FAILURE);
@@ -72,16 +71,12 @@ void	add_input(t_list **files, const char *file_name)
 	infile = (t_file *)malloc(sizeof(t_file));
 	if (!infile)
 		exit(EXIT_FAILURE);
-	infile->is_heredoc = 0;
-	infile->is_signal = 0;
+	infile->flag = 0;
 	infile->name = (char *)file_name;
 	infile->io[WRITE] = 0;
 	infile->io[READ] = open(file_name, O_RDONLY);
 	if (infile->io[READ] < 0)
-	{
-		free(infile);
-		return ;
-	}
+		infile->flag |= e_no_file;
 	new_el = ft_lstnew(infile);
 	if (!new_el)
 		exit(EXIT_FAILURE);
@@ -96,8 +91,7 @@ void	add_output(t_list **files, char *file_name, const int mode)
 	outfile = (t_file *)malloc(sizeof(t_file));
 	if (!outfile)
 		exit(EXIT_FAILURE);
-	outfile->is_heredoc = 0;
-	outfile->is_signal = 0;
+	outfile->flag = 0;
 	outfile->name = get_file_name(file_name);
 	if (mode)
 		outfile->io[WRITE] = \
