@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 20:06:28 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 20:14:00 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,6 @@ void	execute(t_pipe *cmds, t_envp **env)
 		process_one_command(&exe);
 	else
 		process_commands(&exe);
-	signal(SIGINT, handler);
 	ft_lstclear(&(exe.files), clear_file);
 	unlink("heredoc");
 }

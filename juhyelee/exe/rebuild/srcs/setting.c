@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 20:06:12 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/17 20:19:22 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,8 @@ int	set_proc(t_proc *proc, const t_exe *exe, const int index)
 		return (0);
 	proc->cmd = cmd.simple_command->command;
 	proc->arg = get_argument(*cmd.simple_command);
+	printf("command : %s | input : %d | outpue : %d\n", proc->cmd, proc->input, proc->output);
+	printf("pipe 0 : %d | pipe 1 : %d | prev : %d\n\n", proc->pipefd[0], proc->pipefd[1], exe->p_pipe);
 	return (1);
 }
 
