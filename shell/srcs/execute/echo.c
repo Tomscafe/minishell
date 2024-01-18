@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 13:53:45 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:29:40 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,7 +75,7 @@ void	print_arg(const char **arg, const int output, const int n_exit)
 	while (arg[index + 1])
 	{
 		print_str(arg[index], output, n_exit);
-		write(output, " " , 1);
+		write(output, " ", 1);
 		index++;
 	}
 	print_str(arg[index], output, n_exit);
@@ -98,38 +98,32 @@ void	print_str(const char *str, const int output, const int n_exit)
 			ft_putnbr_fd(n_exit, output);
 			index += 2;
 		}
-		write(output, str +index, 1);
+		write(output, str + index, 1);
 		index++;
 	}
 	write(output, str + index, 1);
 }
 
-int	execute_unset(const char *arg, t_envp **list)
+int	execute_unset(const char **arg, t_envp **list)
 {
-	char	**envs;
 	size_t	index;
 	t_envp	*p;
 
-	arg += 6;
-	if (arg[0] == '\0')
+	if (!arg[0])
 		return (EXIT_SUCCESS);
-	envs = ft_split(arg, ' ');
-	if (!envs)
-		exit(EXIT_FAILURE);
 	index = 0;
-	while (envs[index])
+	while (arg[index])
 	{
 		p = *list;
 		while (p)
 		{
-			if (ft_strncmp(p->variable, envs[index], \
+			if (ft_strncmp(p->variable, arg[index], \
 							ft_strlen(p->variable) + 1) == 0)
 				remove_env(list, p);
 			p = p->next;
 		}
 		index++;
 	}
-	clear_strs(envs);
 	return (EXIT_SUCCESS);
 }
 
@@ -142,6 +136,7 @@ void	remove_env(t_envp **list, t_envp *to_del)
 		to_del_prev = to_del_prev->next;
 	to_del_prev->next = to_del->next;
 	free(to_del->variable);
-	free(to_del->value);
+	if (to_del->value)
+		free(to_del->value);
 	free(to_del);
 }

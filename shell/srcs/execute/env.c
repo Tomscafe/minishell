@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:00:02 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 14:10:44 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:28:53 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,9 +97,7 @@ void	add_variable(t_envp **list, const char *var, const char *val)
 	if (!new_env)
 		exit(EXIT_FAILURE);
 	new_env->variable = (char *)var;
-	new_env->value = NULL;
-	if (val[0] != '\0')
-		new_env->value = (char *)val;
+	new_env->value = (char *)val;
 	new_env->next = NULL;
 	if (!*list)
 		*list = new_env;

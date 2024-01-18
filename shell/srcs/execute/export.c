@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:18:49 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 14:16:29 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:28:45 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,6 +85,8 @@ char	*get_value(const char *env)
 	size = 0;
 	while (env[size] && env[size] != '=')
 		size++;
+	if (env[size] == '\0')
+		return (NULL);
 	size = ft_strlen(env + size);
 	val = (char *)malloc(sizeof(char) * (size + 1));
 	if (!val)

@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/18 14:00:42 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:17:39 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -255,7 +255,7 @@ char			*get_value(const char *env);
 int				change_value(t_envp **list, const char *var, const char *val);
 void			add_variable(t_envp **list, const char *var, const char *val);
 /* unset */
-int				execute_unset(const char *arg, t_envp **list);
+int				execute_unset(const char **arg, t_envp **list);
 void			remove_env(t_envp **list, t_envp *to_del);
 /* env */
 int				execute_env(const t_proc table, const t_envp *list);
