@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 17:30:12 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 17:55:17 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -104,7 +104,8 @@ void	print_str(const char *str, const int output, const int n_exit)
 		write(output, str + index, 1);
 		index++;
 	}
-	write(output, str + index, 1);
+	if (str[index - 1] == '$')
+		write(output, "$", 1);
 }
 
 int	execute_unset(const char **arg, t_envp **list)
