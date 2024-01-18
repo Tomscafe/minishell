@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 16:36:08 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 17:38:56 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -79,10 +79,21 @@ char	*get_argument(const t_simple cmd)
 
 int	execute_exit(const char *arg)
 {
-	int	exit_num;
+	int		exit_num;
+	size_t	index;
 
 	if (!arg)
 		exit(0);
+	index = 0;
+	while (arg[index])
+	{
+		if (!ft_isdigit(arg[index]))
+		{
+			printf("minishell: exit: %s: numeric argument required\n", arg);
+			exit(EXIT_FAILURE);
+		}
+		index++;
+	}
 	exit_num = ft_atoi(arg) % 256;
 	exit(exit_num);
 }

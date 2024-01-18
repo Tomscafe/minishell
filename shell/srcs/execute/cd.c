@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:53:01 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 13:57:32 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 17:37:10 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@ int	execute_cd(const char *arg, t_envp **list)
 		chdir(get_home((const t_envp *)(*list)));
 		change_pwd(list);
 		return (EXIT_SUCCESS);
+	}
+	else if (opendir(arg) == NULL)
+	{
+		printf("minishell: cd: %s: no such file or directory\n", arg);
+		return (EXIT_FAILURE);
 	}
 	first_arg = get_first_arg(arg);
 	if (!first_arg)
