@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 19:42:10 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 20:18:41 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@ void	execute(t_pipe *cmds, t_envp **env)
 	exe.env = env;
 	exe.n_cmd = get_num_cmd(cmds);
 	exe.p_pipe = NO_FILE;
+	getcwd(exe.pwd_pth, PATH_MAX);
 	if (!open_all_files(&exe))
 	{
 		ft_lstclear(&(exe.files), clear_when_signal);

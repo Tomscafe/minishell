@@ -6,109 +6,85 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:53:01 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 18:08:34 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 20:42:58 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	execute_cd(const char *arg, t_envp **list)
+int	execute_cd(const char *arg, t_exe *exe)
 {
 	char	*first_arg;
 
-	first_arg = set_first_arg(arg, (const t_envp *)(*list));
-	change_oldpwd(list);
+	change_env("OLDPATH", exe);
+	first_arg = set_first_arg(arg, exe);
 	if (!first_arg)
 		exit(EXIT_FAILURE);
 	if (chdir(first_arg) < 0)
 	{
 		free(first_arg);
-		return (EXIT_FAILURE);
+		chdir(exe->pwd_pth);
 	}
-	change_pwd(list);
+	ft_strlcpy(exe->pwd_pth, first_arg, PATH_MAX);
 	free(first_arg);
 	return (EXIT_SUCCESS);
 }
 
-char	*set_first_arg(const char *arg, const t_envp *list)
+char	*set_first_arg(const char *arg, t_exe *exe)
 {
-	char	*home;
 	char	*ret;
+
+	ret = get_home_path(arg, *exe->env);
+	if (!ret)
+	{
+		ret = ft_strdup(arg);
+		if (!ret)
+			exit(EXIT_FAILURE);
+	}
+	return (ret);
+}
+
+char	*get_home_path(const char *arg, const t_envp *list)
+{
+	char	*ret;
+	char	*home;
+	size_t	size;
 
 	home = get_home(list);
 	if (!arg)
 		return (home);
 	else if (arg[0] == '~')
 	{
-		ret = ft_strjoin(home, arg + 1);
+		size = ft_strlen(home) + ft_strlen(arg + 1) + 1;
+		ret = (char *)malloc(sizeof(char) * size);
 		if (!ret)
 			exit(EXIT_FAILURE);
+		ft_strlcpy(ret, home, size);
+		ft_strlcat(ret, arg + 1, size);
+		return (ret);
 	}
-	else if (opendir(arg) == NULL)
-	{
-		printf("minishell: cd: %s: no such file or directory\n", arg);
-		free(home);
-		return (NULL);
-	}
-	else
-		ret = get_first_arg(arg);
-	free(home);
-	return (ret);
+	return (NULL);
 }
 
-void	change_pwd(t_envp **list)
-{
-	char	buffer[2024];
-	t_envp	*pwd;
-
-	pwd = *list;
-	while (pwd)
-	{
-		if (ft_strncmp(pwd->variable, "PWD", ft_strlen(pwd->variable)) == 0)
-			break ;
-		pwd = pwd->next;
-	}
-	free(pwd->value);
-	if (!getcwd(buffer, 2024))
-		return ;
-	pwd->value = ft_strdup(buffer);
-	if (!pwd->value)
-		exit(EXIT_FAILURE);
-}
-
-void	change_oldpwd(t_envp **list)
+void	change_env(const char *env, t_exe *exe)
 {
 	char	buffer[2024];
 	t_envp	*oldpwd;
 
 	if (!getcwd(buffer, 2024))
 		return ;
-	oldpwd = *list;
+	oldpwd = *exe->env;
 	while (oldpwd)
 	{
-		if (ft_strncmp(oldpwd->variable, "OLDPWD", \
+		if (ft_strncmp(oldpwd->variable, env, \
 						ft_strlen(oldpwd->variable)) == 0)
 		{
 			free(oldpwd->value);
-			oldpwd->value = ft_strdup(buffer);
+			oldpwd->value = ft_strdup(exe->pwd_pth);
 			if (!oldpwd->value)
 				exit(EXIT_FAILURE);
+			return ;
 		}
 		oldpwd = oldpwd->next;
 	}
-}
-
-char	*get_first_arg(const char *arg)
-{
-	size_t	size;
-	char	*ret;
-
-	size = 0;
-	while (arg[size] && arg[size] != ' ')
-		size++;
-	ret = (char *)malloc(sizeof(char) * (size + 1));
-	if (!ret)
-		exit(EXIT_FAILURE);
-	ft_strlcpy(ret, arg, size + 1);
-	return (ret);
 }

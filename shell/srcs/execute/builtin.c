@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:12:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 19:45:32 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 20:21:12 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,9 +40,9 @@ void	builtin(const t_proc proc, t_exe *exe)
 	if (ft_strncmp(proc.cmd, "echo", 5) == 0)
 		exe->st_exit = execute_echo(proc, &arg[1], exe->st_exit);
 	else if (ft_strncmp(proc.cmd, "cd", 3) == 0)
-		exe->st_exit = execute_cd(arg[1], exe->env);
+		exe->st_exit = execute_cd(arg[1], exe);
 	else if (ft_strncmp(proc.cmd, "pwd", 4) == 0)
-		exe->st_exit = execute_pwd(proc);
+		exe->st_exit = execute_pwd(proc, exe);
 	else if (ft_strncmp(proc.cmd, "export", 7) == 0)
 		exe->st_exit = execute_export(proc, &arg[1], exe->env);
 	else if (ft_strncmp(proc.cmd, "unset", 6) == 0)
@@ -56,7 +56,7 @@ void	builtin(const t_proc proc, t_exe *exe)
 	clear_strs((char **)arg);
 }
 
-int	execute_pwd(const t_proc proc)
+int	execute_pwd(const t_proc proc, t_exe *exe)
 {
 	static char	buffer[PATH_MAX];
 	pid_t		child;
@@ -67,8 +67,9 @@ int	execute_pwd(const t_proc proc)
 		exit(EXIT_FAILURE);
 	else if (child == 0)
 	{
-		getcwd(buffer, 2024);
-		ft_putendl_fd(buffer, proc.output);
+		if (getcwd(buffer, PATH_MAX))
+			ft_strlcpy(exe->pwd_pth, buffer, PATH_MAX);
+		ft_putendl_fd(exe->pwd_pth, proc.output);
 		exit(EXIT_SUCCESS);
 	}
 	waitpid(child, &exit_num, 0);

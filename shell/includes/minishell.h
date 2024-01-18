@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/18 19:44:23 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 20:42:22 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,6 +102,7 @@ typedef struct s_exe
 	size_t	n_cmd;
 	int		p_pipe;
 	int		st_exit;
+	char	pwd_pth[PATH_MAX];
 }t_exe;
 
 typedef struct s_setting
@@ -242,14 +243,13 @@ int				get_echo_option(const char *arg);
 void			print_arg(const char **arg, const int output, const int n_exit);
 void			print_str(const char *str, const int output, const int n_exit);
 
-int				execute_cd(const char *arg, t_envp **list);
-char			*set_first_arg(const char *arg, const t_envp *list);
-void			change_pwd(t_envp **list);
-void			change_oldpwd(t_envp **list);
-char			*get_first_arg(const char *arg);
+int				execute_cd(const char *arg, t_exe *exe);
+char			*set_first_arg(const char *arg, t_exe *exe);
+char			*get_home_path(const char *arg, const t_envp *list);
+void			change_env( const char *env, t_exe *exe);
 char			*get_home(const t_envp *list);
 
-int				execute_pwd(const t_proc table);
+int				execute_pwd(const t_proc table, t_exe *exe);
 
 int				execute_export(t_proc table, const char **arg, t_envp **list);
 int				print_env_for_export(const t_proc table, const t_envp *list);
