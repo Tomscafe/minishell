@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 17:55:17 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 18:22:54 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,26 +86,20 @@ void	print_str(const char *str, const int output, const int n_exit)
 	size_t	index;
 
 	index = 0;
-	while (str[index])
+	while (str[index + 1])
 	{
-		if (str[index] == '$')
+		if (str[index] == '$' && str[index + 1] == '?')
 		{
-			index++;
-			continue ;
+			ft_putnbr_fd(output, n_exit);
+			index += 2;
 		}
-		if (str[index - 1] == '$' && str[index] == '?')
+		else
 		{
-			ft_putnbr_fd(n_exit, output);
+			write(output, str + index, 1);
 			index++;
-			continue ;
 		}
-		else if (str[index - 1] == '$')
-			write(output, "$", 1);
-		write(output, str + index, 1);
-		index++;
 	}
-	if (str[index - 1] == '$')
-		write(output, "$", 1);
+	write(output, str + index, 1);
 }
 
 int	execute_unset(const char **arg, t_envp **list)

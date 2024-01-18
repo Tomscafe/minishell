@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 18:11:53 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 18:53:17 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,7 @@ void	execute_at_child(t_proc proc, t_exe *exe, int *pipefd)
 	const char	**arg = (const char **)ft_split(proc.arg, -1);
 	char		*path;
 
+	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
 	path = is_executable(proc.cmd, env);
 	if (!path)
@@ -53,9 +54,26 @@ void	apply_redir(t_proc proc, int *pipefd)
 
 char	*is_executable(const char *cmd, const char **env)
 {
+	char	*ret;
+
 	if (cmd[0] == '.')
-		return (user_command(cmd + 1));
-	return (other_builtin(cmd, env));
+		ret = user_command(cmd + 1);
+	else if (cmd[0] == '/')
+	{
+		ret = ft_strdup(cmd);
+		if (!ret)
+			exit(EXIT_FAILURE);
+	}
+	else
+		ret = other_builtin(cmd, env);
+	if (opendir(ret))
+	{
+		printf("minishell : %s: is a directory\n", ret);
+		exit(126);
+	}
+	else if (access(ret, X_OK) < 0)
+		return (free(ret), NULL);
+	return (ret);
 }
 
 char	*user_command(const char *cmd)
@@ -72,6 +90,11 @@ char	*user_command(const char *cmd)
 	ret = ft_strjoin(pwd, cmd);
 	if (!ret)
 		exit(EXIT_FAILURE);
+	if (opendir(ret))
+	{
+		printf("minishell: %s: is a directory\n", ret);
+		exit(EXIT_FAILURE);
+	}
 	free(pwd);
 	return (ret);
 }
