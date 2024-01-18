@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 12:56:26 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 16:23:13 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,32 @@ void	execute_at_child(t_proc proc, t_exe *exe, int *pipefd)
 	char		*path;
 
 	signal(SIGINT, SIG_DFL);
+	
+	// insert_doble_quote
+	{
+		char **args = ft_split(proc.arg, -1);
+		for (int i = 0; args[i]; i++)
+			printf("\'%s\'\n", args[i]);
+		printf("\n");
+		char *ret = ft_strjoin(args[0], " ");
+		puts(ret);
+		for (int i = 1; arg[i]; i++)
+		{
+			size_t size = ft_strlen(arg[i]) + 4;
+			char *tmp = (char *)malloc(sizeof(char) * (size + 4));
+			ft_memset(tmp, 0, size);
+			tmp[0] = '\"';
+			ft_strlcat(tmp, arg[i], size);
+			ft_strlcat(tmp, "\"", size);
+			ft_strlcat(tmp, " ", size);
+			puts(tmp);
+			char *tmp2 = ft_strjoin(ret, tmp);
+			free(ret);
+			ret = ft_strdup(tmp2);
+		}
+		puts(ret);
+	}
+	
 	path = is_executable(proc.cmd, env);
 	if (!path)
 	{
