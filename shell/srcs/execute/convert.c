@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:40:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 12:40:58 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 16:49:59 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,4 +37,18 @@ char	**convert_to_array(const t_envp *list)
 	}
 	ret[index] = NULL;
 	return (ret);
+}
+
+void	remove_env(t_envp **list, t_envp *to_del)
+{
+	t_envp	*to_del_prev;
+
+	to_del_prev = *list;
+	while (to_del_prev->next != to_del)
+		to_del_prev = to_del_prev->next;
+	to_del_prev->next = to_del->next;
+	free(to_del->variable);
+	if (to_del->value)
+		free(to_del->value);
+	free(to_del);
 }

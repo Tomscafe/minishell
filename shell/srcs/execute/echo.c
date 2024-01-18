@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 14:29:40 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 17:30:12 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -96,8 +96,11 @@ void	print_str(const char *str, const int output, const int n_exit)
 		if (str[index - 1] == '$' && str[index] == '?')
 		{
 			ft_putnbr_fd(n_exit, output);
-			index += 2;
+			index++;
+			continue ;
 		}
+		else if (str[index - 1] == '$')
+			write(output, "$", 1);
 		write(output, str + index, 1);
 		index++;
 	}
@@ -125,18 +128,4 @@ int	execute_unset(const char **arg, t_envp **list)
 		index++;
 	}
 	return (EXIT_SUCCESS);
-}
-
-void	remove_env(t_envp **list, t_envp *to_del)
-{
-	t_envp	*to_del_prev;
-
-	to_del_prev = *list;
-	while (to_del_prev->next != to_del)
-		to_del_prev = to_del_prev->next;
-	to_del_prev->next = to_del->next;
-	free(to_del->variable);
-	if (to_del->value)
-		free(to_del->value);
-	free(to_del);
 }
