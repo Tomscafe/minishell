@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:12:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 19:21:59 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:45:32 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,19 +58,16 @@ void	builtin(const t_proc proc, t_exe *exe)
 
 int	execute_pwd(const t_proc proc)
 {
-	pid_t	child;
-	int		exit_num;
-	char	buffer[2024];
-	char	*ret;
+	static char	buffer[PATH_MAX];
+	pid_t		child;
+	int			exit_num;
 
 	child = fork();
 	if (child < 0)
 		exit(EXIT_FAILURE);
 	else if (child == 0)
 	{
-		ret = getcwd(buffer, 2024);
-		if (!ret)
-			return (EXIT_FAILURE);
+		getcwd(buffer, 2024);
 		ft_putendl_fd(buffer, proc.output);
 		exit(EXIT_SUCCESS);
 	}
@@ -90,7 +87,7 @@ int	execute_env(const t_proc proc, const t_envp *list)
 	{
 		while (list)
 		{
-			if (list->value)
+			if (list->value && list->value[0])
 			{
 				ft_putstr_fd(list->variable, proc.output);
 				ft_putchar_fd('=', proc.output);

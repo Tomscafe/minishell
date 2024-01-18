@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/18 19:23:45 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:44:23 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <unistd.h>
 # include <dirent.h>
 # include <termios.h>
+# include <sys/syslimits.h>
 # include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
