@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/18 18:08:43 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:23:45 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -193,7 +193,6 @@ int				have_others(char *file);
 int				file_name_length(char *file, int j);
 
 void			ft_parsing(char *str, t_envp *env);
-
 
 void			execute(t_pipe *tree, t_envp **list);
 size_t			get_num_cmd(const t_pipe *tree);
