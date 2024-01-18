@@ -3,14 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   dollor2.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
+/*   By: hywoo <hywoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:45:24 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/17 22:55:17 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/14 14:45:28 by hywoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../../includes/minishell.h"
+#include "minishell.h"
 
 t_envp	*find_dollor(t_envp *needle, char *str, int i)
 {
@@ -84,6 +84,8 @@ char	*remove_str(char *str, int i, int j, int t)
 			break ;
 		rm_size++;
 	}
+	if (str[i + rm_size] == '$' && rm_size == 1)
+		rm_size++;
 	result = malloc(sizeof(char) * (ft_strlen(str) - rm_size + 1));
 	while (str[t])
 	{
