@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:53:01 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 20:42:58 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 20:47:00 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ int	execute_cd(const char *arg, t_exe *exe)
 	first_arg = set_first_arg(arg, exe);
 	if (!first_arg)
 		exit(EXIT_FAILURE);
+	if (!opendir(first_arg))
+	{
+		printf("minishell : cd: %s:no such file or directory\n", first_arg);
+		return (free(first_arg), EXIT_FAILURE);
+	}
 	if (chdir(first_arg) < 0)
 	{
 		free(first_arg);
