@@ -6,7 +6,7 @@
 /*   By: hywoo <hywoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:46:06 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/14 14:46:42 by hywoo            ###   ########.fr       */
+/*   Updated: 2024/01/18 12:23:11 by hywoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	ft_parsing(char *str, t_envp *env)
 		return ;
 	}
 	pipe_tree = make_pipe_tree(NULL, NULL, token->next, 0);
-	execute(pipe_tree, &env);
+//	execute(pipe_tree, &env);
 	all_free(token, pipe_tree);
 }
 
