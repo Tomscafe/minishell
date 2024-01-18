@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:18:49 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 19:10:27 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:12:53 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,6 @@ int	execute_export(t_proc proc, const char **arg, t_envp **list)
 	{
 		var = get_variable(arg[index]);
 		val = get_value(arg[index]);
-		printf("%s = %s\n", var, val);
 		if (change_value(list, var, val))
 			free(var);
 		else
