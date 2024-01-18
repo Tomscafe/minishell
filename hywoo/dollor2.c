@@ -84,6 +84,8 @@ char	*remove_str(char *str, int i, int j, int t)
 			break ;
 		rm_size++;
 	}
+	if (str[i + rm_size] == '$' && rm_size == 1)
+		rm_size++;
 	result = malloc(sizeof(char) * (ft_strlen(str) - rm_size + 1));
 	while (str[t])
 	{

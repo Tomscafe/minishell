@@ -121,6 +121,7 @@ t_envp			*make_env(char **envp);
 int				dollor_len(char *str, int k, char *variable);
 int				check_dollor_opt(char *str, int *i);
 char			*convert_dollor(t_envp *needle, char *str, int *i);
+int				convertable_dollor(char *str, int i);
 char			*check_dollor(t_envp *env, char *str, int i, int flag);
 t_envp			*find_dollor(t_envp *needle, char *str, int i);
 void			remake_str2(char *result, char *temp, int *k, int *t);
