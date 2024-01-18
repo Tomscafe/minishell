@@ -6,53 +6,59 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 18:08:14 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 21:27:41 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-void	add_input(t_list **files, const char *file_name)
+int	add_input(t_list **files, t_redirection rd)
 {
 	t_file	*infile;
 	t_list	*new_el;
 
+	if (rd.non)
+		return (printf("minishell : %s: ambiguous redirect\n", rd.non), -1);
 	infile = (t_file *)malloc(sizeof(t_file));
 	if (!infile)
 		exit(EXIT_FAILURE);
-	if (is_exist((const t_list *)(*files), file_name))
-		return ;
-	infile->name = (char *)file_name;
+	if (is_exist((const t_list *)(*files), rd.file))
+		return (0);
+	infile->name = (char *)rd.file;
 	infile->io[WRITE] = NO_FILE;
-	infile->io[READ] = open(file_name, O_RDONLY);
+	infile->io[READ] = open(rd.file, O_RDONLY);
 	new_el = ft_lstnew(infile);
 	if (!new_el)
 		exit(EXIT_FAILURE);
 	ft_lstadd_back(files, new_el);
+	return (1);
 }
 
-void	add_output(t_list **files, char *file_name, const int mode)
+int	add_output(t_list **files, const t_redirection rd, const int mode)
 {
 	t_file	*outfile;
 	t_list	*new_el;
 
+	if (rd.non)
+		return (printf("minishell : %s: ambiguous redirect\n", rd.non), -1);
 	outfile = (t_file *)malloc(sizeof(t_file));
 	if (!outfile)
 		exit(EXIT_FAILURE);
-	if (is_exist((const t_list *)(*files), file_name))
-		return ;
-	outfile->name = get_file_name(file_name);
+	if (is_exist((const t_list *)(*files), rd.file))
+		return (0);
+	outfile->name = get_file_name(rd.file);
 	if (mode)
 		outfile->io[WRITE] = \
-			open(file_name, O_WRONLY | O_APPEND | O_CREAT, 0644);
+			open(rd.file, O_WRONLY | O_APPEND | O_CREAT, 0644);
 	else
 		outfile->io[WRITE] = \
-			open(file_name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
-	outfile->io[READ] = open(file_name, O_RDONLY);
+			open(rd.file, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+	outfile->io[READ] = open(rd.file, O_RDONLY);
 	new_el = ft_lstnew(outfile);
 	if (!new_el)
 		exit(EXIT_FAILURE);
 	ft_lstadd_back(files, new_el);
+	return (1);
 }
 
 char	*get_file_name(char *file_name)

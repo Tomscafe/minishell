@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:46:03 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/17 22:55:31 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 21:14:00 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ void	cutting_filename(t_envp *env, t_redirection *rd, char *file)
 	if (!check_heredoc(rd->symbol))
 	{
 		edt_name = pipe_strdup(env, org_name);
-		free (org_name);
+		if (!*edt_name)
+			rd->non = org_name;
+		else
+			free (org_name);
 		free (file);
 		rd->file = edt_name;
 	}

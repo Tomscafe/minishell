@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/18 20:42:22 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 21:24:21 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <dirent.h>
 # include <termios.h>
 # include <sys/syslimits.h>
-# include <readline/readline.h>
+# include <readline/readline.h> 
 # include <readline/history.h>
 # include "libft.h"
 
@@ -49,6 +49,7 @@ typedef struct s_redirection
 {
 	char					*symbol;
 	char					*file;
+	char					*non;
 	struct s_redirection	*next;
 }	t_redirection;
 
@@ -205,8 +206,8 @@ int				open_all_files(t_exe *exe);
 int				open_files(t_exe *exe, const t_redirection *rd);
 int				add_heredoc(t_list **files, const char *end);
 int				is_exist(const t_list *files, const char *file_name);
-void			add_input(t_list **files, const char *file_name);
-void			add_output(t_list **files, char *file_name, const int mode);
+int				add_input(t_list **files, t_redirection rd);
+int				add_output(t_list **files, t_redirection rd, const int mode);
 void			clear_when_signal(void *to_del);
 void			clear_file(void *to_del);
 char			*get_file_name(char *file_name);
@@ -234,9 +235,9 @@ void			execute_at_child(t_proc proc, t_exe *exe, int *pipefd);
 void			apply_redir(t_proc proc, int *pipefd);
 void			close_file(int fd);
 char			**convert_to_array(const t_envp *list);
-char			*is_executable(const char *cmd, const char **env);
+char			*is_executable(const char *cmd, t_exe *exe, const char **env);
 char			*user_command(const char *cmd);
-char			*other_builtin(const char *cmd, const char **env);
+char			*other_builtin(const char *cmd, t_exe *exe, const char **env);
 
 int				execute_echo(t_proc table, const char **arg, const int n_exit);
 int				get_echo_option(const char *arg);

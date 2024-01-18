@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:45:58 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/17 22:55:26 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 21:15:19 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,8 @@ void	free_command(t_command *com)
 				free(curr_rd->symbol);
 			if (curr_rd->file)
 				free(curr_rd->file);
+			if (curr_rd->non)
+				free(curr_rd->non);
 			free (curr_rd);
 			curr_rd = next_rd;
 		}

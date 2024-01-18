@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 20:02:45 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 02:20:51 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 21:27:28 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,19 @@ int	open_files(t_exe *exe, const t_redirection *rd)
 	while (rd)
 	{
 		if (ft_strncmp(rd->symbol, ">>", 2) == 0)
-			add_output((t_list **)&(exe->files), rd->file, 1);
+		{
+			if (add_output((t_list **)&(exe->files), *rd, 1) < 0)
+				return (0);
+		}
 		else if (rd->symbol[0] == '>')
-			add_output((t_list **)&(exe->files), rd->file, 0);
+			add_output((t_list **)&(exe->files), *rd, 0);
 		if (ft_strncmp(rd->symbol, "<<", 2) == 0)
 			ret = add_heredoc((t_list **)&(exe->files), rd->file);
 		else if (rd->symbol[0] == '<')
-			add_input((t_list **)&(exe->files), rd->file);
+		{
+			if (add_input((t_list **)&(exe->files), *rd) < 0)
+				return (0);
+		}
 		rd = rd->next;
 	}
 	return (ret);

@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:12:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 20:21:12 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 21:06:46 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ int	execute_env(const t_proc proc, const t_envp *list)
 	pid_t	child;
 	int		exit_num;
 
+	if (proc.arg[4] != '\0')
+		return (printf("usage: env\n"), EXIT_FAILURE);
 	child = fork();
 	if (child < 0)
 		exit(EXIT_FAILURE);
