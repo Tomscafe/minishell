@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 02:29:21 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 12:40:54 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,41 +49,6 @@ void	apply_redir(t_proc proc, int *pipefd, int prev)
 		close(pipefd[0]);
 		close(pipefd[1]);
 	}
-	close(prev);
-}
-
-void	close_file(int fd)
-{
-	if (fd == STDIN_FILENO || fd == STDOUT_FILENO)
-		return ;
-	close(fd);
-}
-
-char	**convert_to_array(const t_envp *list)
-{
-	char			**ret;
-	size_t			size;
-	size_t			index;
-	const t_envp	*p = list;
-
-	size = 0;
-	while (p)
-	{
-		size++;
-		p = p->next;
-	}
-	ret = (char **)malloc(sizeof(char *) * (size + 1));
-	if (!ret)
-		exit(EXIT_FAILURE);
-	index = 0;
-	while (list)
-	{
-		ret[index] = get_env_string(list);
-		index++;
-		list = list->next;
-	}
-	ret[index] = NULL;
-	return (ret);
 }
 
 char	*is_executable(const char *cmd, const char **env)

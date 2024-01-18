@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 19:44:24 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 01:32:28 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 12:35:15 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,11 +39,14 @@ void	pipe_command(t_proc *proc, t_exe *exe, const size_t index)
 	setting.cmd = *exe->cmds->first;
 	setting.input = exe->p_pipe;
 	setting.output = pipefd[WRITE];
+	printf("pipe : %d | %d\n", pipefd[0], pipefd[1]);
+	printf("prev : %d\n", exe->p_pipe);
 	if (index == 0)
 		setting.input = STDIN_FILENO;
 	if (!set_proc(proc, setting))
 		return ;
 	execute_commands(proc, exe, pipefd);
+	close(exe->p_pipe);
 	exe->p_pipe = dup(pipefd[READ]);
 	close(pipefd[READ]);
 	close(pipefd[WRITE]);
@@ -57,6 +60,7 @@ void	last_command(t_proc *proc, t_exe *exe)
 	setting.cmd = *exe->cmds->second;
 	setting.input = exe->p_pipe;
 	setting.output = STDOUT_FILENO;
+	printf("prev : %d\n", exe->p_pipe);
 	if (!set_proc(proc, setting))
 		return ;
 	execute_commands(proc, exe, NULL);

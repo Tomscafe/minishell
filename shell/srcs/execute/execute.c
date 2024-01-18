@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 02:33:03 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 12:41:06 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ void	process_commands(t_exe *exe)
 	index = 0;
 	while (index < exe->n_cmd)
 	{
-		waitpid(procs[index].pid, &st_ret, 0);
+		waitpid(procs[index].pid, NULL, WUNTRACED);
 		index++;
 	}
 	exe->st_exit = WEXITSTATUS(st_ret);
@@ -99,3 +99,9 @@ size_t	get_num_cmd(const t_pipe *cmds)
 	return (n_cmd);
 }
 
+void	close_file(int fd)
+{
+	if (fd == STDIN_FILENO || fd == STDOUT_FILENO)
+		return ;
+	close(fd);
+}

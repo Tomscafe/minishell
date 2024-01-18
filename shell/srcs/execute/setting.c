@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 01:45:36 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 12:36:18 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,4 +86,3 @@ int	execute_exit(const char *arg)
 	exit_num = ft_atoi(arg) % 256;
 	exit(exit_num);
 }
-

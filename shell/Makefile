@@ -6,13 +6,13 @@
 #    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/17 20:33:57 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/17 23:37:57 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/18 12:41:23 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 LIBFT_DIR	= libft
 LIBFT		= ${LIBFT_DIR}/libft.a
-RDLINE_DIR	= /usr/local/Cellar/readline/8.2.7#${HOME}/.brew/opt/readline
+RDLINE_DIR	= ${HOME}/.brew/opt/readline
 
 INCS		= includes
 
@@ -47,7 +47,8 @@ EX_SRCS		= ${EX_DIR}/execute.c \
 			  ${EX_DIR}/echo.c \
 			  ${EX_DIR}/cd.c \
 			  ${EX_DIR}/export.c \
-			  ${EX_DIR}/env.c
+			  ${EX_DIR}/env.c \
+			  ${EX_DIR}/convert.c
 EX_OBJS		= ${EX_SRCS:.c=.o}
 
 SRCS		= ${PS_SRCS} \
@@ -62,7 +63,7 @@ MK			= make -C ${LIBFT_DIR}
 CC			= CC
 IFLAG		= -I${RDLINE_DIR}/include -I${INCS}
 LFLAG		= -lreadline -L${RDLINE_DIR}/lib -lft -L${LIBFT_DIR}
-CFLAG		= -Wall -Wextra -g3
+CFLAG		= -Wall -Wextra #-Werror -g3
 
 .PHONY : all clean fclean re
 
