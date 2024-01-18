@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:18:49 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 19:12:53 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:22:27 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,11 +88,11 @@ char	*get_value(const char *env)
 		start++;
 	if (env[start] == '\0')
 		return (NULL);
-	size = ft_strlen(env + start + 1);
-	printf("%zu\n", size);
+	size = ft_strlen(env + start + 1) + 1;
 	val = (char *)malloc(sizeof(char) * (size + 1));
 	if (!val)
 		exit(EXIT_FAILURE);
+	ft_memset(val, 0, sizeof(char) * (size + 1));
 	ft_strlcpy(val, env + start + 1, size + 1);
 	return (val);
 }
