@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:18:49 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 18:18:41 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:10:27 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,6 +25,7 @@ int	execute_export(t_proc proc, const char **arg, t_envp **list)
 	{
 		var = get_variable(arg[index]);
 		val = get_value(arg[index]);
+		printf("%s = %s\n", var, val);
 		if (change_value(list, var, val))
 			free(var);
 		else
@@ -80,18 +81,20 @@ char	*get_variable(const char *env)
 char	*get_value(const char *env)
 {
 	char	*val;
+	size_t	start;
 	size_t	size;
 
-	size = 0;
-	while (env[size] && env[size] != '=')
-		size++;
-	if (env[size] == '\0')
+	start = 0;
+	while (env[start] && env[start] != '=')
+		start++;
+	if (env[start] == '\0')
 		return (NULL);
-	size = ft_strlen(env + size);
+	size = ft_strlen(env + start + 1);
+	printf("%zu\n", size);
 	val = (char *)malloc(sizeof(char) * (size + 1));
 	if (!val)
 		exit(EXIT_FAILURE);
-	ft_strlcpy(val, env + size, size + 1);
+	ft_strlcpy(val, env + start + 1, size + 1);
 	return (val);
 }
 
