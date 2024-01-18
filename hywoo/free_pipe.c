@@ -40,6 +40,8 @@ void	free_command(t_command *com)
 				free(curr_rd->symbol);
 			if (curr_rd->file)
 				free(curr_rd->file);
+			if (curr_rd->non)
+				free(curr_rd->non);
 			free (curr_rd);
 			curr_rd = next_rd;
 		}

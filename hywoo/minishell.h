@@ -42,6 +42,7 @@ typedef struct s_redirection
 {
 	char					*symbol;
 	char					*file;
+	char					*non;
 	struct s_redirection	*next;
 }	t_redirection;
 

@@ -27,7 +27,10 @@ void	cutting_filename(t_envp *env, t_redirection *rd, char *file)
 	if (!check_heredoc(rd->symbol))
 	{
 		edt_name = pipe_strdup(env, org_name);
-		free (org_name);
+		if (!*edt_name)
+			rd->non = org_name;
+		else
+			free (org_name);
 		free (file);
 		rd->file = edt_name;
 	}
