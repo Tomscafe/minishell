@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 02:21:14 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 16:33:17 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,11 +25,11 @@ void	add_input(t_list **files, const char *file_name)
 	infile->name = (char *)file_name;
 	infile->io[WRITE] = NO_FILE;
 	infile->io[READ] = open(file_name, O_RDONLY);
-	if (infile->io[READ] < 0)
-	{
-		free(infile);
-		return ;
-	}
+	//if (infile->io[READ] < 0)
+	//{
+	//	free(infile);
+	//	return ;
+	//}
 	new_el = ft_lstnew(infile);
 	if (!new_el)
 		exit(EXIT_FAILURE);

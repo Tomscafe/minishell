@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 14:39:52 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 16:36:08 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ int	set_redirection(t_proc *proc, const t_list *files, t_command cmd)
 	return (1);
 }
 
-int	set_file(t_proc *table, const t_list *files, const t_redirection rd)
+int	set_file(t_proc *proc, const t_list *files, const t_redirection rd)
 {
 	t_file	*content;
 
@@ -44,17 +44,17 @@ int	set_file(t_proc *table, const t_list *files, const t_redirection rd)
 	{
 		content = files->content;
 		if (rd.symbol[0] == '<')
-			table->input = content->io[READ];
-		else
 		{
-			table->output = content->io[WRITE];
-			if (table->output < 0)
+			proc->input = content->io[READ];
+			if (proc->input < 0)
 			{
 				printf("minishell: %s: no such file or directory\n", \
 						content->name);
 				return (0);
 			}
 		}
+		else
+			proc->output = content->io[WRITE];
 		files = files->next;
 	}
 	return (1);

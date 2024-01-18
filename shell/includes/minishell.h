@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/18 14:17:39 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 16:36:22 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,7 +220,7 @@ void			cmd_signal(int sig);
 int				set_proc(t_proc *proc, const t_setting setting);
 int				set_redirection(t_proc *proc, const t_list *files, \
 								const t_command cmd);
-int				set_file(t_proc *table, const t_list *files, \
+int				set_file(t_proc *proc, const t_list *files, \
 						const t_redirection rd);
 char			*get_argument(const t_simple cmd);
 /* builtin */
