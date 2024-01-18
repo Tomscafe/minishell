@@ -152,7 +152,8 @@ void			cutting_filename(t_envp *env, t_redirection *rd, char *file);
 void			add_split_char(char *result, int *i, int *j);
 int				have_others(char *file);
 int				file_name_length(char *file, int j);
-
+int	convertable_dollor(char *str, int i);
+void	test_token(t_token *token);
 void			ft_parsing(char *str, t_envp *env);
-
+void		test_pipe(t_pipe *pipe);
 #endif

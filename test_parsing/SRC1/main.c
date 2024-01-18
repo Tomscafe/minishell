@@ -23,12 +23,14 @@ void	ft_parsing(char *str, t_envp *env)
 	token = init_token(NULL);
 	token->env = env;
 	tokenizer(token, str);
+	test_token(token);
 	if (syntax_error(token))
 	{
 		all_free(token, NULL);
 		return ;
 	}
 	pipe_tree = make_pipe_tree(NULL, NULL, token->next, 0);
+	test_pipe(pipe_tree);
 //	execute(pipe_tree, &env);
 	all_free(token, pipe_tree);
 }

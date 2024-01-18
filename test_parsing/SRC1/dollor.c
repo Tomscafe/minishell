@@ -74,6 +74,28 @@ char	*convert_dollor(t_envp *needle, char *str, int *i)
 	return (result);
 }
 
+int	convertable_dollor(char *str, int i)
+{
+	int	j;
+	int	flag;
+
+	j = 0;
+	flag = 0;
+	if (str[i] != '$')
+		return (0);
+	while (j < i)
+	{
+		if (str[j] == '\"')
+			flag++;
+		j++;
+	}
+	if ((flag % 2 == 0) && (!str[i + 1] || str[i + 1] == ' '))
+		return (0);
+	if ((flag % 2 == 1) && (str[i + 1] == '\"' || str[i + 1] == ' ' || str[i + 1] == '\''))
+		return (0);
+	return (1);
+}
+
 char	*check_dollor(t_envp *env, char *str, int i, int flag)
 {
 	char	*new_str;
@@ -88,7 +110,7 @@ char	*check_dollor(t_envp *env, char *str, int i, int flag)
 			flag++;
 		if (!flag && new_str[i] == '\'')
 			i = ignore_quotes(new_str, i, '\'');
-		if (new_str[i] == '$')
+		if (convertable_dollor(new_str, i))
 		{
 			needle = find_dollor(env, new_str, i);
 			new_str = convert_dollor(needle, new_str, &i);

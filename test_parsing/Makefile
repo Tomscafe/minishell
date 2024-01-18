@@ -12,12 +12,12 @@
 
 NAME	= minishell
 CC		= CC
-CFLAGS	= -Werror -Wall -Wextra
+CFLAGS	= -Werror -Wall -Wextra -g3
 COMFILE	= -lreadline -L${HOME}/.brew/opt/readline/lib
 OBFLAGS	= -I{HOME}/.brew/opt/readline/include
 SRC		= SRC1/main.c SRC1/signal.c SRC1/tokenizer.c SRC1/tokenizer2.c SRC1/tools.c SRC1/pipe_tree.c \
 		SRC1/pipe_strdup.c SRC1/parsing_error.c SRC1/init_struct.c SRC1/get_simple.c SRC1/get_command.c \
-		SRC1/free_pipe.c SRC1/envp.c SRC1/dollor.c SRC1/dollor2.c SRC1/make_rd.c SRC1/tools2.c
+		SRC1/free_pipe.c SRC1/envp.c SRC1/dollor.c SRC1/dollor2.c SRC1/make_rd.c SRC1/tools2.c SRC1/test.c
 SRC2	= SRC2/builtin.c SRC2/cd.c SRC2/child.c SRC2/command.c SRC2/echo.c SRC2/env.c \
 		SRC2/execute.c SRC2/export.c SRC2/file_1.c SRC2/file_2.c SRC2/setting.c
 LIBSRC	= libft/ft_isascii.c libft/ft_atoi.c libft/ft_bzero.c libft/ft_calloc.c libft/ft_isalnum.c \
