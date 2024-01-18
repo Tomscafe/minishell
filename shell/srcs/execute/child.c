@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 16:27:47 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 18:11:53 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	execute_at_child(t_proc proc, t_exe *exe, int *pipefd)
 	path = is_executable(proc.cmd, env);
 	if (!path)
 	{
-		printf("minishell: %s: Not found command\n", proc.cmd);
+		printf("minishell: %s: command not found\n", proc.cmd);
 		exit(EXIT_FAILURE);
 	}
 	apply_redir(proc, pipefd);
