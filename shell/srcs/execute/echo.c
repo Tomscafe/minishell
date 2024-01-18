@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 18:22:54 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 19:02:25 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ void	print_str(const char *str, const int output, const int n_exit)
 	{
 		if (str[index] == '$' && str[index + 1] == '?')
 		{
-			ft_putnbr_fd(output, n_exit);
+			ft_putnbr_fd(n_exit, output);
 			index += 2;
 		}
 		else
