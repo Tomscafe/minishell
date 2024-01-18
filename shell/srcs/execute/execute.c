@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 12:57:59 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:37:04 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,7 +78,7 @@ void	process_commands(t_exe *exe)
 	index = 0;
 	while (index < exe->n_cmd)
 	{
-		waitpid(procs[index].pid, NULL, WUNTRACED);
+		waitpid(procs[index].pid, &st_ret, WUNTRACED);
 		index++;
 	}
 	exe->st_exit = WEXITSTATUS(st_ret);
