@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 21:12:55 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 21:46:11 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	execute_at_child(t_proc proc, t_exe *exe, int *pipefd)
 
 	signal(SIGQUIT, SIG_DFL);
 	signal(SIGINT, SIG_DFL);
-	path = is_executable(proc.cmd, exe, env);
+	path = is_executable(proc.cmd, env);
 	if (!path)
 	{
 		printf("minishell: %s: command not found\n", proc.cmd);
@@ -52,7 +52,7 @@ void	apply_redir(t_proc proc, int *pipefd)
 	}
 }
 
-char	*is_executable(const char *cmd, t_exe *exe, const char **env)
+char	*is_executable(const char *cmd, const char **env)
 {
 	char	*ret;
 
@@ -65,14 +65,16 @@ char	*is_executable(const char *cmd, t_exe *exe, const char **env)
 			exit(EXIT_FAILURE);
 	}
 	else
-		ret = other_builtin(cmd, exe, env);
+		ret = other_builtin(cmd, env);
+	if (!ret)
+		exit(0);
 	if (opendir(ret))
 	{
 		printf("minishell : %s: is a directory\n", ret);
 		exit(126);
 	}
 	else if (access(ret, X_OK) < 0)
-		return (free(ret), NULL);
+		return (NULL);
 	return (ret);
 }
 
@@ -99,14 +101,19 @@ char	*user_command(const char *cmd)
 	return (ret);
 }
 
-char	*other_builtin(const char *cmd, t_exe *exe, const char **env)
+char	*other_builtin(const char *cmd, const char **env)
 {
 	size_t	index;
 	char	**path;
 	char	*ret;
-	char	*tmp;
 
 	path = get_paths(env);
+	if (!path)
+	{
+		printf("minishell: %s: no such file or directory\n", cmd);
+		return (NULL);
+	}
+	ret = NULL;
 	index = 0;
 	while (path[index])
 	{
@@ -116,12 +123,8 @@ char	*other_builtin(const char *cmd, t_exe *exe, const char **env)
 		index++;
 		free(ret);
 	}
-	tmp = ft_strjoin(exe->pwd_pth, "/");
-	if (!tmp)
-		exit(EXIT_FAILURE);
-	ret = ft_strjoin(tmp, cmd);
-	if (!ret)
-		exit(EXIT_FAILURE);
 	clear_strs(path);
+	if (!ret)
+		printf("minishell: %s: no such file or directory\n", cmd);
 	return (ret);
 }

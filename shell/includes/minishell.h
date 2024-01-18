@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/18 21:24:21 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 21:34:04 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,9 +235,9 @@ void			execute_at_child(t_proc proc, t_exe *exe, int *pipefd);
 void			apply_redir(t_proc proc, int *pipefd);
 void			close_file(int fd);
 char			**convert_to_array(const t_envp *list);
-char			*is_executable(const char *cmd, t_exe *exe, const char **env);
+char			*is_executable(const char *cmd, const char **env);
 char			*user_command(const char *cmd);
-char			*other_builtin(const char *cmd, t_exe *exe, const char **env);
+char			*other_builtin(const char *cmd, const char **env);
 
 int				execute_echo(t_proc table, const char **arg, const int n_exit);
 int				get_echo_option(const char *arg);
