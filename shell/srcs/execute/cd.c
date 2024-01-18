@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:53:01 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 22:54:20 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 13:57:32 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,9 +16,8 @@ int	execute_cd(const char *arg, t_envp **list)
 {
 	char	*first_arg;
 
-	arg += 3;
 	change_oldpwd(list);
-	if (arg[0] == '\0')
+	if (!arg)
 	{
 		chdir(get_home((const t_envp *)(*list)));
 		change_pwd(list);
