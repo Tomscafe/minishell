@@ -6,35 +6,31 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:18:49 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 22:54:43 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:16:29 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	execute_export(t_proc proc, t_envp **list)
+int	execute_export(t_proc proc, const char **arg, t_envp **list)
 {
 	size_t	index;
-	char	**envs;
 	char	*var;
 	char	*val;
 
-	proc.arg += 7;
-	if (proc.arg[0] == '\0')
+	if (!arg[0])
 		return (print_env_for_export(proc, (const t_envp *)(*list)));
-	envs = ft_split(proc.arg, ' ');
-	if (!envs)
-		exit(EXIT_FAILURE);
 	index = 0;
-	while (envs[index])
+	while (arg[index])
 	{
-		var = get_variable(envs[index]);
-		val = get_value(envs[index]);
-		if (!change_value(list, var, val))
+		var = get_variable(arg[index]);
+		val = get_value(arg[index]);
+		if (change_value(list, var, val))
+			free(var);
+		else
 			add_variable(list, var, val);
 		index++;
 	}
-	clear_strs(envs);
 	return (EXIT_SUCCESS);
 }
 
@@ -93,7 +89,7 @@ char	*get_value(const char *env)
 	val = (char *)malloc(sizeof(char) * (size + 1));
 	if (!val)
 		exit(EXIT_FAILURE);
-	ft_strlcpy(val, env, size + 1);
+	ft_strlcpy(val, env + size, size + 1);
 	return (val);
 }
 

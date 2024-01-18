@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:12:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 13:56:26 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:03:16 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,7 +44,7 @@ void	builtin(const t_proc proc, t_exe *exe)
 	else if (ft_strncmp(proc.cmd, "pwd", 4) == 0)
 		exe->st_exit = execute_pwd(proc);
 	else if (ft_strncmp(proc.cmd, "export", 7) == 0)
-		exe->st_exit = execute_export(proc, exe->env);
+		exe->st_exit = execute_export(proc, &arg[1], exe->env);
 	else if (ft_strncmp(proc.cmd, "unset", 6) == 0)
 		exe->st_exit = execute_unset(proc.arg, exe->env);
 	else if (ft_strncmp(proc.cmd, "env", 4) == 0)

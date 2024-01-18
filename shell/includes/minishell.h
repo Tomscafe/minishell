@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/18 13:11:31 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 14:00:42 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ char			*get_home(const t_envp *list);
 /* pwd */
 int				execute_pwd(const t_proc table);
 /* export */
-int				execute_export(t_proc table, t_envp **list);
+int				execute_export(t_proc table, const char **arg, t_envp **list);
 int				print_env_for_export(const t_proc table, const t_envp *list);
 char			*get_variable(const char *env);
 char			*get_value(const char *env);
