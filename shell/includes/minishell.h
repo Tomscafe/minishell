@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/18 12:43:02 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 13:11:31 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -235,9 +235,10 @@ char			*is_executable(const char *cmd, const char **env);
 char			*user_command(const char *cmd);
 char			*other_builtin(const char *cmd, const char **env);
 /* echo */
-int				execute_echo(t_proc table, const int n_exit);
+int				execute_echo(t_proc table, const char **arg, const int n_exit);
 int				get_echo_option(const char *arg);
-void			print_arg(const char *str, const int output, const int n_exit);
+void			print_arg(const char **arg, const int output, const int n_exit);
+void			print_str(const char *str, const int output, const int n_exit);
 /* cd */
 int				execute_cd(const char *arg, t_envp **list);
 void			change_pwd(t_envp **list);

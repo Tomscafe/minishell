@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 12:36:18 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 13:16:07 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,13 +65,14 @@ char	*get_argument(const t_simple cmd)
 	const size_t	cmd_len = ft_strlen(cmd.command);
 	const size_t	arg_len = ft_strlen(cmd.ward);
 	const size_t	size = cmd_len + arg_len + 2;
+	const char		tmp[2] = {-1, 0};
 	char			*ret;
 
 	ret = (char *)malloc(sizeof(char) * size);
 	if (!ret)
 		exit(EXIT_FAILURE);
 	ft_strlcpy(ret, cmd.command, size);
-	ft_strlcat(ret, " ", size);
+	ft_strlcat(ret, tmp, size);
 	ft_strlcat(ret, cmd.ward, size);
 	return (ret);
 }

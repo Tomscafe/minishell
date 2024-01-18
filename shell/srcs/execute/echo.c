@@ -6,15 +6,16 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 22:54:30 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 13:53:45 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	execute_echo(t_proc proc, const int n_exit)
+int	execute_echo(t_proc proc, const char **arg, const int n_exit)
 {
 	pid_t	child;
+	size_t	index;
 	int		is_newline;
 	int		exit_num;
 
@@ -23,15 +24,15 @@ int	execute_echo(t_proc proc, const int n_exit)
 		exit(EXIT_FAILURE);
 	else if (child == 0)
 	{
-		proc.arg += 5;
-		is_newline = get_echo_option(proc.arg);
+		index = 0;
+		if (!arg[0])
+			write(proc.output, "\n", 1);
+		is_newline = get_echo_option(arg[0]);
 		if (is_newline < 0)
 			exit(EXIT_FAILURE);
 		else if (!is_newline)
-			proc.arg += 2;
-		if (proc.arg[0] == ' ')
-			proc.arg++;
-		print_arg(proc.arg, proc.output, n_exit);
+			index++;
+		print_arg(arg + index, proc.output, n_exit);
 		if (is_newline)
 			write(proc.output, "\n", 1);
 		exit(EXIT_SUCCESS);
@@ -66,23 +67,41 @@ int	get_echo_option(const char *arg)
 	return (1);
 }
 
-void	print_arg(const char *str, const int output, const int n_exit)
+void	print_arg(const char **arg, const int output, const int n_exit)
 {
 	size_t	index;
 
 	index = 0;
-	while (str[index + 1])
+	while (arg[index + 1])
 	{
-		if (str[index] == '$' && str[index + 1] == '?')
+		print_str(arg[index], output, n_exit);
+		write(output, " " , 1);
+		index++;
+	}
+	print_str(arg[index], output, n_exit);
+}
+
+void	print_str(const char *str, const int output, const int n_exit)
+{
+	size_t	index;
+
+	index = 0;
+	while (str[index])
+	{
+		if (str[index] == '$')
+		{
+			index++;
+			continue ;
+		}
+		if (str[index - 1] == '$' && str[index] == '?')
 		{
 			ft_putnbr_fd(n_exit, output);
 			index += 2;
-			continue ;
 		}
-		ft_putchar_fd(str[index], output);
+		write(output, str +index, 1);
 		index++;
 	}
-	ft_putchar_fd(str[index], output);
+	write(output, str + index, 1);
 }
 
 int	execute_unset(const char *arg, t_envp **list)

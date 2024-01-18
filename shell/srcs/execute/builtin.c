@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:12:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 22:54:17 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 13:26:06 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,8 +33,12 @@ int	is_builtin(const char *cmd)
 
 void	builtin(const t_proc proc, t_exe *exe)
 {
+	const char	**arg = (const char **)ft_split(proc.arg, -1);
+
+	if (!arg)
+		exit(EXIT_FAILURE);
 	if (ft_strncmp(proc.cmd, "echo", 5) == 0)
-		exe->st_exit = execute_echo(proc, exe->st_exit);
+		exe->st_exit = execute_echo(proc, &arg[1], exe->st_exit);
 	else if (ft_strncmp(proc.cmd, "cd", 3) == 0)
 		exe->st_exit = execute_cd(proc.arg, exe->env);
 	else if (ft_strncmp(proc.cmd, "pwd", 4) == 0)
@@ -49,6 +53,7 @@ void	builtin(const t_proc proc, t_exe *exe)
 		exe->st_exit = execute_exit(proc.arg);
 	else
 		exe->st_exit = EXIT_FAILURE;
+	clear_strs((char **)arg);
 }
 
 int	execute_pwd(const t_proc proc)
