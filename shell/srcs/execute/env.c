@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:00:02 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/17 22:54:38 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 12:53:37 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ char	*get_env_string(const t_envp *env)
 	ret = ft_strjoin(variable, value);
 	if (!ret)
 		exit(EXIT_FAILURE);
+	free(variable);
+	free(value);
 	return (ret);
 }
 
@@ -66,6 +68,7 @@ char	*get_exe_path(const char *path, const char *cmd)
 	ret = ft_strjoin(root, cmd);
 	if (!ret)
 		exit(EXIT_FAILURE);
+	free(root);
 	return (ret);
 }
 

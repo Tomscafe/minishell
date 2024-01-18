@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 12:41:06 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 12:57:59 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,6 +53,7 @@ void	process_one_command(t_exe *exe)
 		builtin(proc, exe);
 	else
 		exe->st_exit = execute_one_command(proc, exe);
+	free(proc.arg);
 }
 
 void	process_commands(t_exe *exe)

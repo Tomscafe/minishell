@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 12:40:54 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 12:56:26 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@ void	execute_at_child(t_proc proc, t_exe *exe, int *pipefd)
 		printf("minishell: %s: Not found command\n", proc.cmd);
 		exit(EXIT_FAILURE);
 	}
-	apply_redir(proc, pipefd, exe->p_pipe);
+	apply_redir(proc, pipefd);
 	execve(path, (char *const *)arg, (char *const *)env);
 	clear_strs((char **)env);
 	clear_strs((char **)arg);
 	free(path);
 }
 
-void	apply_redir(t_proc proc, int *pipefd, int prev)
+void	apply_redir(t_proc proc, int *pipefd)
 {
 	if (proc.input != STDIN_FILENO)
 	{
@@ -72,6 +72,7 @@ char	*user_command(const char *cmd)
 	ret = ft_strjoin(pwd, cmd);
 	if (!ret)
 		exit(EXIT_FAILURE);
+	free(pwd);
 	return (ret);
 }
 

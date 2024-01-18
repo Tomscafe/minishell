@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/18 12:32:38 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 12:43:02 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,7 +84,6 @@ typedef struct s_proc
 	char	*arg;
 	int		input;
 	int		output;
-	//int		pipefd[2];
 }t_proc;
 
 typedef struct s_file
@@ -229,7 +228,7 @@ int				is_builtin(const char *cmd);
 void			builtin(const t_proc table, t_exe *exe);
 /* child */
 void			execute_at_child(t_proc proc, t_exe *exe, int *pipefd);
-void			apply_redir(t_proc proc, int *pipefd, int prev);
+void			apply_redir(t_proc proc, int *pipefd);
 void			close_file(int fd);
 char			**convert_to_array(const t_envp *list);
 char			*is_executable(const char *cmd, const char **env);
