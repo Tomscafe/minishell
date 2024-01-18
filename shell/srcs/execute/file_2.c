@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 16:49:46 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 18:08:14 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	run_heredoc(const char *end, const int hdfile)
 		input_line = readline("> ");
 		if (input_line == NULL)
 			exit(0);
-		if (ft_strncmp(input_line, end, ft_strlen(input_line)) == 0)
+		if (ft_strncmp(input_line, end, ft_strlen(input_line) + 1) == 0)
 			break ;
 		ft_putendl_fd(input_line, hdfile);
 		free(input_line);

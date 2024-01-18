@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:40:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 16:49:59 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 18:06:11 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,4 +51,17 @@ void	remove_env(t_envp **list, t_envp *to_del)
 	if (to_del->value)
 		free(to_del->value);
 	free(to_del);
+}
+
+char	*get_home(const t_envp *list)
+{
+	while (list)
+	{
+		if (ft_strncmp(list->variable, "HOME", ft_strlen(list->variable)) == 0)
+			break ;
+		list = list->next;
+	}
+	if (!list)
+		return (NULL);
+	return (ft_strdup(list->value));
 }

@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:53:01 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 17:50:27 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 18:08:34 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,27 +15,45 @@
 int	execute_cd(const char *arg, t_envp **list)
 {
 	char	*first_arg;
-	char	*home;
 
-	home = get_home((const t_envp *)(*list));
-	if (!arg)
-		first_arg = home;
-	else if (arg[0] == '~')
-		first_arg = ft_strjoin(home, arg + 1);
-	else if (opendir(arg) == NULL)
-	{
-		printf("minishell: cd: %s: no such file or directory\n", arg);
-		return (EXIT_FAILURE);
-	}
-	else
-		first_arg = get_first_arg(arg);
+	first_arg = set_first_arg(arg, (const t_envp *)(*list));
 	change_oldpwd(list);
 	if (!first_arg)
 		exit(EXIT_FAILURE);
 	if (chdir(first_arg) < 0)
-		return (free(first_arg), EXIT_FAILURE);
+	{
+		free(first_arg);
+		return (EXIT_FAILURE);
+	}
 	change_pwd(list);
+	free(first_arg);
 	return (EXIT_SUCCESS);
+}
+
+char	*set_first_arg(const char *arg, const t_envp *list)
+{
+	char	*home;
+	char	*ret;
+
+	home = get_home(list);
+	if (!arg)
+		return (home);
+	else if (arg[0] == '~')
+	{
+		ret = ft_strjoin(home, arg + 1);
+		if (!ret)
+			exit(EXIT_FAILURE);
+	}
+	else if (opendir(arg) == NULL)
+	{
+		printf("minishell: cd: %s: no such file or directory\n", arg);
+		free(home);
+		return (NULL);
+	}
+	else
+		ret = get_first_arg(arg);
+	free(home);
+	return (ret);
 }
 
 void	change_pwd(t_envp **list)
@@ -71,6 +89,7 @@ void	change_oldpwd(t_envp **list)
 		if (ft_strncmp(oldpwd->variable, "OLDPWD", \
 						ft_strlen(oldpwd->variable)) == 0)
 		{
+			free(oldpwd->value);
 			oldpwd->value = ft_strdup(buffer);
 			if (!oldpwd->value)
 				exit(EXIT_FAILURE);
@@ -92,17 +111,4 @@ char	*get_first_arg(const char *arg)
 		exit(EXIT_FAILURE);
 	ft_strlcpy(ret, arg, size + 1);
 	return (ret);
-}
-
-char	*get_home(const t_envp *list)
-{
-	while (list)
-	{
-		if (ft_strncmp(list->variable, "HOME", ft_strlen(list->variable)) == 0)
-			break ;
-		list = list->next;
-	}
-	if (!list)
-		return (NULL);
-	return (ft_strdup(list->value));
 }

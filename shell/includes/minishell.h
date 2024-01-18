@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/18 17:32:39 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/18 18:08:43 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -243,6 +243,7 @@ void			print_arg(const char **arg, const int output, const int n_exit);
 void			print_str(const char *str, const int output, const int n_exit);
 
 int				execute_cd(const char *arg, t_envp **list);
+char			*set_first_arg(const char *arg, const t_envp *list);
 void			change_pwd(t_envp **list);
 void			change_oldpwd(t_envp **list);
 char			*get_first_arg(const char *arg);
