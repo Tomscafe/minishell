@@ -6,7 +6,7 @@
 #    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/17 20:33:57 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/19 17:09:22 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/19 19:29:02 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -48,7 +48,8 @@ EX_SRCS		= ${EX_DIR}/execute.c \
 			  ${EX_DIR}/cd.c \
 			  ${EX_DIR}/export.c \
 			  ${EX_DIR}/env.c \
-			  ${EX_DIR}/convert.c
+			  ${EX_DIR}/convert.c \
+			  ${EX_DIR}/argument.c
 EX_OBJS		= ${EX_SRCS:.c=.o}
 
 SRCS		= ${PS_SRCS} \
@@ -63,7 +64,7 @@ MK			= make -C ${LIBFT_DIR}
 CC			= CC
 IFLAG		= -I${RDLINE_DIR}/include -I${INCS}
 LFLAG		= -lreadline -L${RDLINE_DIR}/lib -lft -L${LIBFT_DIR} 
-CFLAG		= -Wall #-Wextra -Werror -g3
+CFLAG		= -Wall -Wextra -Werror -g3
 
 .PHONY : all clean fclean re
 

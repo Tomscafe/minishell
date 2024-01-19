@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/19 17:26:46 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 18:32:31 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -228,13 +228,18 @@ void			last_command(t_proc *proc, t_exe *exe);
 void			execute_commands(t_proc *proc, t_exe *exe, int *pipefd);
 void			cmd_signal(int sig);
 
-int				set_proc(t_proc *proc, const t_setting setting);
+int				set_proc(t_proc *proc, const t_setting setting, \
+						const int st_exit);
 int				set_redirection(t_proc *proc, const t_list *files, \
 								const t_command cmd);
 int				set_file(t_proc *proc, const t_list *files, \
 						const t_redirection rd);
 int				where_is(const char *file, const t_redirection rd);
-char			*get_argument(const t_simple cmd);
+char			*get_argument(const t_simple cmd, const int st_exit);
+
+int				is_contain(const char *str);
+char			*convert_st_exit(char *str, const int st_exit);
+char			*rejoin_strs(const char **strs, const char *str_exit);
 
 int				is_builtin(const char *cmd);
 void			builtin(const t_proc proc, t_exe *exe);

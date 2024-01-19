@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 21:46:11 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 19:23:15 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	execute_at_child(t_proc proc, t_exe *exe, int *pipefd)
 		printf("minishell: %s: command not found\n", proc.cmd);
 		exit(EXIT_FAILURE);
 	}
+		arg[0]++;
 	apply_redir(proc, pipefd);
 	execve(path, (char *const *)arg, (char *const *)env);
 	clear_strs((char **)env);

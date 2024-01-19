@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 15:50:15 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 18:33:05 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,7 @@ void	process_one_command(t_exe *exe)
 	setting.cmd = *exe->cmds->first;
 	setting.input = STDIN_FILENO;
 	setting.output = STDOUT_FILENO;
-	if (!set_proc(&proc, setting))
+	if (!set_proc(&proc, setting, exe->st_exit))
 	{
 		exe->st_exit = EXIT_FAILURE;
 		return ;

@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:40:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 15:57:22 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 19:29:12 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,15 +55,21 @@ void	remove_env(t_envp **list, t_envp *to_del)
 
 char	*get_home(const t_envp *list)
 {
+	char	*ret;
+
 	while (list)
 	{
 		if (ft_strncmp(list->variable, "HOME", ft_strlen(list->variable)) == 0)
-			break ;
+		{
+			ret = ft_strdup(list->value);
+			if (!ret)
+				exit(EXIT_FAILURE);
+			return (ret);
+		}
 		list = list->next;
 	}
-	if (!list)
-		return (NULL);
-	return (ft_strdup(list->value));
+	printf("minishell: cd: HOME not set\n");
+	return (NULL);
 }
 
 int	execute_exit(const char *arg)

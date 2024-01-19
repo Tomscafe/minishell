@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:53:01 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 20:47:00 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 19:27:14 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ int	execute_cd(const char *arg, t_exe *exe)
 	change_env("OLDPATH", exe);
 	first_arg = set_first_arg(arg, exe);
 	if (!first_arg)
-		exit(EXIT_FAILURE);
+		return (EXIT_FAILURE);
 	if (!opendir(first_arg))
 	{
 		printf("minishell : cd: %s:no such file or directory\n", first_arg);
@@ -55,9 +55,12 @@ char	*get_home_path(const char *arg, const t_envp *list)
 	char	*home;
 	size_t	size;
 
+	ret = NULL;
 	home = get_home(list);
+	if (!home)
+		return (NULL);
 	if (!arg)
-		return (home);
+		ret = ft_strdup(home);
 	else if (arg[0] == '~')
 	{
 		size = ft_strlen(home) + ft_strlen(arg + 1) + 1;
@@ -66,9 +69,10 @@ char	*get_home_path(const char *arg, const t_envp *list)
 			exit(EXIT_FAILURE);
 		ft_strlcpy(ret, home, size);
 		ft_strlcat(ret, arg + 1, size);
-		return (ret);
+		free(home);
 	}
-	return (NULL);
+	free(home);
+	return (ret);
 }
 
 void	change_env(const char *env, t_exe *exe)

@@ -6,13 +6,13 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 15:51:49 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 19:25:22 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	set_proc(t_proc *proc, const t_setting setting)
+int	set_proc(t_proc *proc, const t_setting setting, const int st_exit)
 {
 	proc->input = setting.input;
 	proc->output = setting.output;
@@ -21,7 +21,7 @@ int	set_proc(t_proc *proc, const t_setting setting)
 	if (!setting.cmd.simple_command->command)
 		return (0);
 	proc->cmd = setting.cmd.simple_command->command;
-	proc->arg = get_argument(*setting.cmd.simple_command);
+	proc->arg = get_argument(*setting.cmd.simple_command, st_exit);
 	return (1);
 }
 
@@ -73,19 +73,20 @@ int	where_is(const char *file, const t_redirection rd)
 	return (0);
 }
 
-char	*get_argument(const t_simple cmd)
+char	*get_argument(const t_simple cmd, const int st_exit)
 {
-	const size_t	cmd_len = ft_strlen(cmd.command);
-	const size_t	arg_len = ft_strlen(cmd.ward);
-	const size_t	size = cmd_len + arg_len + 2;
-	const char		tmp[2] = {-1, 0};
+	const size_t	size = ft_strlen(cmd.command) + ft_strlen(cmd.ward) + 2;
+	const char		sp[2] = {-1, 0};
 	char			*ret;
+	char			*arg;
 
-	ret = (char *)malloc(sizeof(char) * size);
+	ret = (char *)malloc(sizeof(size) * size);
 	if (!ret)
 		exit(EXIT_FAILURE);
 	ft_strlcpy(ret, cmd.command, size);
-	ft_strlcat(ret, tmp, size);
+	ft_strlcat(ret, sp, size);
 	ft_strlcat(ret, cmd.ward, size);
-	return (ret);
+	arg = convert_st_exit(ret, st_exit);
+	free(ret);
+	return (arg);
 }
