@@ -6,17 +6,15 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 22:02:03 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 17:27:34 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../includes/minishell.h"
 
-int	execute_echo(t_proc proc, const char **arg, const int n_exit)
+int	execute_echo(t_proc proc, const char **arg)
 {
 	pid_t	child;
-	size_t	index;
-	int		is_newline;
 	int		exit_num;
 
 	child = fork();
@@ -24,16 +22,12 @@ int	execute_echo(t_proc proc, const char **arg, const int n_exit)
 		exit(EXIT_FAILURE);
 	else if (child == 0)
 	{
-		index = 0;
 		if (!arg[0])
+		{
 			write(proc.output, "\n", 1);
-		is_newline = get_echo_option(arg[0]);
-		if (is_newline < 0)
-			exit(EXIT_FAILURE);
-		else if (!is_newline)
-			index++;
-		print_arg(arg + index, proc.output, n_exit);
-		if (is_newline)
+			exit(EXIT_SUCCESS);
+		}
+		if (print_arg(proc.output, arg))
 			write(proc.output, "\n", 1);
 		exit(EXIT_SUCCESS);
 	}
@@ -41,63 +35,46 @@ int	execute_echo(t_proc proc, const char **arg, const int n_exit)
 	return (WEXITSTATUS(exit_num));
 }
 
-int	get_echo_option(const char *arg)
+int	is_option(const char *arg)
 {
-	char	option[4];
+	size_t	index;
 
-	if (arg[0] == '\0')
-		return (1);
-	ft_memset(option, 0, 4);
-	ft_strlcpy(option, arg, 4);
-	if (option[0] == '-')
+	if (arg[0] != '-')
+		return (0);
+	index = 1;
+	while (arg[index])
 	{
-		if (option[1] == 'n')
-		{
-			if (option[2] == ' ' || option[2] == '\0')
-				return (0);
-			else
-				return (1);
-		}
-		else if (option[2] == ' ' || option[2] == '\0')
-		{
-			printf("minishell: echo: Invalid option\n");
-			return (-1);
-		}
+		if (arg[index] != 'n')
+			return (0);
+		index++;
 	}
 	return (1);
 }
 
-void	print_arg(const char **arg, const int output, const int n_exit)
+int	print_arg(const int output, const char **arg)
 {
+	int		is_newline;
 	size_t	index;
 
+	is_newline = 1;
 	index = 0;
+	while (arg[index])
+	{
+		if (is_option(arg[index]))
+			index++;
+		else
+			break ;
+	}
+	if (index != 0)
+		is_newline = 0;
 	while (arg[index + 1])
 	{
-		print_str(arg[index], output, n_exit);
-		write(output, " ", 1);
+		ft_putstr_fd((char *)arg[index], output);
+		ft_putchar_fd(' ', output);
 		index++;
 	}
-	print_str(arg[index], output, n_exit);
-}
-
-void	print_str(const char *str, const int output, const int n_exit)
-{
-	size_t	index;
-
-	index = 0;
-	while (str[index + 1])
-	{
-		if (str[index] == '$' && str[index + 1] == '?')
-		{
-			ft_putnbr_fd(n_exit, output);
-			index += 2;
-			continue ;
-		}
-		write(output, str + index, 1);
-		index++;
-	}
-	write(output, str + index, 1);
+	ft_putstr_fd((char *)arg[index], output);
+	return (is_newline);
 }
 
 int	execute_unset(const char **arg, t_envp **list)
@@ -105,8 +82,6 @@ int	execute_unset(const char **arg, t_envp **list)
 	size_t	index;
 	t_envp	*p;
 
-	if (!arg[0])
-		return (EXIT_SUCCESS);
 	index = 0;
 	while (arg[index])
 	{

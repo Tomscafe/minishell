@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:12:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 13:53:24 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 16:15:34 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ void	builtin(const t_proc proc, t_exe *exe)
 	if (!arg)
 		exit(EXIT_FAILURE);
 	if (ft_strncmp(proc.cmd, "echo", 5) == 0)
-		exe->st_exit = execute_echo(proc, &arg[1], exe->st_exit);
+		exe->st_exit = execute_echo(proc, &arg[1]);
 	else if (ft_strncmp(proc.cmd, "cd", 3) == 0)
 		exe->st_exit = execute_cd(arg[1], exe);
 	else if (ft_strncmp(proc.cmd, "pwd", 4) == 0)

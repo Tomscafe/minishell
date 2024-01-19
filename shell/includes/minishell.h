@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/19 13:24:22 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 17:26:46 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -170,7 +170,7 @@ t_envp			*make_env(char **envp);
 int				dollor_len(char *str, int k, char *variable);
 int				check_dollor_opt(char *str, int *i);
 char			*convert_dollor(t_envp *needle, char *str, int *i);
-int				convertable_dollor(char *str, int i);
+int				converproc_dollor(char *str, int i);
 char			*check_dollor(t_envp *env, char *str, int i, int flag);
 t_envp			*find_dollor(t_envp *needle, char *str, int i);
 void			remake_str2(char *result, char *temp, int *k, int *t);
@@ -222,10 +222,10 @@ char			*get_file_name(char *file_name);
 int				heredoc(const char *end);
 void			run_heredoc(const char *end, const int hdfile);
 
-int				execute_one_command(const t_proc table, t_exe *exe);
-void			pipe_command(t_proc *table, t_exe *exe, const size_t index);
-void			last_command(t_proc *table, t_exe *exe);
-void			execute_commands(t_proc *table, t_exe *exe, int *pipefd);
+int				execute_one_command(const t_proc proc, t_exe *exe);
+void			pipe_command(t_proc *proc, t_exe *exe, const size_t index);
+void			last_command(t_proc *proc, t_exe *exe);
+void			execute_commands(t_proc *proc, t_exe *exe, int *pipefd);
 void			cmd_signal(int sig);
 
 int				set_proc(t_proc *proc, const t_setting setting);
@@ -237,7 +237,7 @@ int				where_is(const char *file, const t_redirection rd);
 char			*get_argument(const t_simple cmd);
 
 int				is_builtin(const char *cmd);
-void			builtin(const t_proc table, t_exe *exe);
+void			builtin(const t_proc proc, t_exe *exe);
 
 void			execute_at_child(t_proc proc, t_exe *exe, int *pipefd);
 void			apply_redir(t_proc proc, int *pipefd);
@@ -247,10 +247,9 @@ char			*is_executable(const char *cmd, const char **env);
 char			*user_command(const char *cmd);
 char			*other_builtin(const char *cmd, const char **env);
 
-int				execute_echo(t_proc table, const char **arg, const int n_exit);
-int				get_echo_option(const char *arg);
-void			print_arg(const char **arg, const int output, const int n_exit);
-void			print_str(const char *str, const int output, const int n_exit);
+int				execute_echo(t_proc proc, const char **arg);
+int				is_option(const char *arg);
+int				print_arg(const int output, const char **arg);
 
 int				execute_cd(const char *arg, t_exe *exe);
 char			*set_first_arg(const char *arg, t_exe *exe);
@@ -258,10 +257,10 @@ char			*get_home_path(const char *arg, const t_envp *list);
 void			change_env( const char *env, t_exe *exe);
 char			*get_home(const t_envp *list);
 
-int				execute_pwd(const t_proc table, t_exe *exe);
+int				execute_pwd(const t_proc proc, t_exe *exe);
 
-int				execute_export(t_proc table, const char **arg, t_envp **list);
-int				print_env_for_export(const t_proc table, const t_envp *list);
+int				execute_export(t_proc proc, const char **arg, t_envp **list);
+int				print_env_for_export(const t_proc proc, const t_envp *list);
 char			*get_variable(const char *env);
 char			*get_value(const char *env);
 int				change_value(t_envp **list, const char *var, const char *val);
@@ -270,7 +269,7 @@ void			add_variable(t_envp **list, const char *var, const char *val);
 int				execute_unset(const char **arg, t_envp **list);
 void			remove_env(t_envp **list, t_envp *to_del);
 
-int				execute_env(const t_proc table, const t_envp *list);
+int				execute_env(const t_proc proc, const t_envp *list);
 
 int				execute_exit(const char *arg);
 
