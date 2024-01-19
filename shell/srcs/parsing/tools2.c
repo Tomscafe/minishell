@@ -53,8 +53,8 @@ int	have_others(char *file)
 	i = 0;
 	while (file[i])
 	{
-		i = ignore_quotes(file, i, '\'');
-		i = ignore_quotes(file, i, '\"');
+		i = ignore_quotes(file, i, '\'', 0);
+		i = ignore_quotes(file, i, '\"', 0);
 		if (file[i] == ' ')
 		{
 			i = ignore_space(file, i, SP);
@@ -74,8 +74,8 @@ int	file_name_length(char *file, int j)
 	j = ignore_space(file, j, SP);
 	while (file[j] && file[j] != ' ')
 	{
-		j = ignore_quotes(file, j, '\'');
-		j = ignore_quotes(file, j, '\"');
+		j = ignore_quotes(file, j, '\'', 0);
+		j = ignore_quotes(file, j, '\"', 0);
 		j++;
 	}
 	size = j - size;

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "../../includes/minishell.h"
 
 int	dollor_len(char *str, int k, char *variable)
 {
@@ -110,7 +110,7 @@ char	*check_dollor(t_envp *env, char *str, int i, int flag)
 		else if (!flag && new_str[i] == '\"')
 			flag++;
 		if (!flag && new_str[i] == '\'')
-			i = ignore_quotes(new_str, i, '\'');
+			i = ignore_quotes(new_str, i, '\'', 0);
 		if (convertable_dollor(new_str, i))
 		{
 			needle = find_dollor(env, new_str, i);

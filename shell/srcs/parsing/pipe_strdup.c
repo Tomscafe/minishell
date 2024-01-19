@@ -17,9 +17,9 @@ int	rm_size_space(char *str, int i, int space, int cnt)
 	while (str[i])
 	{
 		if (str[i] == '\'')
-			i = ignore_quotes(str, i, '\'');
+			i = ignore_quotes(str, i, '\'', 0);
 		else if (str[i] == '\"')
-			i = ignore_quotes(str, i, '\"');
+			i = ignore_quotes(str, i, '\"', 0);
 		if (str[i] == ' ')
 		{
 			while (str[i] && str[i] == ' ')
