@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:46:04 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/17 22:55:33 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 14:17:31 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,5 +41,6 @@ t_redirection	*init_redirection(t_redirection *rd)
 	rd->symbol = NULL;
 	rd->file = NULL;
 	rd->next = NULL;
+	rd->non = NULL;
 	return (rd);
 }
