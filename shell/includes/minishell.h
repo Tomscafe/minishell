@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/19 18:32:31 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 20:35:52 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -217,6 +217,7 @@ int				add_input(t_list **files, t_redirection rd);
 int				add_output(t_list **files, t_redirection rd, const int mode);
 void			clear_when_signal(void *to_del);
 void			clear_file(void *to_del);
+void			heredoc_signal(int signal);
 char			*get_file_name(char *file_name);
 
 int				heredoc(const char *end);

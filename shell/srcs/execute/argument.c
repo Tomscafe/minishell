@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 18:43:13 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 19:06:20 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 20:38:06 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,4 +78,11 @@ char	*rejoin_strs(const char **strs, const char *str_exit)
 		index++;
 	}
 	return (ret);
+}
+
+void	heredoc_signal(int signal)
+{
+	signal = 1;
+	printf("\n");
+	exit(signal);
 }

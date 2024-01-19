@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 14:00:08 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 20:36:17 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,7 +101,7 @@ void	run_heredoc(const char *end, const int hdfile)
 {
 	char	*input_line;
 
-	signal(SIGINT, SIG_DFL);
+	signal(SIGINT, heredoc_signal);
 	while (1)
 	{
 		input_line = readline("> ");
