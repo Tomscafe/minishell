@@ -7,7 +7,7 @@ void	handler(int sig)
 	printf("minishell$ \n");
 
 	if (rl_on_new_line() == -1)	// move new line after print read line
-		exit (1);
+		exit (-1);
 	rl_replace_line("", 1);	// can't fine funtion? works well
 	rl_redisplay();			//readline(str) :: display str
 }
