@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:53:01 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 19:27:14 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 20:15:47 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,22 +15,24 @@
 int	execute_cd(const char *arg, t_exe *exe)
 {
 	char	*first_arg;
+	DIR		*ret;
 
 	change_env("OLDPATH", exe);
 	first_arg = set_first_arg(arg, exe);
 	if (!first_arg)
 		return (EXIT_FAILURE);
-	if (!opendir(first_arg))
+	ret = opendir(first_arg);
+	if (!ret)
 	{
 		printf("minishell : cd: %s:no such file or directory\n", first_arg);
-		return (free(first_arg), EXIT_FAILURE);
+		free(first_arg);
+		free(ret);
+		return (EXIT_FAILURE);
 	}
 	if (chdir(first_arg) < 0)
-	{
-		free(first_arg);
 		chdir(exe->pwd_pth);
-	}
 	ft_strlcpy(exe->pwd_pth, first_arg, PATH_MAX);
+	closedir(ret);
 	free(first_arg);
 	return (EXIT_SUCCESS);
 }
@@ -69,7 +71,6 @@ char	*get_home_path(const char *arg, const t_envp *list)
 			exit(EXIT_FAILURE);
 		ft_strlcpy(ret, home, size);
 		ft_strlcat(ret, arg + 1, size);
-		free(home);
 	}
 	free(home);
 	return (ret);
@@ -77,23 +78,26 @@ char	*get_home_path(const char *arg, const t_envp *list)
 
 void	change_env(const char *env, t_exe *exe)
 {
-	char	buffer[2024];
-	t_envp	*oldpwd;
+	char	buffer[PATH_MAX];
+	t_envp	*list;
+	char	*ret;
 
-	if (!getcwd(buffer, 2024))
+	ret = getcwd(buffer, PATH_MAX);
+	if (!ret)
 		return ;
-	oldpwd = *exe->env;
-	while (oldpwd)
+	list = *exe->env;
+	while (list)
 	{
-		if (ft_strncmp(oldpwd->variable, env, \
-						ft_strlen(oldpwd->variable)) == 0)
+		if (ft_strncmp(list->variable, env, \
+						ft_strlen(list->variable)) == 0)
 		{
-			free(oldpwd->value);
-			oldpwd->value = ft_strdup(exe->pwd_pth);
-			if (!oldpwd->value)
+			free(list->value);
+			list->value = ft_strdup(exe->pwd_pth);
+			printf("%p %p\n", ret, list->value);
+			if (!list->value)
 				exit(EXIT_FAILURE);
 			return ;
 		}
-		oldpwd = oldpwd->next;
+		list = list->next;
 	}
 }

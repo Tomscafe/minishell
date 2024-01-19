@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 14:36:04 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 19:23:15 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 19:39:57 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,7 @@ char	*is_executable(const char *cmd, const char **env)
 		exit(0);
 	if (opendir(ret))
 	{
-		printf("minishell : %s: is a directory\n", ret);
+		printf("minishell : %s: command not found\n", ret);
 		exit(126);
 	}
 	else if (access(ret, X_OK) < 0)
@@ -95,7 +95,7 @@ char	*user_command(const char *cmd)
 		exit(EXIT_FAILURE);
 	if (opendir(ret))
 	{
-		printf("minishell: %s: is a directory\n", ret);
+		printf("minishell: %s: command not found\n", ret);
 		exit(EXIT_FAILURE);
 	}
 	free(pwd);
@@ -111,7 +111,7 @@ char	*other_builtin(const char *cmd, const char **env)
 	path = get_paths(env);
 	if (!path)
 	{
-		printf("minishell: %s: no such file or directory\n", cmd);
+		printf("minishell: %s: command not found\n", cmd);
 		return (NULL);
 	}
 	ret = NULL;
@@ -126,6 +126,6 @@ char	*other_builtin(const char *cmd, const char **env)
 	}
 	clear_strs(path);
 	if (!ret)
-		printf("minishell: %s: no such file or directory\n", cmd);
+		printf("minishell: %s: command not found\n", cmd);
 	return (ret);
 }
