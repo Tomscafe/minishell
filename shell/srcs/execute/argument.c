@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/19 18:43:13 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 20:38:06 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 22:16:16 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,32 @@ void	heredoc_signal(int signal)
 	signal = 1;
 	printf("\n");
 	exit(signal);
+}
+
+int	replace_redir(t_list **files, const char *file_name, const int mode)
+{
+	t_list	**p;
+	t_file	*content;
+
+	if (files)
+		return (0);
+	p = files;
+	while (p)
+	{
+		content = (*p)->content;
+		if (ft_strncmp(content->name, file_name, \
+			ft_strlen(content->name) + 1) == 0)
+		{
+			content->io[READ] = open(file_name, O_RDONLY);
+			if (mode)
+				content->io[WRITE] = \
+					open(file_name, O_WRONLY | O_APPEND | O_CREAT, 0644);
+			else
+				content->io[WRITE] = \
+					open(file_name, O_WRONLY | O_TRUNC | O_CREAT, 0644);
+			return (1);
+		}
+		*p = (*p)->next;
+	}
+	return (0);
 }

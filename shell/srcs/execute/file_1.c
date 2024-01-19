@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 20:02:45 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 13:55:52 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 22:02:22 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,7 @@ int	open_files(t_exe *exe, const t_redirection *rd)
 	while (rd)
 	{
 		if (ft_strncmp(rd->symbol, ">>", 2) == 0)
-		{
-			if (add_output((t_list **)&(exe->files), *rd, 1) < 0)
-				return (0);
-		}
+			add_output((t_list **)&(exe->files), *rd, 1);
 		else if (rd->symbol[0] == '>')
 			add_output((t_list **)&(exe->files), *rd, 0);
 		if (ft_strncmp(rd->symbol, "<<", 2) == 0)

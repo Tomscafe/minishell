@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 20:36:17 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 22:11:12 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	add_input(t_list **files, t_redirection rd)
 	if (!infile)
 		exit(EXIT_FAILURE);
 	if (is_exist((const t_list *)(*files), rd.file))
-		return (0);
+		return (free(infile), 0);
 	infile->name = (char *)rd.file;
 	infile->io[WRITE] = NO_FILE;
 	infile->io[READ] = open(rd.file, O_RDONLY);
@@ -34,18 +34,21 @@ int	add_input(t_list **files, t_redirection rd)
 	return (1);
 }
 
-int	add_output(t_list **files, const t_redirection rd, const int mode)
+void	add_output(t_list **files, const t_redirection rd, const int mode)
 {
 	t_file	*outfile;
 	t_list	*new_el;
 
 	if (rd.non)
-		return (printf("minishell : %s: ambiguous redirect\n", rd.non), -1);
+	{
+		printf("minishell : %s: ambiguous redirect\n", rd.non);
+		return ;
+	}
+	if (replace_redir(files, rd.file, mode))
+		return ;
 	outfile = (t_file *)malloc(sizeof(t_file));
 	if (!outfile)
 		exit(EXIT_FAILURE);
-	if (is_exist((const t_list *)(*files), rd.file))
-		return (0);
 	outfile->name = get_file_name(rd.file);
 	if (mode)
 		outfile->io[WRITE] = \
@@ -58,7 +61,6 @@ int	add_output(t_list **files, const t_redirection rd, const int mode)
 	if (!new_el)
 		exit(EXIT_FAILURE);
 	ft_lstadd_back(files, new_el);
-	return (1);
 }
 
 char	*get_file_name(char *file_name)
