@@ -6,7 +6,7 @@
 /*   By: hywoo <hywoo@student.42seoul.kr>           +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/14 14:46:03 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/14 14:46:37 by hywoo            ###   ########.fr       */
+/*   Updated: 2024/01/19 15:45:35 by hywoo            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,6 @@ void	cutting_filename(t_envp *env, t_redirection *rd, char *file)
 		free (file);
 		rd->file = edt_name;
 		printf("orgname:%s\n",rd->non);
-		printf("")
 	}
 	else
 	{
