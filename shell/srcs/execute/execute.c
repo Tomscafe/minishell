@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 14:15:45 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 15:50:15 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,9 @@ void	execute(t_pipe *cmds, t_envp **env)
 {
 	static t_exe	exe;
 
+	if (cmds->first->simple_command->command && \
+		cmds->first->simple_command->command[0] == '\0')
+		return ;
 	exe.cmds = cmds;
 	exe.env = env;
 	exe.n_cmd = get_num_cmd(cmds);
