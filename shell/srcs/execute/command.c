@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 19:44:24 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 17:43:50 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/20 00:45:58 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,14 @@ void	pipe_command(t_proc *proc, t_exe *exe, const size_t index)
 	if (index == 0)
 		setting.input = STDIN_FILENO;
 	if (!set_proc(proc, setting, exe->st_exit))
+	{
+		close(exe->p_pipe);
+		exe->p_pipe = dup(pipefd[READ]);
+		close(pipefd[READ]);
+		close(pipefd[WRITE]);
+		free(proc->arg);
 		return ;
+	}
 	execute_commands(proc, exe, pipefd);
 	close(exe->p_pipe);
 	exe->p_pipe = dup(pipefd[READ]);

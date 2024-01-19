@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 22:15:53 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/20 01:04:47 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,15 +19,10 @@ void	execute(t_pipe *cmds, t_envp **env)
 	if (cmds->first->simple_command->command && \
 		cmds->first->simple_command->command[0] == '\0')
 		return ;
-	exe.cmds = cmds;
-	exe.env = env;
-	exe.n_cmd = get_num_cmd(cmds);
-	exe.p_pipe = NO_FILE;
-	getcwd(exe.pwd_pth, PATH_MAX);
+	set_exe(&exe, cmds, env);
 	if (!open_all_files(&exe))
 	{
-		ft_lstclear(&(exe.files), clear_when_signal);
-		unlink(HD);
+		clean_files(&exe.files);
 		return ;
 	}
 	if (exe.n_cmd == 1)
@@ -35,8 +30,23 @@ void	execute(t_pipe *cmds, t_envp **env)
 	else
 		process_commands(&exe);
 	ft_signal();
-	ft_lstclear(&(exe.files), clear_file);
-	unlink(HD);
+	clean_files(&exe.files);
+}
+
+void	set_exe(t_exe *exe, t_pipe *cmds, t_envp **env)
+{
+	exe->cmds = cmds;
+	exe->env = env;
+	exe->n_cmd = 1;
+	exe->p_pipe = NO_FILE;
+	getcwd(exe->pwd_pth, PATH_MAX);
+	while (cmds->next)
+	{
+		cmds = cmds->next;
+		exe->n_cmd++;
+	}
+	if (cmds->second)
+		exe->n_cmd++;
 }
 
 void	process_one_command(t_exe *exe)
@@ -87,21 +97,6 @@ void	process_commands(t_exe *exe)
 	}
 	exe->st_exit = WEXITSTATUS(st_ret);
 	free(procs);
-}
-
-size_t	get_num_cmd(const t_pipe *cmds)
-{
-	size_t	n_cmd;
-
-	n_cmd = 1;
-	while (cmds->next)
-	{
-		cmds = cmds->next;
-		n_cmd++;
-	}
-	if (cmds->second)
-		n_cmd++;
-	return (n_cmd);
 }
 
 void	close_file(int fd)

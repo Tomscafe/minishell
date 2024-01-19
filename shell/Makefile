@@ -6,7 +6,7 @@
 #    By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/01/17 20:33:57 by juhyelee          #+#    #+#              #
-#    Updated: 2024/01/19 19:29:02 by juhyelee         ###   ########.fr        #
+#    Updated: 2024/01/20 00:34:49 by juhyelee         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -63,7 +63,7 @@ RM			= rm -rf
 MK			= make -C ${LIBFT_DIR}
 CC			= CC
 IFLAG		= -I${RDLINE_DIR}/include -I${INCS}
-LFLAG		= -lreadline -L${RDLINE_DIR}/lib -lft -L${LIBFT_DIR} 
+LFLAG		= -lreadline -L${RDLINE_DIR}/lib -lft -L${LIBFT_DIR}
 CFLAG		= -Wall -Wextra -Werror -g3
 
 .PHONY : all clean fclean re

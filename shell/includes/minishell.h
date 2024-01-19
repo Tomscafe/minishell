@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/19 22:11:52 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/20 01:08:03 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@
 # include <dirent.h>
 # include <termios.h>
 # include <sys/syslimits.h>
-# include <readline/readline.h> 
+# include <readline/readline.h>
 # include <readline/history.h>
 # include "libft.h"
 
@@ -204,8 +204,8 @@ int				file_name_length(char *file, int j);
 
 void			ft_parsing(char *str, t_envp *env);
 
-void			execute(t_pipe *tree, t_envp **list);
-size_t			get_num_cmd(const t_pipe *tree);
+void			execute(t_pipe *cmds, t_envp **env);
+void			set_exe(t_exe *exe, t_pipe *cmds, t_envp **env);
 void			process_one_command(t_exe *exe);
 void			process_commands(t_exe *exe);
 
@@ -221,6 +221,7 @@ void			clear_when_signal(void *to_del);
 void			clear_file(void *to_del);
 void			heredoc_signal(int signal);
 char			*get_file_name(char *file_name);
+void			clean_files(t_list **files);
 
 int				heredoc(const char *end);
 void			run_heredoc(const char *end, const int hdfile);

@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 20:02:45 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 22:02:22 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/20 01:07:55 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,4 +99,10 @@ void	clear_file(void *to_del)
 	close_file(file->io[READ]);
 	close_file(file->io[WRITE]);
 	free(file);
+}
+
+void	clean_files(t_list **files)
+{
+	ft_lstclear(files, clear_file);
+	unlink(HD);
 }
