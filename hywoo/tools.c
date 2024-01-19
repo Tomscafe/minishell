@@ -23,13 +23,19 @@ int	ignore_space(char *str, int i, int type)
 
 int	ignore_quotes(char *str, int j, char c)
 {
+	int	invalid;
+
+	invalid = -1;
 	if (str[j] != c)
 		return (j);
 	if (str[j] == c)
 		j++;
 	while (str[j] && str[j] != c)
 		j++;
-	return (j);
+	if (str[j] == c)
+		return (j);
+	else
+		return (invalid);
 }
 
 int	check_type(char c)
@@ -50,24 +56,20 @@ int	check_type(char c)
 int	valid_quotes(char *str)
 {
 	int	i;
-	int	flag1;
-	int	flag2;
 
 	i = 0;
-	flag1 = 0;
-	flag2 = 0;
 	while (str[i])
 	{
-		if (str[i] == '\'')
-			flag1++;
-		if (str[i] == '\"')
-			flag2++;
+		if (str[i] == '\'' || str[i] == '\"')
+		{
+			i = ignore_quotes(str, i, str[i]);
+			if (i == -1)
+			{
+				printf("minishell: syntax error\n");
+				return (1);
+			}
+		}
 		i++;
-	}
-	if (flag1 % 2 || flag2 % 2)
-	{
-		printf("minishell: syntax error\n");
-		return (1);
 	}
 	return (0);
 }
