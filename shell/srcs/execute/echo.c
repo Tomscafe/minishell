@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 19:26:42 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 20:20:12 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,6 @@ int	execute_unset(const char **arg, t_envp **list)
 	size_t	index;
 	t_envp	*p;
 
-	arg[0] += 6;
 	index = 0;
 	while (arg[index])
 	{

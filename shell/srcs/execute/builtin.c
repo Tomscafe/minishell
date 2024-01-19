@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:12:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 19:26:02 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 20:22:49 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ int	execute_env(const t_proc proc, const t_envp *list)
 	{
 		while (list)
 		{
-			if (list->value && list->value[0])
+			if (list->value)
 			{
 				ft_putstr_fd(list->variable, proc.output);
 				ft_putchar_fd('=', proc.output);
