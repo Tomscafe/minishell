@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:40:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 13:26:26 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 15:57:22 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,20 +69,22 @@ char	*get_home(const t_envp *list)
 int	execute_exit(const char *arg)
 {
 	int		exit_num;
+	char	*to_comp;
 	size_t	index;
 
 	if (!arg)
 		exit(0);
+	exit_num = ft_atoi(arg);
+	to_comp = ft_itoa(exit_num);
+	if (arg[0] == '+')
+		arg++;
 	index = 0;
-	while (arg[index])
+	if (ft_strncmp(arg, to_comp, ft_strlen(arg) + 1))
 	{
-		if (!ft_isdigit(arg[index]))
-		{
-			printf("minishell: exit: %s: numeric argument required\n", arg);
-			exit(EXIT_FAILURE);
-		}
-		index++;
+		printf("exit\n");
+		printf("minishell: exit: %s: numberic argument required\n", arg);
+		exit(255);
 	}
-	exit_num = ft_atoi(arg) % 256;
-	exit(exit_num);
+	free(to_comp);
+	exit(exit_num % 255);
 }
