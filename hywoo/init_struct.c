@@ -41,5 +41,6 @@ t_redirection	*init_redirection(t_redirection *rd)
 	rd->symbol = NULL;
 	rd->file = NULL;
 	rd->next = NULL;
+	rd->non = NULL;
 	return (rd);
 }

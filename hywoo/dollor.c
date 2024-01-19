@@ -91,7 +91,7 @@ int	convertable_dollor(char *str, int i)
 	}
 	if ((flag % 2 == 0) && (!str[i + 1] || str[i + 1] == ' '))
 		return (0);
-	if ((flag % 2 == 1) && (str[i + 1] == '\"' || str[i + 1] == ' '))
+	if ((flag % 2 == 1) && (str[i + 1] == '\"' || str[i + 1] == ' ' || str[i + 1] == '\''))
 		return (0);
 	return (1);
 }

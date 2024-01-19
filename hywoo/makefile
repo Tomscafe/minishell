@@ -1,6 +1,6 @@
 NAME	= minishell
 CC		= CC
-CFLAGS	= -Werror -Wall -Wextra
+CFLAGS	= -Werror -Wall -Wextra -g3
 COMFILE	= -lreadline -L${HOME}/.brew/opt/readline/lib
 OBFLAGS	= -I{HOME}/.brew/opt/readline/include
 SRC		= main.c signal.c tokenizer.c tokenizer2.c tools.c pipe_tree.c \

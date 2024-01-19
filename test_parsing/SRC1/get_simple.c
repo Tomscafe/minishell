@@ -34,6 +34,7 @@ void	cutting_filename(t_envp *env, t_redirection *rd, char *file)
 		free (file);
 		rd->file = edt_name;
 		printf("orgname:%s\n",rd->non);
+		printf("")
 	}
 	else
 	{
