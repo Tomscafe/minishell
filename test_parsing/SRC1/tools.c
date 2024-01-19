@@ -34,6 +34,8 @@ int	ignore_quotes(char *str, int j, char c, int syntax)
 		j++;
 	if (str[j] == c)
 		return (j);
+	if (!syntax)
+		return (j);
 	else
 		return (invalid);
 }
