@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/18 12:40:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 19:40:00 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 13:26:26 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,4 +64,25 @@ char	*get_home(const t_envp *list)
 	if (!list)
 		return (NULL);
 	return (ft_strdup(list->value));
+}
+
+int	execute_exit(const char *arg)
+{
+	int		exit_num;
+	size_t	index;
+
+	if (!arg)
+		exit(0);
+	index = 0;
+	while (arg[index])
+	{
+		if (!ft_isdigit(arg[index]))
+		{
+			printf("minishell: exit: %s: numeric argument required\n", arg);
+			exit(EXIT_FAILURE);
+		}
+		index++;
+	}
+	exit_num = ft_atoi(arg) % 256;
+	exit(exit_num);
 }

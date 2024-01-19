@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 03:41:33 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 20:18:41 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 13:02:31 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ void	execute(t_pipe *cmds, t_envp **env)
 	if (!open_all_files(&exe))
 	{
 		ft_lstclear(&(exe.files), clear_when_signal);
-		unlink("heredoc");
+		unlink(HD);
 		return ;
 	}
 	if (exe.n_cmd == 1)
@@ -33,7 +33,7 @@ void	execute(t_pipe *cmds, t_envp **env)
 		process_commands(&exe);
 	ft_signal();
 	ft_lstclear(&(exe.files), clear_file);
-	unlink("heredoc");
+	unlink(HD);
 }
 
 void	process_one_command(t_exe *exe)

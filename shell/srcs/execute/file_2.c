@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 18:39:21 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 21:27:41 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 13:24:58 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ int	heredoc(const char *end)
 	int		heredocfd;
 	int		st_exit;
 
-	heredocfd = open("heredoc", O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	heredocfd = open(HD, O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (!heredocfd)
 		exit(EXIT_FAILURE);
 	signal(SIGINT, SIG_IGN);
@@ -88,13 +88,13 @@ int	heredoc(const char *end)
 		run_heredoc(end, heredocfd);
 	waitpid(hd, &st_exit, WUNTRACED);
 	ft_signal();
-	if (WIFSIGNALED(st_exit) != 0)
+	if (WIFSIGNALED(st_exit))
 	{
 		printf("\n");
-		return (unlink("heredoc"), -1);
+		return (unlink(HD), -1);
 	}
 	close(heredocfd);
-	return (open("heredoc", O_RDONLY));
+	return (open(HD, O_RDONLY, 0644));
 }
 
 void	run_heredoc(const char *end, const int hdfile)

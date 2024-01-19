@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/16 17:38:43 by hywoo             #+#    #+#             */
-/*   Updated: 2024/01/18 21:34:04 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 13:24:22 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@
 # define NO_FILE (-1)
 # define READ 0
 # define WRITE 1
+# define HD "_heredoc"
 
 typedef struct s_envp
 {
@@ -80,6 +81,12 @@ typedef struct s_token
 	struct s_token	*next;
 }	t_token;
 
+typedef enum e_redir
+{
+	e_heredoc = 1,
+	e_input,
+	e_output
+}t_redir;
 typedef struct s_proc
 {
 	pid_t	pid;
@@ -226,6 +233,7 @@ int				set_redirection(t_proc *proc, const t_list *files, \
 								const t_command cmd);
 int				set_file(t_proc *proc, const t_list *files, \
 						const t_redirection rd);
+int				where_is(const char *file, const t_redirection rd);
 char			*get_argument(const t_simple cmd);
 
 int				is_builtin(const char *cmd);

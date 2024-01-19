@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 16:51:20 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/18 17:38:56 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/19 13:29:49 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,25 +39,38 @@ int	set_redirection(t_proc *proc, const t_list *files, t_command cmd)
 int	set_file(t_proc *proc, const t_list *files, const t_redirection rd)
 {
 	t_file	*content;
+	t_redir	redir;
 
 	while (files)
 	{
 		content = files->content;
-		if (rd.symbol[0] == '<')
-		{
+		redir = where_is(content->name, rd);
+		if (redir == e_heredoc || redir == e_input)
 			proc->input = content->io[READ];
-			if (proc->input < 0)
-			{
-				printf("minishell: %s: no such file or directory\n", \
-						content->name);
-				return (0);
-			}
-		}
-		else
+		else if (redir == e_output)
 			proc->output = content->io[WRITE];
+		if (proc->input < 0)
+		{
+			printf("minishell: %s: no such file or directory\n", content->name);
+			return (0);
+		}
 		files = files->next;
 	}
 	return (1);
+}
+
+int	where_is(const char *file, const t_redirection rd)
+{
+	if (ft_strncmp(file, rd.file, ft_strlen(file) + 1) == 0)
+	{
+		if (ft_strncmp(rd.symbol, "<<", 2) == 0)
+			return (e_heredoc);
+		else if (rd.symbol[0] == '<')
+			return (e_input);
+		else
+			return (e_output);
+	}
+	return (0);
 }
 
 char	*get_argument(const t_simple cmd)
@@ -75,25 +88,4 @@ char	*get_argument(const t_simple cmd)
 	ft_strlcat(ret, tmp, size);
 	ft_strlcat(ret, cmd.ward, size);
 	return (ret);
-}
-
-int	execute_exit(const char *arg)
-{
-	int		exit_num;
-	size_t	index;
-
-	if (!arg)
-		exit(0);
-	index = 0;
-	while (arg[index])
-	{
-		if (!ft_isdigit(arg[index]))
-		{
-			printf("minishell: exit: %s: numeric argument required\n", arg);
-			exit(EXIT_FAILURE);
-		}
-		index++;
-	}
-	exit_num = ft_atoi(arg) % 256;
-	exit(exit_num);
 }
