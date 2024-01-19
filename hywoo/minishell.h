@@ -82,7 +82,7 @@ int				check_type(char c);
 t_token			*init_token(t_token *token);
 void			add_token_back(t_token *token, char *str, int type);
 int				ignore_space(char *str, int i, int type);
-int				ignore_quotes(char *str, int j, char c);
+int				ignore_quotes(char *str, int j, char c, int syntax);
 int				token_command(t_token *token, char *str, int i, int type);
 int				end_of_ward(char c);
 int				token_ward(t_token *token, char *str, int i, int type);

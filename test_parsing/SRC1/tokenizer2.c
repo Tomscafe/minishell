@@ -24,9 +24,9 @@ int	token_command(t_token *token, char *str, int i, int type)
 	{
 		type = check_type(str[j]);
 		if (str[j] == '\'')
-			j = ignore_quotes(str, j, '\'');
+			j = ignore_quotes(str, j, '\'', 0);
 		if (str[j] == '\"')
-			j = ignore_quotes(str, j, '\"');
+			j = ignore_quotes(str, j, '\"', 0);
 		if (type == PIPE || type == REDIRECTION)
 			break ;
 		j++;
@@ -47,9 +47,9 @@ int	token_ward(t_token *token, char *str, int i, int type)
 	while (str[j])
 	{
 		if (str[j] == '\'')
-			j = ignore_quotes(str, j, '\'');
+			j = ignore_quotes(str, j, '\'', 0);
 		if (str[j] == '\"')
-			j = ignore_quotes(str, j, '\"');
+			j = ignore_quotes(str, j, '\"', 0);
 		if (end_of_ward(str[j]))
 			break ;
 		j++;
