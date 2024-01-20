@@ -6,7 +6,7 @@
 /*   By: juhyelee <juhyelee@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/01/11 15:21:41 by juhyelee          #+#    #+#             */
-/*   Updated: 2024/01/19 20:20:12 by juhyelee         ###   ########.fr       */
+/*   Updated: 2024/01/20 12:31:12 by juhyelee         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,8 @@ int	print_arg(const int output, const char **arg)
 	}
 	if (index != 0)
 		is_newline = 0;
+	if (!arg[index])
+		return (is_newline);
 	while (arg[index + 1])
 	{
 		ft_putstr_fd((char *)arg[index], output);
